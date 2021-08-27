@@ -3,8 +3,8 @@ This repo includes scripts, configuration files and step-by-step guides for
 Arch Linux deployment on a laptop (mobile) computer.
 
 This installation procedure is based on the following sources:
-[Arch Linux Installation guide](https://wiki.archlinux.org/title/Installation_guide)
-[Rich Grundy - Archlinux on encrypted btrfs with systemd-boot and KDE](https://rich.grundy.io/blog/archlinux-on-encrypted-btrfs-with-systemd-boot-and-kde/)
+* [Arch Linux Installation guide](https://wiki.archlinux.org/title/Installation_guide)
+* [Rich Grundy - Archlinux on encrypted btrfs with systemd-boot and KDE](https://rich.grundy.io/blog/archlinux-on-encrypted-btrfs-with-systemd-boot-and-kde/)
 
 # Requirements #
 
@@ -24,7 +24,7 @@ This installation procedure is based on the following sources:
 # Partitioning #
 
 ## UEFI ##
-partition | type	| size | file system
+partition | type | size | file system
 --------- | ----------- | ---- | ----------- 
 /boot | ef00 | +550M | mkfs.fat -F32
 / | 8300 | +30G | mkfs.btrfs
