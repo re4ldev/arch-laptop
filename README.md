@@ -22,7 +22,7 @@ This installation procedure is based on the official [Arch Linux Installation gu
 # Partitioning #
 
 ## UEFI ##
-partition | mount point	| size | file system
+partition | type	| size | file system
 --------- | ----------- | ---- | ----------- 
 /boot | ef00 | +550M | mkfs.fat -F32
 / | 8300 | +30G | mkfs.btrfs
