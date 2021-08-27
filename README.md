@@ -30,13 +30,13 @@ partition | type | size | file system
 / | 8300 | +30G | mkfs.btrfs
 
 For System integrity create subvolumes instead of directories for:
-/tmp
-/opt
-/srv
-/var/spool
-/var/log
-/var/run
-/var/tmp
+* /tmp
+* /opt
+* /srv
+* /var/spool
+* /var/log
+* /var/run
+* /var/tmp
 
 # Packages #
 
