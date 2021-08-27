@@ -29,6 +29,15 @@ partition | type | size | file system
 /boot | ef00 | +550M | mkfs.fat -F32
 / | 8300 | +30G | mkfs.btrfs
 
+For System integrity create subvolumes instead of directories for:
+/tmp
+/opt
+/srv
+/var/spool
+/var/log
+/var/run
+/var/tmp
+
 # Packages #
 
 ## Base ##
