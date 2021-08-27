@@ -2,7 +2,9 @@ Arch Linux OS installation and configuration procedures for laptop PC.
 This repo includes scripts, configuration files and step-by-step guides for 
 Arch Linux deployment on a laptop (mobile) computer.
 
-This installation procedure is based on the official [Arch Linux Installation guide](https://wiki.archlinux.org/title/Installation_guide).
+This installation procedure is based on the following sources:
+[Arch Linux Installation guide](https://wiki.archlinux.org/title/Installation_guide)
+[Rich Grundy - Archlinux on encrypted btrfs with systemd-boot and KDE](https://rich.grundy.io/blog/archlinux-on-encrypted-btrfs-with-systemd-boot-and-kde/)
 
 # Requirements #
 
