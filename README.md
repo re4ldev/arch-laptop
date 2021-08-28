@@ -1,18 +1,19 @@
-Arch Linux OS installation and configuration procedures for laptop PC. 
-This repo includes scripts, configuration files and step-by-step guides for 
-Arch Linux deployment on a laptop (mobile) computer.
+This repository is an attempt to create a complete guide for Arch Linux operating system deployment on a mobile personal computer (laptop). The installation will fulfill all the requirements listed below.
 
-This installation procedure is based on the following sources:
+This installation procedure heavily borrows from the following sources:
 * [Arch Linux Installation guide](https://wiki.archlinux.org/title/Installation_guide)
 * [Rich Grundy - Archlinux on encrypted btrfs with systemd-boot and KDE](https://rich.grundy.io/blog/archlinux-on-encrypted-btrfs-with-systemd-boot-and-kde/)
+* [Nice Micro channel](https://odysee.com/@nicemicro:6?)
+* [EF - Linux Made Simple](https://www.youtube.com/c/EFLinuxMadeSimple)
 
 # Requirements #
 
 1. Data at rest encryption (disk partitions and swap).
-2. Battery saving features (hibernation to disk on lid close).
+2. Battery saving features (hibernation to disk on lid close or button press).
 3. Wireless connectivity (wifi, bluetooth, wan), if available.
 4. Snapshot system (to easily restore to previous state in case of failure).
 5. Periodic full backup to NAS when connected to LAN.
+6. Graphical environment.
 
 # Installation steps #
 
@@ -40,15 +41,12 @@ For System integrity create subvolumes instead of directories for:
 
 # Packages #
 
-## Base ##
-
-base linux linux-firmware
-dosfstools btrfs-progs
-intel-ucode
-dhcpcd wpa_supplicant
-vim
-man-db man-pages texinfo
-
-## Optional ##
-
-networkmanager (replaces: dhcpcd wpa_supplicant)
+categoty | default | optional
+-------- | -------- | --------
+Base System | base base-devel linux linux-firmware |
+File System tools | dosfstools btrfs-progs |
+CPU microcode | intel-ucode |
+Network | dhcpcd wpa_supplicant | networkmanager (replaces: dhcpcd wpa_supplicant)
+Utils | vim git |
+Documentation | man-db man-pages texinfo |
+Graphical environment | xf86-video-intel xorg-server xorg-xinit xorg-xsetroot |
