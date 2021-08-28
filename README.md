@@ -41,12 +41,13 @@ For System integrity create subvolumes instead of directories for:
 
 # Packages #
 
-categoty | default | optional
+categoty | official | AUR 
 -------- | -------- | --------
 Base System | base base-devel linux linux-firmware |
 File System tools | dosfstools btrfs-progs |
 CPU microcode | intel-ucode |
-Network | dhcpcd wpa_supplicant | networkmanager (replaces: dhcpcd wpa_supplicant)
+Network | dhcpcd wpa_supplicant | 
 Utils | vim git |
 Documentation | man-db man-pages texinfo |
 Graphical environment | xf86-video-intel xorg-server xorg-xinit xorg-xsetroot |
+Window Manager | | dwm
