@@ -5,10 +5,11 @@ I am Linux enthisiast with no system administration background. This guide was p
 This repository is an attempt to create a complete guide for Arch Linux operating system deployment on a mobile personal computer (laptop). 
 
 This installation procedure heavily borrows from the following sources:
-* [Arch Linux Installation guide](https://wiki.archlinux.org/title/Installation_guide)
-* [Rich Grundy - Archlinux on encrypted btrfs with systemd-boot and KDE](https://rich.grundy.io/blog/archlinux-on-encrypted-btrfs-with-systemd-boot-and-kde/)
-* [Nice Micro channel](https://odysee.com/@nicemicro:6?)
-* [EF - Linux Made Simple](https://www.youtube.com/c/EFLinuxMadeSimple)
+* [Arch Linux Installation guide (archlinux wiki)](https://wiki.archlinux.org/title/Installation_guide)
+* [Archlinux on encrypted btrfs with systemd-boot and KDE (blog)](https://rich.grundy.io/blog/archlinux-on-encrypted-btrfs-with-systemd-boot-and-kde/)
+* [Nice Micro (youtube)](https://www.youtube.com/channel/UC2bkdAPR47c7FkvwSXzzMzQ)
+* [EF - Linux Made Simple (youtube)](https://www.youtube.com/c/EFLinuxMadeSimple)
+* [Installing Arch on an encrypted BRTFS with EFI (blog)](https://gareth.com/index.php/2020/07/15/installing-arch-on-an-encrypted-btrfs-with-efi/)
 
 # I. Requirements #
 
