@@ -29,7 +29,7 @@ This installation procedure heavily borrows from the following sources:
 
 1. Acquire an installation image.
 2. Verify an installation image signature.
-3. Prepare an installation media.
+3. Prepare an installation medium.
 4. Boot the live environment.
 5. Set keyboard layout.
 6. Verify the boot mode.
@@ -65,7 +65,7 @@ Execute the gpg command to verify .iso file agianst .iso.sig. Both files must be
 `gpg:                using RSA key 4AA4767BBC9C4B1D18AE28B77F2D434B9741E8AC`\
 `gpg: Can't check signature: No public key`
 
-## 3. Prepare an installation media: ##
+## 3. Prepare an installation medium: ##
 Find out the name of the USB drive and make sure it is not mounted:\
 `$ lsblk`\
 `NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT`\
