@@ -100,8 +100,11 @@ Boot laptop with the USB drive prepared in the previous step. Arch Linux install
 By default console keymap is US. Available layouts can be listed with:\
 `# ls /usr/share/kbd/keymaps/**/*.map.gz`
 
-To modify the layout, append a corresponding file name to loadkeys. For example, for German layout:\
-`# loadkeys de-latin1`
+To modify the layout, append a corresponding file name to loadkeys. For example, for Polish programmers layout:\
+`# loadkeys pl`
+
+Set console font to support Polish special characters.\
+`# setfont lat2-16.psfu.gz`
 
 ## 8. Verify the boot mode: ##
 We need verify that we are actually booted in UEFI mode. If the following command is executed without error that means we run UEFI, similarly to the below output.\
