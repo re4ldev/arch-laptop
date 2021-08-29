@@ -1,6 +1,8 @@
 DISCLAIMER: No liability for the contents of this documents can be accepted. Use the concepts, examples and other content at your own risk. There may be errors and inaccuracies, that may of course be damaging to your system. Although this is highly unlikely, you should proceed with caution. The author does not accept any responsibility for any damage incurred.
 
-This repository is an attempt to create a complete guide for Arch Linux operating system deployment on a mobile personal computer (laptop). The installation will fulfill all the requirements listed below.
+I am Linux enthisiast with no system administration background. This guide was put together by myself following a number of documents, tutorials and recommendations. I would appreciate any kind of constructive feedback about the below procedure. You can use Issues section for that purpose.
+
+This repository is an attempt to create a complete guide for Arch Linux operating system deployment on a mobile personal computer (laptop). 
 
 This installation procedure heavily borrows from the following sources:
 * [Arch Linux Installation guide](https://wiki.archlinux.org/title/Installation_guide)
@@ -21,8 +23,8 @@ This installation procedure heavily borrows from the following sources:
 
 # II. Assumptions #
 
-1. To create an installation media we will use Linux distribution with the following tools: GnuPG, wget, dd.
-2. USB flash drive (pendrive) is used as installation media.
+1. To create an installation medium we will use Linux distribution with the following tools: GnuPG, wget, dd. For instructions to create installation medium from Windows or MacOS, please refer to Arch Linux installation guide.
+2. USB flash drive (pendrive) is used as installation medium.
 3. We are using the following Arch Linux image file: _**archlinux-2021.08.01-x86_64.iso**_ and corresponding _**archlinux-2021.08.01-x86_64.iso.sig**_
 
 # III. Installation steps #
@@ -49,7 +51,7 @@ This installation procedure heavily borrows from the following sources:
 20. Set up the network.
 21. Set root password.
 22. Set initramfs.
-23. Install bootloader (systemd-boot).
+23. Install bootloader.
 24. Boot into a newly installed system.
 
 ## 1. Acquire an installation image: ##
@@ -84,6 +86,21 @@ In case the device is not empty, wipe out the device prior to .iso copy.\
 
 Copy Arch Linux install image to USB drive.\
 `# dd if=archlinux-2021.08.01-x86_64.iso of=/dev/sda bs=4M conv=fsync oflag=direct status=progress`
+
+## 4. Boot the live environment: ##
+Boot laptop with the USB drive prepared in the previous step. Arch Linux installation images do not support Secure Boot. Consult Arch Linux installation guide for more details.
+
+## 5. Set keyboard layout: ##
+By default console keymap is US. Available layouts can be listed with:\
+`# ls /usr/share/kbd/keymaps/**/*.map.gz`
+
+To modify the layout, append a corresponding file name to loadkeys. For example, for German layout:\
+`# loadkeys de-latin1`
+
+## 6. Verify the boot mode: ##
+We need verify that we are actually booted in UEFI mode. If the following command is executed without error that means we run UEFI, similarly to the below output.\
+`# mount | grep efi`\
+`efivarfs on /sys/firmware/efi/efivars type efivarfs (rw,nosuid,nodev,noexec,realtime)`
 
 # Partitioning #
 
