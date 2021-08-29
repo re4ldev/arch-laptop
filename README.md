@@ -34,26 +34,27 @@ This installation procedure heavily borrows from the following sources:
 2. Verify an installation image signature.
 3. Prepare an installation medium.
 4. Boot the live environment.
-5. Set keyboard layout.
-6. Verify the boot mode.
-7. Connect to the Internet.
-8. Update the system clock.
-9. Partition the disks.
-10. Setup an encryption on the main partition.
-11. Format disk partitions.
-12. Create btrfs subvolumes.
-13. Mount the subvolumes.
-14. Select the mirrors.
-15. Install essential packages with pacstrap.
-16. Generate fstab.
-17. Chroot into the new system.
-18. Set a timezone.
-19. Set locale.
-20. Set up the network.
-21. Set root password.
-22. Set initramfs.
-23. Install bootloader.
-24. Boot into a newly installed system.
+5. Set up the network.
+6. Set up SSH access to the live environment.
+7. Set keyboard layout.
+8. Verify the boot mode.
+9. Update the system clock.
+10. Partition the disks.
+11. Setup an encryption on the main partition.
+12. Format disk partitions.
+13. Create btrfs subvolumes.
+14. Mount the subvolumes.
+15. Select the mirrors.
+16. Install essential packages with pacstrap.
+17. Generate fstab.
+18. Chroot into the new system.
+19. Set a timezone.
+20. Set locale.
+21. Set up the network.
+22. Set root password.
+23. Set initramfs.
+24. Install bootloader.
+25. Boot into a newly installed system.
 
 ## 1. Acquire an installation image: ##
 The updated list of mirrors can be found on [Arch Linux download page](https://archlinux.org/download). Download Arch Linux image (.iso) from preferred mirror, and the corresponding PGP signature file (.iso.sig) from Arch Linux download page directly.\
@@ -91,14 +92,18 @@ Copy Arch Linux install image to USB drive.\
 ## 4. Boot the live environment: ##
 Boot laptop with the USB drive prepared in the previous step. Arch Linux installation images do not support Secure Boot. Consult Arch Linux installation guide for more details.
 
-## 5. Set keyboard layout: ##
+## 5. Set up the network: ##
+
+## 6. Set up SSH access to the live environment: ##
+
+## 7. Set keyboard layout: ##
 By default console keymap is US. Available layouts can be listed with:\
 `# ls /usr/share/kbd/keymaps/**/*.map.gz`
 
 To modify the layout, append a corresponding file name to loadkeys. For example, for German layout:\
 `# loadkeys de-latin1`
 
-## 6. Verify the boot mode: ##
+## 8. Verify the boot mode: ##
 We need verify that we are actually booted in UEFI mode. If the following command is executed without error that means we run UEFI, similarly to the below output.\
 `# mount | grep efi`\
 `efivarfs on /sys/firmware/efi/efivars type efivarfs (rw,nosuid,nodev,noexec,realtime)`
