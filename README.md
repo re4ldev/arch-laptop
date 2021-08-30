@@ -166,17 +166,27 @@ Add default route to access Internet.\
 **`# ip route add default via 10.0.0.1/24 dev enp0s3`**
 
 ## 7. Live environment SSH access setup ##
+To be able to login via ssh we need to set a root password.\
+**`# passwd root`**
+
+If ssh service is already enabled/running you can try to connect via ssh. Check if ssh service is already running.\
+**`# systemctl list-unit-files -t service | grep ssh`**\
+`sshd.service enabled disabled`
+
+If ssh is not running start the service.\
+**`# systemctl start sshd`**
 
 ## 8. Live environment boot mode verification ##
 We need verify that we are actually booted in UEFI mode. If the following command is executed without error that means we run UEFI, similarly to the below output.\
 **`# mount | grep efi`**\
 `efivarfs on /sys/firmware/efi/efivars type efivarfs (rw,nosuid,nodev,noexec,realtime)`
 
+## 9. Live environment system clock update ##
+Use NTP server to syncronize time.\
+**`# timedatectl set-ntp true`**
 
-
-
-
-
+Set CET timezone.\
+**`# timedatectl set-timezone Europe/Warsaw`**
 
 # Partitioning #
 
