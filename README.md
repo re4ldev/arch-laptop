@@ -58,12 +58,12 @@ This installation procedure heavily borrows from the following sources:
 
 ## 1. Acquire an installation image: ##
 The updated list of mirrors can be found on [Arch Linux download page](https://archlinux.org/download). Download Arch Linux image (.iso) from preferred mirror, and the corresponding PGP signature file (.iso.sig) from Arch Linux download page directly.\
-`$ wget https://ftp.icm.edu.pl/pub/Linux/dist/archlinux/iso/2021.08.01/archlinux-2021.08.01-x86_64.iso`\
-`$ wget https://archlinux.org/iso/2021.08.01/archlinux-2021.08.01-x86_64.iso.sig`
+**`$ wget https://ftp.icm.edu.pl/pub/Linux/dist/archlinux/iso/2021.08.01/archlinux-2021.08.01-x86_64.iso`**\
+**`$ wget https://archlinux.org/iso/2021.08.01/archlinux-2021.08.01-x86_64.iso.sig`**
 
 ## 2. Verify an installation image signature: ##
 Execute the gpg command to verify .iso file agianst .iso.sig. Both files must be in the same directory. Make sure RSA key from the output matches PGP fingerprint provided on Arch Linux download website.\
-`$ gpg --keyserver-options auto-key-retrieve --verify archlinux-2021.08.01-x86_64.iso.sig`
+**`$ gpg --keyserver-options auto-key-retrieve --verify archlinux-2021.08.01-x86_64.iso.sig`**\
 `gpg: assuming signed data in 'archlinux-2021.08.01-x86_64.iso'`\
 `gpg: Signature made Sun 01 Aug 2021 10:32:22 AM CEST`\
 `gpg:                using RSA key 4AA4767BBC9C4B1D18AE28B77F2D434B9741E8AC`\
@@ -71,7 +71,7 @@ Execute the gpg command to verify .iso file agianst .iso.sig. Both files must be
 
 ## 3. Prepare an installation medium: ##
 Find out the name of the USB drive and make sure it is not mounted:\
-`$ lsblk`\
+**`$ lsblk`**\
 `NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT`\
 `sda           8:0    1 14.5G  0 disk`\
 `├─sda1        8:1    1  711M  0 part /media/pi/ARCH_202107`\
@@ -81,34 +81,71 @@ Find out the name of the USB drive and make sure it is not mounted:\
 `└─sdb2      179:7    0 57.8G  0 part /`
 
 In the above example, the USB drive is the _**sda**_ device. Make sure the device is not mounted.\
-`$ umount /dev/sda1`
+**`$ umount /dev/sda1`**
 
 In case the device is not empty, wipe out the device prior to .iso copy.\
-`# wipefs --all /dev/sda`
+**`# wipefs --all /dev/sda`**
 
 Copy Arch Linux install image to USB drive.\
-`# dd if=archlinux-2021.08.01-x86_64.iso of=/dev/sda bs=4M conv=fsync oflag=direct status=progress`
+**`# dd if=archlinux-2021.08.01-x86_64.iso of=/dev/sda bs=4M conv=fsync oflag=direct status=progress`**
 
 ## 4. Boot the live environment: ##
 Boot laptop with the USB drive prepared in the previous step. Arch Linux installation images do not support Secure Boot. Consult Arch Linux installation guide for more details.
 
 ## 5. Set keyboard layout and console font: ##
 By default console keymap is US. Available layouts can be listed with:\
-`# ls /usr/share/kbd/keymaps/**/*.map.gz`
+**`# ls /usr/share/kbd/keymaps/**/*.map.gz`**
 
 To modify the layout, append a corresponding file name to loadkeys. For example, for Polish programmers layout:\
-`# loadkeys pl`
+**`# loadkeys pl`**
 
 Set console font to support Polish special characters.\
-`# setfont lat2-16.psfu.gz`
+**`# setfont lat2-16.psfu.gz`**
 
-## 6. Set up the network: ##
+## 6. Set up the network access: ##
+### Wired connection with DHCP ###
+Connect network cable to the laptop. If DHCP server is available in the network, ethernet network interface will be configured automatically. Check the network interface configuration.\
+**`# ip addr`**\
+`2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel UP mode DEFAULT group default qlen 1000`\
+`link/ether 08:00:27:8f:69:ff brd ff:ff:ff:ff:ff:ff`\
+`inet 192.168.0.2/24 metric 100 brd 192.168.0.255 scope global dynamic enp0s3`\
+`valid_lft 83738sec preferred_lft 83738sec`\
+`inet6 fe80::a12:abcd:a12b:1234/64 scope link`\
+`valid_lft forever preferred_lft forever`
+
+Check for Internet access:\
+**`# ping archlinux.org`**\
+`PING archlinux.org (95.217.163.246) 56(84) bytes of data.`\
+`64 bytes from archlinux.org (95.217.163.246): icmp_seq=1 ttl=49 time=44.3 ms`\
+`64 bytes from archlinux.org (95.217.163.246): icmp_seq=2 ttl=49 time=44.3 ms`\
+`64 bytes from archlinux.org (95.217.163.246): icmp_seq=3 ttl=49 time=44.3 ms`
+
+### Wired connection without DHCP ###
+Connect network cable to the laptop. Check for available network interfaces:\
+**`# ip link`**\
+`1: lo <LOOPBACK,UP,LOWER_UP> mtu 65535 qdisc noqueue state UNKNOWN mode DEFAULT group qlen 1000`\
+`link/loopacbk 00:00:00:00:00:00 brd 00:00:00:00:00:00`\
+`2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel UP mode DEFAULT group default qlen 1000`\
+`link/ether 08:00:27:8f:69:ff brd ff:ff:ff:ff:ff:ff`\
+
+Add an IP address to an interface:\
+**`# ip address add 192.168.0.2/24 broadcast + dev enp0s3`**
+
+Add default route to access Internet:\
+**`# ip route add default via 192.168.0.1/24 dev enp0s3`**
+
+Check for Internet access:\
+**`# ping archlinux.org`**\
+`PING archlinux.org (95.217.163.246) 56(84) bytes of data.`\
+`64 bytes from archlinux.org (95.217.163.246): icmp_seq=1 ttl=49 time=44.3 ms`\
+`64 bytes from archlinux.org (95.217.163.246): icmp_seq=2 ttl=49 time=44.3 ms`\
+`64 bytes from archlinux.org (95.217.163.246): icmp_seq=3 ttl=49 time=44.3 ms`
 
 ## 7. Set up SSH access to the live environment: ##
 
 ## 8. Verify the boot mode: ##
 We need verify that we are actually booted in UEFI mode. If the following command is executed without error that means we run UEFI, similarly to the below output.\
-`# mount | grep efi`\
+**`# mount | grep efi`**\
 `efivarfs on /sys/firmware/efi/efivars type efivarfs (rw,nosuid,nodev,noexec,realtime)`
 
 # Partitioning #
