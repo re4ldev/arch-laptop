@@ -1,6 +1,6 @@
 DISCLAIMER: No liability for the contents of this documents can be accepted. Use the concepts, examples and other content at your own risk. There may be errors and inaccuracies, that may of course be damaging to your system. Although this is highly unlikely, you should proceed with caution. The author does not accept any responsibility for any damage incurred.
 
-I am Linux enthisiast with no system administration background. This guide was put together by myself following a number of documents, tutorials and recommendations. I would appreciate any kind of constructive feedback about the below procedure. You can use Issues section for that purpose.
+I am Linux enthusiast with no system administration background. This guide was put together by myself following a number of documents, tutorials and recommendations. I would appreciate any kind of constructive feedback about the below procedure. You can use Issues section for that purpose.
 
 This repository is an attempt to create a complete guide for Arch Linux operating system deployment on a mobile personal computer (laptop). 
 
