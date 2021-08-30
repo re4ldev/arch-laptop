@@ -36,11 +36,11 @@ This installation procedure heavily borrows from the following sources:
 2. Verify an installation image signature.
 3. Prepare an installation medium.
 4. Boot the live environment.
-5. Set keyboard layout and console font.
-6. Set up the network access.
-7. Set up SSH access to the live environment.
-8. Verify the boot mode.
-9. Update the system clock.
+5. Live environment keyboard layout and console font setup.
+6. Live environment network access setup.
+7. Live environment SSH access setup.
+8. Live environment boot mode verification.
+9. Live environment system clock update.
 10. Partition the disks.
 11. Setup an encryption on the main partition.
 12. Format disk partitions.
@@ -58,12 +58,12 @@ This installation procedure heavily borrows from the following sources:
 24. Install bootloader.
 25. Boot into a newly installed system.
 
-## 1. Acquire an installation image: ##
+## 1. Acquire an installation image ##
 The updated list of mirrors can be found on [Arch Linux download page](https://archlinux.org/download). Download Arch Linux image (.iso) from preferred mirror, and the corresponding PGP signature file (.iso.sig) from Arch Linux download page directly.\
 **`$ wget https://ftp.icm.edu.pl/pub/Linux/dist/archlinux/iso/2021.08.01/archlinux-2021.08.01-x86_64.iso`**\
 **`$ wget https://archlinux.org/iso/2021.08.01/archlinux-2021.08.01-x86_64.iso.sig`**
 
-## 2. Verify an installation image signature: ##
+## 2. Verify an installation image signature ##
 Execute the gpg command to verify .iso file agianst .iso.sig. Both files must be in the same directory. Make sure RSA key from the output matches PGP fingerprint provided on Arch Linux download website.\
 **`$ gpg --keyserver-options auto-key-retrieve --verify archlinux-2021.08.01-x86_64.iso.sig`**\
 `gpg: assuming signed data in 'archlinux-2021.08.01-x86_64.iso'`\
@@ -71,8 +71,8 @@ Execute the gpg command to verify .iso file agianst .iso.sig. Both files must be
 `gpg:                using RSA key 4AA4767BBC9C4B1D18AE28B77F2D434B9741E8AC`\
 `gpg: Can't check signature: No public key`
 
-## 3. Prepare an installation medium: ##
-Find out the name of the USB drive and make sure it is not mounted:\
+## 3. Prepare an installation medium ##
+Find out the name of the USB drive and make sure it is not mounted.\
 **`$ lsblk`**\
 `NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT`\
 `sda           8:0    1 14.5G  0 disk`\
@@ -91,20 +91,20 @@ In case the device is not empty, wipe out the device prior to .iso copy.\
 Copy Arch Linux install image to USB drive.\
 **`# dd if=archlinux-2021.08.01-x86_64.iso of=/dev/sda bs=4M conv=fsync oflag=direct status=progress`**
 
-## 4. Boot the live environment: ##
+## 4. Boot the live environment ##
 Boot laptop with the USB drive prepared in the previous step. Arch Linux installation images do not support Secure Boot. Consult Arch Linux installation guide for more details.
 
-## 5. Set keyboard layout and console font: ##
-By default console keymap is US. Available layouts can be listed with:\
+## 5. Live environment keyboard layout and console font setup ##
+By default console keymap is US. List the directory with available keyboard layouts.\
 **`# ls /usr/share/kbd/keymaps/**/*.map.gz`**
 
-To modify the layout, append a corresponding file name to loadkeys. For example, for Polish programmers layout:\
+To modify the layout, append a corresponding file name to loadkeys. For example, for Polish programmers layout.\
 **`# loadkeys pl`**
 
 Set console font to support Polish special characters.\
 **`# setfont lat2-16.psfu.gz`**
 
-## 6. Set up the network access: ##
+## 6. Live environment network access setup ##
 Since network connectivity is a critical setting for successful Arch Linux installation we will describe four different network access scenarios:
 1. Wired connection with DHCP
 2. Wired connection without DHCP
@@ -116,7 +116,7 @@ WPA/WPA2-PSK encryption mode\
 SSID: MyTestLab\
 passphrase: myTestPass
 
-Check for available network interfaces, and apply one of the above scenarios to the preferred interface:\
+Check for available network interfaces, and apply one of the above scenarios to the preferred interface.\
 **`# ip link`**\
 `1: lo <LOOPBACK,UP,LOWER_UP> mtu 65535 qdisc noqueue state UNKNOWN mode DEFAULT group qlen 1000`\
 `link/loopacbk 00:00:00:00:00:00 brd 00:00:00:00:00:00`\
@@ -125,7 +125,7 @@ Check for available network interfaces, and apply one of the above scenarios to 
 `3: wlan0: <BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN mode DORMANT group default qlen 1000`\
 `link/ether 08:00:27:aa:bb:cc brd ff:ff:ff:ff:ff:ff` 
 
-Once applied the procedure for any of the DHCP scenarios, you should verify local IP address:\
+Once applied the procedure for any of the DHCP scenarios, you should verify local IP address.\
 **`# ip addr`**\
 `2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel UP mode DEFAULT group default qlen 1000`\
 `link/ether 08:00:27:8f:69:ff brd ff:ff:ff:ff:ff:ff`\
@@ -134,7 +134,7 @@ Once applied the procedure for any of the DHCP scenarios, you should verify loca
 `inet6 fe80::a12:abcd:a12b:1234/64 scope link`\
 `valid_lft forever preferred_lft forever`
 
-Once applied the procedure from one of the above scenarios, you should verify Internet access:\
+Once applied the procedure from one of the above scenarios, you should verify Internet access.\
 **`# ping archlinux.org`**\
 `PING archlinux.org (95.217.163.246) 56(84) bytes of data.`\
 `64 bytes from archlinux.org (95.217.163.246): icmp_seq=1 ttl=49 time=44.3 ms`\
@@ -145,32 +145,38 @@ Once applied the procedure from one of the above scenarios, you should verify In
 Connect network cable to the laptop. If DHCP server is available in the network, ethernet network interface will be configured automatically.
 
 ### 6-2. Wired connection without DHCP ###
-Add an IP address to the interface:\
+Add an IP address to the interface.\
 **`# ip address add 10.0.0.2/24 broadcast + dev enp0s3`**
 
-Add default route to access Internet:\
+Add default route to access Internet.\
 **`# ip route add default via 10.0.0.1/24 dev enp0s3`**
 
 ### 6-3. Wireless connection with DHCP ###
-Connect to wireless LAN:\
+Connect to wireless LAN.\
 **`# iwctl --passphrase myTestPass station wlan0 connect MyTestLab`**
 
 ### 6-4. Wireless connection without DHCP ###
-Connect to wireless LAN:\
+Connect to wireless LAN.\
 **`# iwctl --passphrase myTestPass station wlan0 connect MyTestLab`**
 
-Add an IP address to the interface:\
+Add an IP address to the interface.\
 **`# ip address add 10.0.0.2/24 broadcast + dev enp0s3`**
 
-Add default route to access Internet:\
+Add default route to access Internet.\
 **`# ip route add default via 10.0.0.1/24 dev enp0s3`**
 
-## 7. Set up SSH access to the live environment: ##
+## 7. Live environment SSH access setup ##
 
-## 8. Verify the boot mode: ##
+## 8. Live environment boot mode verification ##
 We need verify that we are actually booted in UEFI mode. If the following command is executed without error that means we run UEFI, similarly to the below output.\
 **`# mount | grep efi`**\
 `efivarfs on /sys/firmware/efi/efivars type efivarfs (rw,nosuid,nodev,noexec,realtime)`
+
+
+
+
+
+
 
 # Partitioning #
 
