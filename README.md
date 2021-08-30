@@ -27,6 +27,8 @@ This installation procedure heavily borrows from the following sources:
 1. To create an installation medium we will use Linux distribution with the following tools: GnuPG, wget, dd. For instructions to create installation medium from Windows or MacOS, please refer to Arch Linux installation guide.
 2. USB flash drive (pendrive) is used as installation medium.
 3. We are using the following Arch Linux image file: _**archlinux-2021.08.01-x86_64.iso**_ and corresponding _**archlinux-2021.08.01-x86_64.iso.sig**_
+4. There is a LAN network with Internet access available.
+5. Arch Linux live environment will be accessed via SSH to perform the installation procedure.
 
 # III. Installation steps #
 
@@ -35,7 +37,7 @@ This installation procedure heavily borrows from the following sources:
 3. Prepare an installation medium.
 4. Boot the live environment.
 5. Set keyboard layout and console font.
-6. Set up the network.
+6. Set up the network access.
 7. Set up SSH access to the live environment.
 8. Verify the boot mode.
 9. Update the system clock.
@@ -103,43 +105,65 @@ Set console font to support Polish special characters.\
 **`# setfont lat2-16.psfu.gz`**
 
 ## 6. Set up the network access: ##
-### Wired connection with DHCP ###
-Connect network cable to the laptop. If DHCP server is available in the network, ethernet network interface will be configured automatically. Check the network interface configuration.\
-**`# ip addr`**\
-`2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel UP mode DEFAULT group default qlen 1000`\
-`link/ether 08:00:27:8f:69:ff brd ff:ff:ff:ff:ff:ff`\
-`inet 192.168.0.2/24 metric 100 brd 192.168.0.255 scope global dynamic enp0s3`\
-`valid_lft 83738sec preferred_lft 83738sec`\
-`inet6 fe80::a12:abcd:a12b:1234/64 scope link`\
-`valid_lft forever preferred_lft forever`
+Since network connectivity is a critical setting for successful Arch Linux installation we will describe four different network access scenarios:
+1. Wired connection with DHCP
+2. Wired connection without DHCP
+3. Wireless connection with DHCP
+4. Wireless connection without DHCP
 
-Check for Internet access:\
-**`# ping archlinux.org`**\
-`PING archlinux.org (95.217.163.246) 56(84) bytes of data.`\
-`64 bytes from archlinux.org (95.217.163.246): icmp_seq=1 ttl=49 time=44.3 ms`\
-`64 bytes from archlinux.org (95.217.163.246): icmp_seq=2 ttl=49 time=44.3 ms`\
-`64 bytes from archlinux.org (95.217.163.246): icmp_seq=3 ttl=49 time=44.3 ms`
+Wireless access point specification:\
+WPA/WPA2-PSK encryption mode\
+SSID: MyTestLab\
+passphrase: myTestPass
 
-### Wired connection without DHCP ###
-Connect network cable to the laptop. Check for available network interfaces:\
+Check for available network interfaces, and apply one of the above scenarios to the preferred interface:\
 **`# ip link`**\
 `1: lo <LOOPBACK,UP,LOWER_UP> mtu 65535 qdisc noqueue state UNKNOWN mode DEFAULT group qlen 1000`\
 `link/loopacbk 00:00:00:00:00:00 brd 00:00:00:00:00:00`\
 `2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel UP mode DEFAULT group default qlen 1000`\
 `link/ether 08:00:27:8f:69:ff brd ff:ff:ff:ff:ff:ff`\
+`3: wlan0: <BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN mode DORMANT group default qlen 1000`\
+`link/ether 08:00:27:aa:bb:cc brd ff:ff:ff:ff:ff:ff` 
 
-Add an IP address to an interface:\
-**`# ip address add 192.168.0.2/24 broadcast + dev enp0s3`**
+Once applied the procedure for any of the DHCP scenarios, you should verify local IP address:\
+**`# ip addr`**\
+`2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel UP mode DEFAULT group default qlen 1000`\
+`link/ether 08:00:27:8f:69:ff brd ff:ff:ff:ff:ff:ff`\
+`inet 10.0.0.2/24 metric 100 brd 10.0.0.255 scope global dynamic enp0s3`\
+`valid_lft 83738sec preferred_lft 83738sec`\
+`inet6 fe80::a12:abcd:a12b:1234/64 scope link`\
+`valid_lft forever preferred_lft forever`
 
-Add default route to access Internet:\
-**`# ip route add default via 192.168.0.1/24 dev enp0s3`**
-
-Check for Internet access:\
+Once applied the procedure from one of the above scenarios, you should verify Internet access:\
 **`# ping archlinux.org`**\
 `PING archlinux.org (95.217.163.246) 56(84) bytes of data.`\
 `64 bytes from archlinux.org (95.217.163.246): icmp_seq=1 ttl=49 time=44.3 ms`\
 `64 bytes from archlinux.org (95.217.163.246): icmp_seq=2 ttl=49 time=44.3 ms`\
 `64 bytes from archlinux.org (95.217.163.246): icmp_seq=3 ttl=49 time=44.3 ms`
+
+### 6-1. Wired connection with DHCP ###
+Connect network cable to the laptop. If DHCP server is available in the network, ethernet network interface will be configured automatically.
+
+### 6-2. Wired connection without DHCP ###
+Add an IP address to the interface:\
+**`# ip address add 10.0.0.2/24 broadcast + dev enp0s3`**
+
+Add default route to access Internet:\
+**`# ip route add default via 10.0.0.1/24 dev enp0s3`**
+
+### 6-3. Wireless connection with DHCP ###
+Connect to wireless LAN:\
+**`# iwctl --passphrase myTestPass station wlan0 connect MyTestLab`**
+
+### 6-4. Wireless connection without DHCP ###
+Connect to wireless LAN:\
+**`# iwctl --passphrase myTestPass station wlan0 connect MyTestLab`**
+
+Add an IP address to the interface:\
+**`# ip address add 10.0.0.2/24 broadcast + dev enp0s3`**
+
+Add default route to access Internet:\
+**`# ip route add default via 10.0.0.1/24 dev enp0s3`**
 
 ## 7. Set up SSH access to the live environment: ##
 
