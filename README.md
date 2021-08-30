@@ -34,9 +34,9 @@ This installation procedure heavily borrows from the following sources:
 2. Verify an installation image signature.
 3. Prepare an installation medium.
 4. Boot the live environment.
-5. Set up the network.
-6. Set up SSH access to the live environment.
-7. Set keyboard layout.
+5. Set keyboard layout and console font.
+6. Set up the network.
+7. Set up SSH access to the live environment.
 8. Verify the boot mode.
 9. Update the system clock.
 10. Partition the disks.
@@ -92,11 +92,7 @@ Copy Arch Linux install image to USB drive.\
 ## 4. Boot the live environment: ##
 Boot laptop with the USB drive prepared in the previous step. Arch Linux installation images do not support Secure Boot. Consult Arch Linux installation guide for more details.
 
-## 5. Set up the network: ##
-
-## 6. Set up SSH access to the live environment: ##
-
-## 7. Set keyboard layout: ##
+## 5. Set keyboard layout and console font: ##
 By default console keymap is US. Available layouts can be listed with:\
 `# ls /usr/share/kbd/keymaps/**/*.map.gz`
 
@@ -105,6 +101,10 @@ To modify the layout, append a corresponding file name to loadkeys. For example,
 
 Set console font to support Polish special characters.\
 `# setfont lat2-16.psfu.gz`
+
+## 6. Set up the network: ##
+
+## 7. Set up SSH access to the live environment: ##
 
 ## 8. Verify the boot mode: ##
 We need verify that we are actually booted in UEFI mode. If the following command is executed without error that means we run UEFI, similarly to the below output.\
