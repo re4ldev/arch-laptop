@@ -188,13 +188,29 @@ Use NTP server to syncronize time.\
 Set CET timezone.\
 **`# timedatectl set-timezone Europe/Warsaw`**
 
-# Partitioning #
-
-## UEFI ##
+## 10. Partition the disks ##
+We will create two partitions. One for the boot and another one for the System. We will not use swap partition, instead we will use swapfile.
 partition | type | size | file system
 --------- | ---- | ---- | ----------- 
-boot | ef00 | +550M | mkfs.fat -F32
-OS | 8300 | ~ | mkfs.btrfs
+boot | esp | +550M | fat32
+System | linux | ~ | btrfs
+
+First we need to verify the disk device name on which we will install Arch Linux.\
+**`# lsblk`**\
+`NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS`\
+`loop0 7:0 0 662.1M 1 loop /run/archiso/airootfs`\
+`sda 8:0 0 20G 0 disk`\
+`sr0 11:0 1 831.3M 0 rom /run/archiso/bootmnt`
+
+We will use GNU parted to partition the disk.\
+First create GUID Partition Table.\
+**`# parted -s /dev/sda mklabel gpt`**
+
+Make partition for boot.\
+**`# parted -s /dev/sda mkpart ESP fat32 1MiB 551MiB set 1 esp on name 1 efi`**
+
+Make partition for the system.\
+**`# parted -s /dev/sda mkpart System 551MiB 100% name 2 system`**
 
 For System integrity create subvolumes instead of directories for:
 * /tmp
