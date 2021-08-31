@@ -212,6 +212,14 @@ Make partition for boot.\
 Make partition for the system.\
 **`# parted -s /dev/sda mkpart System 551MiB 100% name 2 system`**
 
+Verify the partitions are correcrtly created.\
+**`# lsblk`**\
+`loop0 7:0 0 662.1M 1 loop /run/archiso/airootfs`\
+`sda 8:0 0 20G 0 disk`\
+`└─sda1 8:1 0 550M 0 part`\
+`└─sda2 8:2 0 19.5G 0 part`\
+`sr0 11:0 1 831.3M 0 rom /run/archiso/bootmnt`
+
 For System integrity create subvolumes instead of directories for:
 * /tmp
 * /opt
