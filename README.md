@@ -176,6 +176,8 @@ If ssh service is already enabled/running you can try to connect via ssh. Check 
 If ssh is not running start the service.\
 **`# systemctl start sshd`**
 
+You can now connect via ssh to the live environment from another machine.
+
 ## 8. Live environment boot mode verification ##
 We need verify that we are actually booted in UEFI mode. If the following command is executed without error that means we run UEFI, similarly to the below output.\
 **`# mount | grep efi`**\
