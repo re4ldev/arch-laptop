@@ -29,6 +29,7 @@ This installation procedure heavily borrows from the following sources:
 3. We are using the following Arch Linux image file: _**archlinux-2021.08.01-x86_64.iso**_ and corresponding _**archlinux-2021.08.01-x86_64.iso.sig**_
 4. There is a LAN network with Internet access available.
 5. Arch Linux live environment will be accessed via SSH to perform the installation procedure.
+6. All storage devices are SSD SATA.
 
 # III. Installation steps #
 
@@ -41,22 +42,23 @@ This installation procedure heavily borrows from the following sources:
 7. Live environment SSH access setup.
 8. Live environment boot mode verification.
 9. Live environment system clock update.
-10. Partition the disks.
-11. Setup an encryption on the main partition.
-12. Format disk partitions.
-13. Create btrfs subvolumes.
-14. Mount the subvolumes.
-15. Select the mirrors.
-16. Install essential packages with pacstrap.
-17. Generate fstab.
-18. Chroot into the new system.
-19. Set a timezone.
-20. Set locale.
-21. Set up the network.
-22. Set root password.
-23. Set initramfs.
-24. Install bootloader.
-25. Boot into a newly installed system.
+10. Wipe out the disk.
+11. Partition the disks.
+12. Setup an encryption on the main partition.
+13. Format disk partitions.
+14. Create btrfs subvolumes.
+15. Mount the subvolumes.
+16. Select the mirrors.
+17. Install essential packages with pacstrap.
+18. Generate fstab.
+19. Chroot into the new system.
+20. Set a timezone.
+21. Set locale.
+22. Set up the network.
+23. Set root password.
+24. Set initramfs.
+25. Install bootloader.
+26. Boot into a newly installed system.
 
 ## 1. Acquire an installation image ##
 The updated list of mirrors can be found on [Arch Linux download page](https://archlinux.org/download). Download Arch Linux image (.iso) from preferred mirror, and the corresponding PGP signature file (.iso.sig) from Arch Linux download page directly.\
@@ -190,19 +192,32 @@ Use NTP server to syncronize time.\
 Set CET timezone.\
 **`# timedatectl set-timezone Europe/Warsaw`**
 
-## 10. Partition the disks ##
-We will create two partitions. One for the boot and another one for the System. We will not use swap partition, instead we will use swapfile.
-partition | type | size | file system
---------- | ---- | ---- | ----------- 
-boot | esp | +550M | fat32
-System | linux | ~ | btrfs
+## 10. Wipe out the disk ##
+This step is optional. It is only required if you want to sanitize the disk prior to its usage.
 
-First we need to verify the disk device name on which we will install Arch Linux.\
+Verify the disk device name on which we will install Arch Linux.\
 **`# lsblk`**\
 `NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS`\
 `loop0 7:0 0 662.1M 1 loop /run/archiso/airootfs`\
 `sda 8:0 0 20G 0 disk`\
 `sr0 11:0 1 831.3M 0 rom /run/archiso/bootmnt`
+
+Make sure the drive security is not frozen.\
+**`hdparm -I /dev/sda | grep frozen`**\
+`frozen`
+
+If it says _frozen_ it is not possible to proceed with the next step. To unfreeze the drive you may try to suspend the system. Upon waking up, it is likely that the freeze will be lifted. Issue the above command once again to check if after waking up the output says _not_ _frozen_.\
+
+> Follow up:
+> https://wiki.archlinux.org/title/Solid_state_drive/Memory_cell_clearing
+>
+
+## 11. Partition the disks ##
+We will create two partitions. One for the boot and another one for the System. We will not use swap partition, instead we will use swapfile.
+partition | type | size | file system
+--------- | ---- | ---- | ----------- 
+boot | esp | +550M | fat32
+System | linux | ~ | btrfs
 
 We will use GNU parted to partition the disk.\
 First create GUID Partition Table.\
@@ -215,12 +230,25 @@ Make partition for the system.\
 **`# parted -s /dev/sda mkpart System 551MiB 100% name 2 system`**
 
 Verify the partitions are correcrtly created.\
-**`# lsblk`**\
+**`# lsblk**`\
 `loop0 7:0 0 662.1M 1 loop /run/archiso/airootfs`\
 `sda 8:0 0 20G 0 disk`\
 `└─sda1 8:1 0 550M 0 part`\
 `└─sda2 8:2 0 19.5G 0 part`\
 `sr0 11:0 1 831.3M 0 rom /run/archiso/bootmnt`
+
+## 12. Setup an encryption on the main partition ##
+We will encrypt the system partition with LUKS.
+
+
+;\
+;\
+;\
+;\
+;\
+;
+
+# TEMP #
 
 For System integrity create subvolumes instead of directories for:
 * /tmp
