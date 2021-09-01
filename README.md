@@ -5,6 +5,7 @@ I am Linux enthusiast with no system administration background. This guide was p
 This repository is an attempt to create a complete guide for Arch Linux operating system deployment on a mobile personal computer (laptop). 
 
 This installation procedure heavily borrows from the following sources:
+* [Arch Linux Wiki](https://wiki.archlinux.org/)
 * [Arch Linux Installation guide (archlinux wiki)](https://wiki.archlinux.org/title/Installation_guide)
 * [Archlinux on encrypted btrfs with systemd-boot and KDE (blog)](https://rich.grundy.io/blog/archlinux-on-encrypted-btrfs-with-systemd-boot-and-kde/)
 * [Nice Micro (youtube)](https://www.youtube.com/channel/UC2bkdAPR47c7FkvwSXzzMzQ)
