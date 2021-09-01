@@ -194,7 +194,7 @@ Set CET timezone.\
 **`# timedatectl set-timezone Europe/Warsaw`**
 
 ## 10. Wipe out the disk ##
-This step is optional. It is only required if you want to sanitize the disk prior to its usage.
+This step is optional. It is only required if you want to sanitize the disk prior to its usage. The below described sanitization steps will only apply to SSD SATA. For NVME connected devices, please, follow up on Arch Linux wiki [SSD/Memory cell cleaning](https://wiki.archlinux.org/title/Solid_state_drive/Memory_cell_clearing).
 
 Verify the disk device name on which we will install Arch Linux.\
 **`# lsblk`**\
@@ -207,11 +207,22 @@ Make sure the drive security is not frozen.\
 **`hdparm -I /dev/sda | grep frozen`**\
 `frozen`
 
-If it says _frozen_ it is not possible to proceed with the next step. To unfreeze the drive you may try to suspend the system. Upon waking up, it is likely that the freeze will be lifted. Issue the above command once again to check if after waking up the output says _not_ _frozen_.\
+If it says _frozen_ it is not possible to proceed with the next step. To unfreeze the drive you may try to suspend the system. Upon waking up, it is likely that the freeze will be lifted. Issue the above command once again to check if after waking up the output says _not_ _frozen_. This trick worked on all the tested devices, in case you are still facing a problem, please follow up on Arch Linux wiki [SSD/Memory cell cleaning](https://wiki.archlinux.org/title/Solid_state_drive/Memory_cell_clearing).
 
-> Follow up:
-> https://wiki.archlinux.org/title/Solid_state_drive/Memory_cell_clearing
->
+IMPORTANT: Do not reboot after applying this step.\
+Enable security by setting a user password.\
+**`# hdparm --user-master u --security-set-pass PasSWorD /dev/sda`**
+
+As a sanity check, let's verify that security is enabled.\
+**`# hdparm -I /dev/sda`**
+
+IMPORTANT: After this command the SSD will be wiped and data will be lost.\
+IMPORTANT: Ensure that the drive is not mounted.\
+Issue the ATA Secure Erase command.\
+**`# hdparm --user-master u --security-erase PasSWorD /dev/sda`**
+
+The drive is now erased, let's verify that security is not enabled.\
+**`# hdparm -I /dev/sda`**
 
 ## 11. Partition the disks ##
 We will create two partitions. One for the boot and another one for the System. We will not use swap partition, instead we will use swapfile.
