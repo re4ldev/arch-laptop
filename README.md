@@ -194,7 +194,7 @@ Set CET timezone.\
 **`# timedatectl set-timezone Europe/Warsaw`**
 
 ## 10. Wipe out the disk ##
-This step is optional. It is only required if you want to sanitize the disk prior to its usage. The below described sanitization steps will only apply to SSD SATA. For NVME connected devices, please, follow up on Arch Linux wiki [SSD/Memory cell cleaning](https://wiki.archlinux.org/title/Solid_state_drive/Memory_cell_clearing).
+This step is optional. It is only required if you want to sanitize the disk prior to its usage.
 
 Verify the disk device name on which we will install Arch Linux.\
 **`# lsblk`**\
@@ -207,7 +207,8 @@ Make sure the drive security is not frozen.\
 **`hdparm -I /dev/sda | grep frozen`**\
 `frozen`
 
-If it says _frozen_ it is not possible to proceed with the next step. To unfreeze the drive you may try to suspend the system. Upon waking up, it is likely that the freeze will be lifted. Issue the above command once again to check if after waking up the output says _not_ _frozen_. This trick worked on all the tested devices, in case you are still facing a problem, please follow up on Arch Linux wiki [SSD/Memory cell cleaning](https://wiki.archlinux.org/title/Solid_state_drive/Memory_cell_clearing).
+If it says _frozen_ it is not possible to proceed with the next step. To unfreeze the drive you may try to suspend the system. Upon waking up, it is likely that the freeze will be lifted. Issue the above command once again to check if after waking up the output says _not_ _frozen_. This trick worked on all the tested devices, in case you are still facing a problem, please follow up on Arch Linux wiki [SSD/Memory cell cleaning](https://wiki.archlinux.org/title/Solid_state_drive/Memory_cell_clearing).\
+**`# systemctl suspend`**
 
 IMPORTANT: Do not reboot after applying this step.\
 Enable security by setting a user password.\
