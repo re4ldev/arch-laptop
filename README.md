@@ -226,7 +226,7 @@ Verify the clock is correctly configured.\
 ## 10. Wipe out the disk ##
 **IMPORTANT**: If you follow the instructions included in this step, the data on the disk will be erased. Proceed with caution.
 
-This step is optional. It is only required if you want to sanitize the disk before it is used to host Arch Linux OS.
+This step is optional but recommended. It ensures that random data is written to the disk prior to the encryption making it almost impossible to distinguish the free space from the occupied one.
 
 Verify the disk device name on which we will install Arch Linux.\
 **`# lsblk`**\
@@ -259,6 +259,9 @@ Issue the ATA Secure Erase command.\
 The drive is now erased, let's verify that security is not enabled.\
 **`# hdparm -I /dev/sda`**
 
+Fill the disk with random bytes stream.\
+**`dd if=/dev/urandom of=/dev/sda bs=4096 status=progress`**
+
 ## 11. Partition the disks ##
 **IMPORTANT**: If you follow the instructions included in this step, the data on the disk will be erased. Proceed with caution.
 
@@ -266,9 +269,14 @@ We will create two partitions. One for the boot and another one for the System. 
 
 partition | type | size | file system
 --------- | ---- | ---- | ----------- 
-boot | esp | +550M | fat32
+boot | esp | +550M | fat32 (UEFI) / ext4 (BIOS)
 System | linux | ~ | btrfs
 
+Depending on the boot type partition the disk following one of the scenarios:
+1. Partition scheme for UEFI
+2. Partition scheme for BIOS
+
+### 11-1 Partition scheme for UEFI ##
 We will use GNU parted to partition the disk.\
 First create GUID Partition Table.\
 **`# parted -s /dev/sda mklabel gpt`**
@@ -286,6 +294,10 @@ Verify the partitions are correcrtly created.\
 `└─sda1 8:1 0 550M 0 part`\
 `└─sda2 8:2 0 19.5G 0 part`\
 `sr0 11:0 1 831.3M 0 rom /run/archiso/bootmnt`
+
+### 11-2 Partition scheme for BIOS ##
+
+
 
 ## 12. Setup an encryption on the main partition ##
 We will encrypt the system partition with LUKS.
