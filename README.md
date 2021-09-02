@@ -314,6 +314,9 @@ We will encrypt the system partition with LUKS.
 
 ad 6. Live environment network setup:
 	- add WWAN configuration
+	
+ad 11. Partition disk:
+	- one partition scheme, should be compatible with both BIOS and UEFI.
 
 # TEMP #
 
