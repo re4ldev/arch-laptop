@@ -25,8 +25,7 @@ This installation procedure heavily borrows from the following sources:
 4. Snapshot system (to easily restore to previous state in case of failure).
 5. Periodic full backup to NAS when connected to LAN.
 6. Graphical environment.
-7. Should support both MBR and UEFI systems.
-8. Should be a minimal install, include only essential packages required for each functionality.
+7. Should be a minimal install, include only essential packages required for each functionality.
 
 # II. Assumptions #
 
@@ -36,6 +35,7 @@ This installation procedure heavily borrows from the following sources:
 4. There is a LAN network with Internet access available.
 5. Arch Linux live environment will be accessed via SSH to perform the installation procedure.
 6. All storage devices are SSD SATA.
+7. Boot mode is UEFI.
 
 # III. Installation steps #
 
