@@ -1,22 +1,27 @@
-DISCLAIMER: No liability for the contents of this documents can be accepted. Use the concepts, examples and other content at your own risk. There may be errors and inaccuracies, that may of course be damaging to your system. Although this is highly unlikely, you should proceed with caution. The author does not accept any responsibility for any damage incurred.
+In this repository I attempt to create a complete **Guide** for Arch Linux operating system deployment on a mobile personal computer (laptop). The solution should satisfy the list of requirements collected in section I. Requirements.
 
-I am Linux enthusiast with no system administration background. This guide was put together by myself following a number of documents, tutorials and recommendations. I would appreciate any kind of constructive feedback about the below procedure. You can use Issues section for that purpose.
+I am Linux enthusiast with no system administration background. This **Guide** was put together by myself following a number of documents, tutorials and recommendations available online. Hopefully this is a living document, updated frequently to catch up with the latest developments.
 
-This repository is an attempt to create a complete guide for Arch Linux operating system deployment on a mobile personal computer (laptop). 
+I would appreciate all kind of constructive feedback about the below procedure steps, applied solutions, and used software. You can use Issues section for that purpose.
+
+**DISCLAIMER**: No liability for the contents of this documents can be accepted. Use the concepts, examples and other content at your own risk. There may be errors and inaccuracies, that may of course be damaging to your system. Although this is highly unlikely, you should proceed with caution. The author does not accept any responsibility for any damage incurred.
+
+**IMPORTANT**: If applied incorrectly, some of the steps described in the **Guide** may irreversibly erase data from your computer.
 
 This installation procedure heavily borrows from the following sources:
 * [Arch Linux Wiki](https://wiki.archlinux.org/)
 * [Arch Linux Installation guide (archlinux wiki)](https://wiki.archlinux.org/title/Installation_guide)
 * [Archlinux on encrypted btrfs with systemd-boot and KDE (blog)](https://rich.grundy.io/blog/archlinux-on-encrypted-btrfs-with-systemd-boot-and-kde/)
-* [Nice Micro (youtube)](https://www.youtube.com/channel/UC2bkdAPR47c7FkvwSXzzMzQ)
-* [EF - Linux Made Simple (youtube)](https://www.youtube.com/c/EFLinuxMadeSimple)
+* [Nice Micro (youtube channel)](https://www.youtube.com/channel/UC2bkdAPR47c7FkvwSXzzMzQ)
+* [EF - Linux Made Simple (youtube channel)](https://www.youtube.com/c/EFLinuxMadeSimple)
+* [Luke Smith (youtube channel)](https://www.youtube.com/c/LukeSmithxyz)
 * [Installing Arch on an encrypted BRTFS with EFI (blog)](https://gareth.com/index.php/2020/07/15/installing-arch-on-an-encrypted-btrfs-with-efi/)
 
 # I. Requirements #
 
 1. Data at rest encryption (data partitions and swap).
 2. Battery saving features (hibernation to disk on lid close or button press).
-3. Wireless connectivity (wifi, bluetooth, wan), if available.
+3. Wireless connectivity (wifi, bluetooth, wwan), if available.
 4. Snapshot system (to easily restore to previous state in case of failure).
 5. Periodic full backup to NAS when connected to LAN.
 6. Graphical environment.
@@ -75,7 +80,7 @@ Execute the gpg command to verify .iso file agianst .iso.sig. Both files must be
 `gpg: Can't check signature: No public key`
 
 ## 3. Prepare an installation medium ##
-Find out the name of the USB drive and make sure it is not mounted.\
+Find out the name of the USB drive device.\
 **`$ lsblk`**\
 `NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT`\
 `sda           8:0    1 14.5G  0 disk`\
@@ -95,17 +100,20 @@ Copy Arch Linux install image to USB drive.\
 **`# dd if=archlinux-2021.08.01-x86_64.iso of=/dev/sda bs=4M conv=fsync oflag=direct status=progress`**
 
 ## 4. Boot the live environment ##
-Boot laptop with the USB drive prepared in the previous step. Arch Linux installation images do not support Secure Boot. Consult Arch Linux installation guide for more details.
+Boot laptop with the USB drive prepared in the previous step. Arch Linux installation images does not support Secure Boot. If you are having trouble booting from the USB, please, consult [Arch Linux installation guide](https://wiki.archlinux.org/title/Installation_guide) for more details.
 
 ## 5. Live environment keyboard layout and console font setup ##
 By default console keymap is US. List the directory with available keyboard layouts.\
 **`# ls /usr/share/kbd/keymaps/**/*.map.gz`**
 
-To modify the layout, append a corresponding file name to loadkeys. For example, for Polish programmers layout.\
+To modify the layout, append a corresponding file name without extension (.map.gz) to loadkeys. For example, for Polish programmers layout.\
 **`# loadkeys pl`**
 
-Set console font to support Polish special characters.\
-**`# setfont lat2-16.psfu.gz`**
+List the directory with available console fonts.\
+**`# ls /usr/share/kbd/consolefonts/**/*.psfu.gz`**
+
+To modify the console font to support Polish special characters, append a font name without extension (.psfu.gz) to setfont.\
+**`# setfont lat2-16`**
 
 ## 6. Live environment network access setup ##
 Since network connectivity is a critical setting for successful Arch Linux installation we will describe four different network access scenarios:
@@ -114,10 +122,20 @@ Since network connectivity is a critical setting for successful Arch Linux insta
 3. Wireless connection with DHCP
 4. Wireless connection without DHCP
 
-Wireless access point specification:\
-WPA/WPA2-PSK encryption mode\
-SSID: MyTestLab\
-passphrase: myTestPass
+Make sure the card is not blocked.\
+**`# rfkill list`**\
+`0: phy0: Wireless LAN`\
+`Soft blocked: no`\
+`Hard blocked: no`
+
+If the card is hard-blocked then use the hardware button (switch) to unblock it.\
+If the card is not hard-blocked but soft-blocked then unblock it with rfkill.\
+**`# rfkill unblock wifi`**
+
+Wireless access point specification:
+>SSID: MyTestLab\
+>passphrase: myTestPass
+>WPA/WPA2-PSK encryption mode\
 
 Check for available network interfaces, and apply one of the above scenarios to the preferred interface.\
 **`# ip link`**\
@@ -193,8 +211,18 @@ Use NTP server to syncronize time.\
 Set CET timezone.\
 **`# timedatectl set-timezone Europe/Warsaw`**
 
+Verify the clock is correctly configured.\
+**`# timedatectl show`**\
+`Timezone=Europe/Warsaw`\
+`LocalRTC=no`\
+`CanNTP=yes`\
+`NTP=yes`\
+`NTPSynchronized=yes`\
+`TimeUSec=Sun 2021-08-29 10:48:17 CEST`\
+`RTCTimeUSec=Sun 2021-08-29 10:48:17 CEST`
+
 ## 10. Wipe out the disk ##
-This step is optional. It is only required if you want to sanitize the disk prior to its usage.
+This step is optional. It is only required if you want to sanitize the disk before it is used to host Arch Linux OS.
 
 Verify the disk device name on which we will install Arch Linux.\
 **`# lsblk`**\
@@ -207,20 +235,20 @@ Make sure the drive security is not frozen.\
 **`hdparm -I /dev/sda | grep frozen`**\
 `frozen`
 
-If it says _frozen_ it is not possible to proceed with the next step. To unfreeze the drive you may try to suspend the system. Upon waking up, it is likely that the freeze will be lifted. Issue the above command once again to check if after waking up the output says _not_ _frozen_. This trick worked on all the tested devices, in case you are still facing a problem, please follow up on Arch Linux wiki [SSD/Memory cell cleaning](https://wiki.archlinux.org/title/Solid_state_drive/Memory_cell_clearing).\
+If it says _frozen_ it is not possible to proceed with the next step. To unfreeze the drive you may try to suspend the system. Upon waking up, it is likely that the freeze will be lifted. If this trick does not work for you, please, follow up on Arch Linux wiki [SSD/Memory cell cleaning](https://wiki.archlinux.org/title/Solid_state_drive/Memory_cell_clearing).\
 **`# systemctl suspend`**\
 **`# hdparm -I /dev/sda | grep frozen`**\
-`frozen`
+`not frozen`
 
-IMPORTANT: Do not reboot after applying this step.\
+**IMPORTANT**: Do not reboot after applying this step.\
 Enable security by setting a user password.\
 **`# hdparm --user-master u --security-set-pass PasSWorD /dev/sda`**
 
 As a sanity check, let's verify that security is enabled.\
 **`# hdparm -I /dev/sda`**
 
-IMPORTANT: After this command the SSD will be wiped and data will be lost.\
-IMPORTANT: Ensure that the drive is not mounted.\
+**IMPORTANT**: After this command the SSD will be wiped and data will be lost.\
+**IMPORTANT**: Ensure that the drive is not mounted.\
 Issue the ATA Secure Erase command.\
 **`# hdparm --user-master u --security-erase PasSWorD /dev/sda`**
 
@@ -228,7 +256,10 @@ The drive is now erased, let's verify that security is not enabled.\
 **`# hdparm -I /dev/sda`**
 
 ## 11. Partition the disks ##
+**IMPORTANT**: If you follow the instructions included in this step, the data on the disk will be erased. Proceed with caution.
+
 We will create two partitions. One for the boot and another one for the System. We will not use swap partition, instead we will use swapfile.
+
 partition | type | size | file system
 --------- | ---- | ---- | ----------- 
 boot | esp | +550M | fat32
@@ -262,6 +293,11 @@ We will encrypt the system partition with LUKS.
 ;\
 ;\
 ;
+
+# TODO #
+
+ad 6. Live environment network setup:
+	- add WWAN configuration
 
 # TEMP #
 
