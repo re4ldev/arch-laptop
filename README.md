@@ -259,7 +259,7 @@ Issue the ATA Secure Erase command.\
 The drive is now erased, let's verify that security is not enabled.\
 **`# hdparm -I /dev/sda`**
 
-Fill the disk with random bytes stream.\
+Fill the disk with random bytes stream. Depending on the drive size, this step will take an extended period of time.\
 **`dd if=/dev/urandom of=/dev/sda bs=4096 status=progress`**
 
 ## 11. Partition the disks ##
