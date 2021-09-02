@@ -6,7 +6,7 @@ I would appreciate all kind of constructive feedback about the below procedure s
 
 **DISCLAIMER**: No liability for the contents of this documents can be accepted. Use the concepts, examples and other content at your own risk. There may be errors and inaccuracies, that may of course be damaging to your system. Although this is highly unlikely, you should proceed with caution. The author does not accept any responsibility for any damage incurred.
 
-**IMPORTANT**: If applied incorrectly, some of the steps described in the **Guide** may irreversibly erase data from your computer.
+**IMPORTANT**: If applied incorrectly, some of the steps described in the **Guide** may irreversibly erase data from, and damage your computer.
 
 This installation procedure heavily borrows from the following sources:
 * [Arch Linux Wiki](https://wiki.archlinux.org/)
