@@ -260,7 +260,7 @@ The drive is now erased, let's verify that security is not enabled.\
 **`# hdparm -I /dev/sda`**
 
 Fill the disk with random bytes stream. Depending on the drive size, this step will take an extended period of time.\
-**`cat /dev/urandom > /dev/sda`**
+**`shred -v -n 1 /dev/sda`**
 
 ## 11. Partition the disks ##
 **IMPORTANT**: If you follow the instructions included in this step, the data on the disk will be erased. Proceed with caution.
