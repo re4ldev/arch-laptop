@@ -80,6 +80,8 @@ Execute the gpg command to verify .iso file agianst .iso.sig. Both files must be
 `gpg: Can't check signature: No public key`
 
 ## 3. Prepare an installation medium ##
+**IMPORTANT**: Make sure you are applying the changes to the USB drive. After this step the data will be permanently erased from the device on which you apply the commands.
+
 Find out the name of the USB drive device.\
 **`$ lsblk`**\
 `NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT`\
@@ -222,6 +224,8 @@ Verify the clock is correctly configured.\
 `RTCTimeUSec=Sun 2021-08-29 10:48:17 CEST`
 
 ## 10. Wipe out the disk ##
+**IMPORTANT**: If you follow the instructions included in this step, the data on the disk will be erased. Proceed with caution.
+
 This step is optional. It is only required if you want to sanitize the disk before it is used to host Arch Linux OS.
 
 Verify the disk device name on which we will install Arch Linux.\
