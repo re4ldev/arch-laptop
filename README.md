@@ -19,7 +19,7 @@ This installation procedure heavily borrows from the following sources:
 
 # I. Requirements #
 
-1. Data at rest encryption (data partitions and swap).
+1. Data at rest encryption (at least data partitions and swap).
 2. Battery saving features (hibernation to disk on lid close or button press).
 3. Wireless connectivity (wifi, bluetooth, wwan), if available.
 4. Snapshot system (to easily restore to previous state in case of failure).
@@ -50,7 +50,7 @@ This installation procedure heavily borrows from the following sources:
 9. Live environment system clock update.
 10. Wipe out the disk.
 11. Partition the disks.
-12. Setup an encryption on the main partition.
+12. Setup an encryption.
 13. Format disk partitions.
 14. Create btrfs subvolumes.
 15. Mount the subvolumes.
@@ -136,8 +136,8 @@ If the card is not hard-blocked but soft-blocked then unblock it with rfkill.\
 
 Wireless access point specification:
 >SSID: MyTestLab\
->passphrase: myTestPass\
->WPA/WPA2-PSK encryption mode
+>passphrase: myTestPass
+>WPA/WPA2-PSK encryption mode\
 
 Check for available network interfaces, and apply one of the above scenarios to the preferred interface.\
 **`# ip link`**\
@@ -289,10 +289,6 @@ Verify the partitions are correcrtly created.\
 `└─sda1 8:1 0 550M 0 part`\
 `└─sda2 8:2 0 19.5G 0 part`\
 `sr0 11:0 1 831.3M 0 rom /run/archiso/bootmnt`
-
-### 11-2 Partition scheme for BIOS ##
-
-
 
 ## 12. Setup an encryption on the main partition ##
 We will encrypt the system partition with LUKS.
