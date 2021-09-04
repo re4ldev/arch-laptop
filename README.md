@@ -269,14 +269,9 @@ We will create two partitions. One for the boot and another one for the System. 
 
 partition | type | size | file system
 --------- | ---- | ---- | ----------- 
-boot | esp | +550M | fat32 (UEFI) / ext4 (BIOS)
+boot | esp | +550M | fat32
 System | linux | ~ | btrfs
 
-Depending on the boot type partition the disk following one of the scenarios:
-1. Partition scheme for UEFI
-2. Partition scheme for BIOS
-
-### 11-1 Partition scheme for UEFI ##
 We will use GNU parted to partition the disk.\
 First create GUID Partition Table.\
 **`# parted -s /dev/sda mklabel gpt`**
