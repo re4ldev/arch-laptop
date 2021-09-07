@@ -26,6 +26,7 @@ This installation procedure heavily borrows from the following sources:
 5. Periodic full backup to NAS when connected to LAN.
 6. Graphical environment.
 7. Should be a minimal install, include only essential packages required for each functionality.
+8. Apply the latest software versions as soon as they are released (to make sure the latest security best practives are applied).
 
 # II. Assumptions #
 
