@@ -329,6 +329,7 @@ Base System | base base-devel linux linux-firmware |
 File System tools | dosfstools btrfs-progs |
 CPU microcode | intel-ucode |
 Network | dhcpcd wpa_supplicant | 
+Bootloader | grub efibootmgr | 
 Utils | vim git |
 Documentation | man-db man-pages texinfo |
 Graphical environment | xf86-video-intel xorg-server xorg-xinit xorg-xsetroot |
