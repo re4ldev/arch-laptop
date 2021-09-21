@@ -27,6 +27,7 @@ This installation procedure heavily borrows from the following sources:
 6. Graphical environment.
 7. Should be a minimal install, include only essential packages required for each functionality.
 8. Apply the latest software versions as soon as they are released (to make sure the latest security best practives are applied).
+9. Allow booting from both, UEFI and BIOS modes (in case the disk needs to be attached to a different laptop which supports different boot mode).
 
 # II. Assumptions #
 
@@ -36,7 +37,6 @@ This installation procedure heavily borrows from the following sources:
 4. There is a LAN network with Internet access available.
 5. Arch Linux live environment will be accessed via SSH to perform the installation procedure.
 6. All storage devices are SSD SATA.
-7. Boot mode is UEFI.
 
 # III. Installation steps #
 
@@ -268,20 +268,24 @@ Fill the disk with random bytes stream. Depending on the drive size, this step w
 
 We will create two partitions. One for the boot and another one for the System. We will not use swap partition, instead we will use swapfile.
 
-partition | type | size | file system
+partition | parted type | size | file system
 --------- | ---- | ---- | ----------- 
-boot | esp | +550M | fat32
-System | linux | ~ | btrfs
+BIOS | boot_grub | 1MiB | N/A
+ESP | esp | 550MiB | fat32
+SYSTEM | linux | ~ | btrfs
 
 We will use GNU parted to partition the disk.\
 First create GUID Partition Table.\
 **`# parted -s /dev/sda mklabel gpt`**
 
-Make partition for boot.\
-**`# parted -s /dev/sda mkpart ESP fat32 1MiB 551MiB set 1 esp on name 1 efi`**
+Make partition for BIOS boot.\
+**`# parted -s -a minimal /dev/sda mkpart BIOS 0G 1MiB set 1 bios_grub on`**
+
+Make partition for UEFI boot.\
+**`parted -s /dev/sda mkpart ESP fat32 1MiB 551MiB set 2 esp on`**
 
 Make partition for the system.\
-**`# parted -s /dev/sda mkpart System 551MiB 100% name 2 system`**
+**`# parted -s /dev/sda mkpart SYSTEM btrfs 551MiB 100%`**
 
 Verify the partitions are correcrtly created.\
 **`# lsblk`**\
@@ -306,9 +310,6 @@ We will encrypt the system partition with LUKS.
 
 ad 6. Live environment network setup:
 	- add WWAN configuration
-	
-ad 11. Partition disk:
-	- one partition scheme, should be compatible with both BIOS and UEFI.
 
 # TEMP #
 
@@ -330,7 +331,7 @@ File System tools | dosfstools btrfs-progs |
 CPU microcode | intel-ucode |
 Network | dhcpcd wpa_supplicant | 
 Bootloader | grub efibootmgr | 
-Utils | vim git |
+Utils | vim git openssh |
 Documentation | man-db man-pages texinfo |
 Graphical environment | xf86-video-intel xorg-server xorg-xinit xorg-xsetroot |
 Window Manager | | dwm
