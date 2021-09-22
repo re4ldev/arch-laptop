@@ -53,8 +53,8 @@ This installation procedure heavily borrows from the following sources:
 11. Partition the disks.
 12. Setup an encryption.
 13. Format disk partitions.
-14. Create btrfs subvolumes.
-15. Mount the subvolumes.
+14. Create and mount btrfs subvolumes.
+15. Mount the non-btrfs partitions.
 16. Select the mirrors.
 17. Install essential packages with pacstrap.
 18. Generate fstab.
@@ -124,6 +124,8 @@ Since network connectivity is a critical setting for successful Arch Linux insta
 2. Wired connection without DHCP
 3. Wireless connection with DHCP
 4. Wireless connection without DHCP
+
+(TODO: Include WWAN configuration procedure)
 
 Make sure the card is not blocked.\
 **`# rfkill list`**\
@@ -296,32 +298,76 @@ Verify the partitions are correcrtly created.\
 `└─sda3 8:3 0 19.5G 0 part`\
 `sr0 11:0 1 831.3M 0 rom /run/archiso/bootmnt`
 
+(TODO: What about the SWAP?)
+
 ## 12. Setup an encryption on the main partition ##
 We will encrypt the system partition with LUKS.
 
+Setup encryption on the SYSTEM partition and open the encrypted partition to work with it.\
+**`# cryptsetup luksFormat /dev/sda3`**\
+**`# cryptsetup luksOpen /dev/sda3 cryptroot`**
 
-;\
-;\
-;\
-;\
-;\
-;
+## 13. Format disk partitions ##
+Format SYSTEM and EFI partition with its respective file systems.
 
-# TODO #
+EFI partition requires FAT32 file system.\
+**`# mkfs.fat -F32 /dev/sda2`**
 
-ad 6. Live environment network setup:
-	- add WWAN configuration
+SYSTEM partition will use btrfs file system.\
+**`# mkfs.btrfs /dev/mapper/cryptroot`**
 
-# TEMP #
+## 14. Create and mount btrfs subvolumes. ##
+The followin are a tentative subvolumes we will use for our Arch Linux installation.
 
-For System integrity create subvolumes instead of directories for:
-* /tmp
-* /opt
-* /srv
-* /var/spool
-* /var/log
-* /var/run
-* /var/tmp
+(TODO: review the subvolumes layout)\
+(TODO: for system integrity create subvolumes instead of directories for:\
+/tmp\
+/opt\
+/srv\
+/var/spool\
+/var/log\
+/var/run\
+/var/tmp)\
+(TODO: include a nice diagram to depict the subvolumes)
+
+Mount the cryptroot mapper to /mnt.\
+**`# mount -o noatime,compress=lzo,discard,ssd,defaults /dev/mapper/cryptroot /mnt`**\
+**`# cd /mnt`**
+
+Create subvolumes.\
+**`# btrfs subvolume create __active`**\
+**`# btrfs subvolume create __active/rootvol`**\
+**`# btrfs subvolume create __active/home`**\
+**`# btrfs subvolume create __active/var`**\
+**`# btrfs subvolume create __snapshots`**\
+**`# btrfs subvolume create __snapshots/root`**\
+**`# btrfs subvolume create __snapshots/home`**\
+**`# btrfs subvolume create __snapshots/var`**\
+**`# cd`**\
+**`# umount /mnt`**
+
+Mount the created subvolumes.\
+**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=__active/rootvol /dev/mapper/cryptroot /mnt`**\
+**`# mkdir /mnt/.snapshots`**\
+**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=__snapshots/root /dev/mapper/cryptroot /mnt/.snapshots`**\
+**`# mkdir /mnt/{home,var,boot}`**\
+**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=__active/home /dev/mapper/cryptroot /mnt/home`**\
+**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=__active/var /dev/mapper/cryptroot /mnt/var`**\
+**`# mkdir /mnt/home/.snapshots`**\
+**`# mkdir /mnt/var/.snapshots`**\
+**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=__snapshots/home /dev/mapper/cryptroot /mnt/home/.snapshots`**\
+**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=__snapshots/var /dev/mapper/cryptroot /mnt/var/.snapshots`**\
+**`# sync`**
+
+## 15. Mount the non-btrfs /boot partition ##
+Mount the boot partition.\
+**`# mount /dev/sda2 /mnt/boot`**
+
+\
+\
+\
+\
+\
 
 # Packages #
 
