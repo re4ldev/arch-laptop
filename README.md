@@ -66,6 +66,7 @@ This installation procedure heavily borrows from the following sources:
 24. Set initramfs.
 25. Install bootloader.
 26. Boot into a newly installed system.
+27. Create a swapfile.
 
 ## 1. Acquire an installation image ##
 The updated list of mirrors can be found on [Arch Linux download page](https://archlinux.org/download). Download Arch Linux image (.iso) from preferred mirror, and the corresponding PGP signature file (.iso.sig) from Arch Linux download page directly.\
@@ -268,7 +269,7 @@ Fill the disk with random bytes stream. Depending on the drive size, this step w
 ## 11. Partition the disks ##
 **IMPORTANT**: If you follow the instructions included in this step, the data on the disk will be erased. If you apply incorrectly the following steps you may erase the data from your computer irreversibly. Proceed with caution.
 
-We will create three partitions. One for the legacy BIOS, second one for the UEFI boot, and the last one for the System. We will not use swap partition, instead we will use swapfile.
+We will create three partitions. One for the legacy BIOS, second one for the UEFI boot, and the last one for the System. We will not use swap partition, instead we will use swapfile on subvolume.
 
 partition | parted type | size | file system
 --------- | ---- | ---- | ----------- 
@@ -297,8 +298,6 @@ Verify the partitions are correcrtly created.\
 `└─sda2 8:2 0 550M 0 part`\
 `└─sda3 8:3 0 19.5G 0 part`\
 `sr0 11:0 1 831.3M 0 rom /run/archiso/bootmnt`
-
-(TODO: What about the SWAP?)
 
 ## 12. Setup an encryption on the main partition ##
 We will encrypt the system partition with LUKS.
@@ -335,6 +334,7 @@ Mount the cryptroot mapper to /mnt.\
 **`# cd /mnt`**
 
 Create subvolumes.\
+**`# btrfs subvolume create __swap`**\
 **`# btrfs subvolume create __active`**\
 **`# btrfs subvolume create __active/rootvol`**\
 **`# btrfs subvolume create __active/home`**\
