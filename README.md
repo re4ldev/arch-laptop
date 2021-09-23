@@ -268,7 +268,7 @@ Fill the disk with random bytes stream. Depending on the drive size, this step w
 ## 11. Partition the disks ##
 **IMPORTANT**: If you follow the instructions included in this step, the data on the disk will be erased. If you apply incorrectly the following steps you may erase the data from your computer irreversibly. Proceed with caution.
 
-We will create two partitions. One for the boot and another one for the System. We will not use swap partition, instead we will use swapfile.
+We will create three partitions. One for the legacy BIOS, second one for the UEFI boot, and the last one for the System. We will not use swap partition, instead we will use swapfile.
 
 partition | parted type | size | file system
 --------- | ---- | ---- | ----------- 
