@@ -266,7 +266,7 @@ Fill the disk with random bytes stream. Depending on the drive size, this step w
 **`shred -v -n 1 /dev/sda`**
 
 ## 11. Partition the disks ##
-**IMPORTANT**: If you follow the instructions included in this step, the data on the disk will be erased. Proceed with caution.
+**IMPORTANT**: If you follow the instructions included in this step, the data on the disk will be erased. If you apply incorrectly the following steps you may erase the data from your computer irreversibly. Proceed with caution.
 
 We will create two partitions. One for the boot and another one for the System. We will not use swap partition, instead we will use swapfile.
 
