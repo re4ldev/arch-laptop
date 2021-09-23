@@ -55,7 +55,7 @@ This installation procedure heavily borrows from the following sources:
 13. Format disk partitions.
 14. Create and mount btrfs subvolumes and non-btrfs partitions.
 15. Select the mirrors.
-16. Install essential packages with pacstrap.
+16. Install system packages with pacstrap.
 17. Generate fstab.
 18. Chroot into the new system.
 19. Set a timezone.
@@ -361,18 +361,23 @@ Mount the created subvolumes.\
 Mount the boot partition.\
 **`# mount /dev/sda2 /mnt/boot`**
 
-\
-\
-\
-\
-\
+## 15. Update the mirror list ##
+Arch Linux installation is performed via network. The packages are downloaded from the mirrors.
 
-# Packages #
+We will use _reflector_ - python script to update pacman mirror list. Sort the 20 most recently synchronized mirrors accessible via https.\
+**`# reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist`**
 
+We can verify the selected mirrors viewing /etc/pacmand.d/mirrorlist file.\
+**`# vim /etc/pacman.d/mirrorlist`**
+
+## 16. Install system packages with pacstrap ##
+_pacstrap_ script is used to install the selected system packages and copy the mirror list established in the previous step into a hard drive.
+
+This is a complete list of packages that will be installed to satisfy the system requirements from section I. Not all the packages from the below list will be installed in this step. Graphical environment related packages will be installed in a separate step later in the process.
 categoty | official | AUR 
 -------- | -------- | --------
 Base System | base base-devel linux linux-firmware |
-File System tools | dosfstools btrfs-progs |
+File System tools | dosfstools btrfs-progs ef2sprogs |
 CPU microcode | intel-ucode |
 Network | dhcpcd wpa_supplicant | 
 Bootloader | grub efibootmgr | 
@@ -380,3 +385,6 @@ Utils | vim git openssh |
 Documentation | man-db man-pages texinfo |
 Graphical environment | xf86-video-intel xorg-server xorg-xinit xorg-xsetroot |
 Window Manager | | dwm
+
+Use _pacstrap_ to install Arch Linux on the hard drive.\
+**`# pacstrap /mnt base base-devel linux linux-firmware dosfstools btrfs-progs e2fsprogs intel-ucode dhcpcd wpa_supplicant grub efibootmgr vim git openssh man-db man-pages texinfo`**
