@@ -227,7 +227,7 @@ Verify the clock is correctly configured.\
 `RTCTimeUSec=Sun 2021-08-29 10:48:17 CEST`
 
 ## 10. Wipe out the disk ##
-**IMPORTANT**: If you follow the instructions included in this step, the data on the disk will be erased. Proceed with caution.
+**IMPORTANT**: If you follow the instructions included in this step, the data on the disk will be erased. If you apply incorrectly the following step you may erase the data from your computer irreversibly. Proceed with caution.
 
 This step is optional but recommended. It ensures that random data is written to the disk prior to the encryption making it almost impossible to distinguish the free space from the occupied one.
 
