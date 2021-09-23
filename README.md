@@ -53,20 +53,19 @@ This installation procedure heavily borrows from the following sources:
 11. Partition the disks.
 12. Setup an encryption.
 13. Format disk partitions.
-14. Create and mount btrfs subvolumes.
-15. Mount the non-btrfs partitions.
-16. Select the mirrors.
-17. Install essential packages with pacstrap.
-18. Generate fstab.
-19. Chroot into the new system.
-20. Set a timezone.
-21. Set locale.
-22. Set up the network.
-23. Set root password.
-24. Set initramfs.
-25. Install bootloader.
-26. Boot into a newly installed system.
-27. Create a swapfile.
+14. Create and mount btrfs subvolumes and non-btrfs partitions.
+15. Select the mirrors.
+16. Install essential packages with pacstrap.
+17. Generate fstab.
+18. Chroot into the new system.
+19. Set a timezone.
+20. Set locale.
+21. Set up the network.
+22. Set root password.
+23. Set initramfs.
+24. Install bootloader.
+25. Boot into a newly installed system.
+26. Create a swapfile.
 
 ## 1. Acquire an installation image ##
 The updated list of mirrors can be found on [Arch Linux download page](https://archlinux.org/download). Download Arch Linux image (.iso) from preferred mirror, and the corresponding PGP signature file (.iso.sig) from Arch Linux download page directly.\
@@ -359,7 +358,6 @@ Mount the created subvolumes.\
 **`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=__snapshots/var /dev/mapper/cryptroot /mnt/var/.snapshots`**\
 **`# sync`**
 
-## 15. Mount the non-btrfs /boot partition ##
 Mount the boot partition.\
 **`# mount /dev/sda2 /mnt/boot`**
 
