@@ -284,7 +284,7 @@ Make partition for BIOS boot.\
 **`# parted -s -a minimal /dev/sda mkpart BIOS 0G 1MiB set 1 bios_grub on`**
 
 Make partition for UEFI boot.\
-**`parted -s /dev/sda mkpart ESP fat32 1MiB 551MiB set 2 esp on`**
+**`# parted -s /dev/sda mkpart ESP fat32 1MiB 551MiB set 2 esp on`**
 
 Make partition for the system.\
 **`# parted -s /dev/sda mkpart SYSTEM btrfs 551MiB 100%`**
