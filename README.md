@@ -329,6 +329,8 @@ subvolume | directory | rationale
 @srv | /srv | contains web and ftp servers, it is excluded to avoid data loss on rollbacks
 @tmp | /tmp | all directories containing temporary files and caches are excluded from snapshots
 @usr_local | /usr/local | used to manually install software, it is excluded to avoid uninstalling this softare on rollbacks
+@var | /var | this directory contains many variable files, including logs, temporary caches, third party products in /var/opt, and is the default location for many virtual machine images and databases. Therefore this subvolume is created to exclude all of this variable data from snapshots and is created with Copy-On-Write disabled. 
+@swap | /swap | contains a swapfile which should be excluded from snapshots
 
 (TODO: review the subvolumes layout)\
 (TODO: for system integrity create subvolumes instead of directories for:\
