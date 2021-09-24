@@ -323,7 +323,7 @@ subvolume | directory | rationale
 --------- | --------- | ---------
 @ | / | root directory is its own subvolume
 @home | /home | since /home does not reside on a separate partition it is excluded from snapshots to avoid data loss on rollbacks
-@home_user | /home/user | Users' home folder is excluded from snapshots to avoid data loss on rollbacks
+@home_alice | /home/user | Users' home folder is excluded from snapshots to avoid data loss on rollbacks
 @root | /root | it is just a home directory for root users, excluded to avoid data loss on rollbacks
 @opt | /opt | third-party applications are usually installed here, it is excluded to avoid uninstalling these apps on rollbacks
 @srv | /srv | contains web and ftp servers, it is excluded to avoid data loss on rollbacks
@@ -331,6 +331,7 @@ subvolume | directory | rationale
 @usr_local | /usr/local | used to manually install software, it is excluded to avoid uninstalling this softare on rollbacks
 @var | /var | this directory contains many variable files, including logs, temporary caches, third party products in /var/opt, and is the default location for many virtual machine images and databases. Therefore this subvolume is created to exclude all of this variable data from snapshots and is created with Copy-On-Write disabled. 
 @swap | /swap | contains a swapfile which should be excluded from snapshots
+@snapshots | /.snapshots | snapshots subvolume, do not snapshot the snapshots :)
 
 (TODO: review the subvolumes layout)\
 (TODO: for system integrity create subvolumes instead of directories for:\
@@ -343,16 +344,18 @@ Mount the cryptroot mapper to /mnt.\
 **`# mount -o noatime,compress=lzo,discard,ssd,defaults /dev/mapper/cryptroot /mnt`**\
 **`# cd /mnt`**
 
-Create subvolumes.\
-**`# btrfs subvolume create __swap`**\
-**`# btrfs subvolume create __active`**\
-**`# btrfs subvolume create __active/rootvol`**\
-**`# btrfs subvolume create __active/home`**\
-**`# btrfs subvolume create __active/var`**\
-**`# btrfs subvolume create __snapshots`**\
-**`# btrfs subvolume create __snapshots/root`**\
-**`# btrfs subvolume create __snapshots/home`**\
-**`# btrfs subvolume create __snapshots/var`**\
+Create subvolumes. In _@home_user_ substitute _user_ with the username.\
+**`# btrfs subvolume create @`**\
+**`# btrfs subvolume create @home`**\
+**`# btrfs subvolume create @home_user`**\
+**`# btrfs subvolume create @root`**\
+**`# btrfs subvolume create @opt`**\
+**`# btrfs subvolume create @srv`**\
+**`# btrfs subvolume create @tmp`**\
+**`# btrfs subvolume create @usr_local`**\
+**`# btrfs subvolume create @var`**\
+**`# btrfs subvolume create @swap`**\
+**`# btrfs subvolume create @snapshots`**\
 **`# cd`**\
 **`# umount /mnt`**
 
