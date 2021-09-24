@@ -323,7 +323,7 @@ subvolume | directory | rationale
 --------- | --------- | ---------
 @ | / | root directory is its own subvolume
 @home | /home | since /home does not reside on a separate partition it is excluded from snapshots to avoid data loss on rollbacks
-@home_alice | /home/user | Users' home folder is excluded from snapshots to avoid data loss on rollbacks
+@home_user | /home/user | Users' home folder is excluded from snapshots to avoid data loss on rollbacks
 @root | /root | it is just a home directory for root users, excluded to avoid data loss on rollbacks
 @opt | /opt | third-party applications are usually installed here, it is excluded to avoid uninstalling these apps on rollbacks
 @srv | /srv | contains web and ftp servers, it is excluded to avoid data loss on rollbacks
