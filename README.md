@@ -770,4 +770,4 @@ Graphical environment | xf86-video-intel xorg-server xorg-xinit xorg-xsetroot |
 Window Manager | | dwm
 
 Use _pacstrap_ to install Arch Linux on the hard drive.\
-**`# pacstrap /mnt base base-devel linux linux-firmware dosfstools btrfs-progs e2fsprogs intel-ucode dhcpcd wpa_supplicant grub efibootmgr vim git openssh man-db man-pages texinfo`**
+**`# pacstrap /mnt base base-devel linux linux-firmware dosfstools btrfs-progs e2fsprogs intel-ucode dhcpcd wpa_supplicant grub efibootmgr vim git openssh man-db man-pages texinfo networkmanager parted`**
