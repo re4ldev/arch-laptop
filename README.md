@@ -318,7 +318,13 @@ SYSTEM partition will use btrfs file system.\
 **`# mkfs.btrfs /dev/mapper/cryptroot`**
 
 ## 14. Create and mount btrfs subvolumes. ##
-Subvolume layout for the system installation.
+(TODO: review the subvolumes layout)\
+(TODO: for system integrity create subvolumes instead of directories for:\
+/var/spool\
+/var/log\
+/var/run\
+/var/tmp)\
+Subvolume layout for the system installation. 
 subvolume | directory | rationale
 --------- | --------- | ---------
 @ | / | root directory is its own subvolume
@@ -333,18 +339,11 @@ subvolume | directory | rationale
 @swap | /swap | contains a swapfile which should be excluded from snapshots
 @snapshots | /.snapshots | snapshots subvolume, do not snapshot the snapshots :)
 
-(TODO: review the subvolumes layout)\
-(TODO: for system integrity create subvolumes instead of directories for:\
-/var/spool\
-/var/log\
-/var/run\
-/var/tmp)\
-
 Mount the cryptroot mapper to /mnt.\
-**`# mount -o noatime,compress=lzo,discard,ssd,defaults /dev/mapper/cryptroot /mnt`**
+**`# mount -o noatime,compress=lzo,discard,ssd,defaults /dev/mapper/cryptroot /mnt`**\
 
-Create subvolumes. In _@home_user_ substitute _user_ with the username.\
-**`# cd /mnt`**\
+Create subvolumes. In @home_user substitute _user_ with the username.\
+**`# cd /mnt`**
 **`# btrfs subvolume create @`**\
 **`# btrfs subvolume create @home`**\
 **`# btrfs subvolume create @home_user`**\
@@ -359,17 +358,22 @@ Create subvolumes. In _@home_user_ substitute _user_ with the username.\
 **`# cd`**\
 **`# umount /mnt`**
 
-Mount the created subvolumes.\
-**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=__active/rootvol /dev/mapper/cryptroot /mnt`**\
-**`# mkdir /mnt/.snapshots`**\
-**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=__snapshots/root /dev/mapper/cryptroot /mnt/.snapshots`**\
-**`# mkdir /mnt/{home,var,boot}`**\
-**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=__active/home /dev/mapper/cryptroot /mnt/home`**\
-**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=__active/var /dev/mapper/cryptroot /mnt/var`**\
-**`# mkdir /mnt/home/.snapshots`**\
-**`# mkdir /mnt/var/.snapshots`**\
-**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=__snapshots/home /dev/mapper/cryptroot /mnt/home/.snapshots`**\
-**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=__snapshots/var /dev/mapper/cryptroot /mnt/var/.snapshots`**\
+Mount the created subvolumes. In _/mnt/home/user_ substitute _user_ with the username.\
+(TODO: review mount options)\
+**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=@ /dev/mapper/cryptroot /mnt`**\
+**`# mkdir /mnt/{boot,home,root,opt,srv,tmp,usr,var,swap,.snapshots}`**\
+**`# mkdir /mnt/home/user`**\
+**`# mkdir /mnt/usr/local`**\
+**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=@home /dev/mapper/cryptroot /mnt/home`**\
+**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=@home_user /dev/mapper/cryptroot /mnt/home/user`**\
+**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=@root /dev/mapper/cryptroot /mnt/root`**\
+**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=@opt /dev/mapper/cryptroot /mnt/opt`**\
+**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=@srv /dev/mapper/cryptroot /mnt/srv`**\
+**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=@tmp /dev/mapper/cryptroot /mnt/tmp`**\
+**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=@usr_local /dev/mapper/cryptroot /mnt/usr/local`**\
+**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=@var /dev/mapper/cryptroot /mnt/var`**\
+**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=@swap /dev/mapper/cryptroot /mnt/swap`**\
+**`# mount -o noatime,discard,ssd,defaults,subvol=@snapshots /dev/mapper/cryptroot /mnt/.snapshots`**\
 **`# sync`**
 
 Mount the boot partition.\
