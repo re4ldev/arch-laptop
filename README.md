@@ -388,9 +388,9 @@ categoty | official | AUR
 Base System | base base-devel linux linux-firmware |
 File System tools | dosfstools btrfs-progs ef2sprogs |
 CPU microcode | intel-ucode |
-Network | dhcpcd wpa_supplicant | 
+Network | dhcpcd wpa_supplicant networkmanager | 
 Bootloader | grub efibootmgr | 
-Utils | vim git openssh |
+Utils | vim git openssh parted |
 Documentation | man-db man-pages texinfo |
 Graphical environment | xf86-video-intel xorg-server xorg-xinit xorg-xsetroot |
 Window Manager | | dwm
