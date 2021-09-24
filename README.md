@@ -319,11 +319,8 @@ SYSTEM partition will use btrfs file system.\
 
 ## 14. Create and mount btrfs subvolumes. ##
 (TODO: review the subvolumes layout)\
-(TODO: for system integrity create subvolumes instead of directories for:\
-/var/spool\
-/var/log\
-/var/run\
-/var/tmp)\
+(TODO: for system integrity create subvolumes instead of directories for: /var/spool, /var/log, /var/run, /var/tmp)
+
 Subvolume layout for the system installation. 
 subvolume | directory | rationale
 --------- | --------- | ---------
