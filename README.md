@@ -340,7 +340,7 @@ Mount the cryptroot mapper to /mnt.\
 **`# mount -o noatime,compress=lzo,discard,ssd,defaults /dev/mapper/cryptroot /mnt`**\
 
 Create subvolumes. In @home_user substitute _user_ with the username.\
-**`# cd /mnt`**
+**`# cd /mnt`**\
 **`# btrfs subvolume create @`**\
 **`# btrfs subvolume create @home`**\
 **`# btrfs subvolume create @home_user`**\
