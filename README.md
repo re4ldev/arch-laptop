@@ -343,7 +343,7 @@ Mount the cryptroot mapper to /mnt.\
 IMPORTANT: Make sure to use your username instead of _user_.
 
 Create subvolumes.\
-**`# cd /mnt`**
+**`# cd /mnt`**\
 **`# btrfs subvolume create @`**\
 **`# btrfs subvolume create @home`**\
 **`# btrfs subvolume create @home_user`**\
