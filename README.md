@@ -318,10 +318,9 @@ SYSTEM partition will use btrfs file system.\
 **`# mkfs.btrfs /dev/mapper/cryptroot`**
 
 ## 14. Create and mount btrfs subvolumes. ##
+Subvolume layout for the system installation.\
 (TODO: review the subvolumes layout)\
 (TODO: for system integrity create subvolumes instead of directories for: /var/spool, /var/log, /var/run, /var/tmp)
-
-Subvolume layout for the system installation. 
 subvolume | directory | rationale
 --------- | --------- | ---------
 @ | / | root directory is its own subvolume
@@ -361,8 +360,7 @@ Create subvolumes.\
 
 Mount root subvolume.\
 IMPORTANT: Make sure to revisit mount options to fit your hardware.\
-(TODO: review mount options)\
-**`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@ /dev/mapper/cryptroot /mnt`**
+**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@ /dev/mapper/cryptroot /mnt`**
 
 Create the directories where the subvolumes will be mounted.\
 **`# mkdir /mnt/{boot,home,root,opt,srv,tmp,usr,var,swap,.snapshots}`**\
@@ -371,17 +369,17 @@ Create the directories where the subvolumes will be mounted.\
 **`# mkdir /mnt/usr/local`**
 
 Mount the remaining subvolumes.\
-**`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@home /dev/mapper/cryptroot /mnt/home`**\
-**`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@home_user /dev/mapper/cryptroot /mnt/home/user`**\
-**`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@home_user_snapshots /dev/mapper/cryptroot /mnt/home/user/.snapshots`**\
-**`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@root /dev/mapper/cryptroot /mnt/root`**\
-**`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@opt /dev/mapper/cryptroot /mnt/opt`**\
-**`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@srv /dev/mapper/cryptroot /mnt/srv`**\
-**`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@tmp /dev/mapper/cryptroot /mnt/tmp`**\
-**`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@usr_local /dev/mapper/cryptroot /mnt/usr/local`**\
-**`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@var /dev/mapper/cryptroot /mnt/var`**\
-**`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@swap /dev/mapper/cryptroot /mnt/swap`**\
-**`# mount -o defaults,noatime,discard,ssd,subvol=@snapshots /dev/mapper/cryptroot /mnt/.snapshots`**\
+**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@home /dev/mapper/cryptroot /mnt/home`**\
+**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@home_user /dev/mapper/cryptroot /mnt/home/user`**\
+**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@home_user_snapshots /dev/mapper/cryptroot /mnt/home/user/.snapshots`**\
+**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@root /dev/mapper/cryptroot /mnt/root`**\
+**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@opt /dev/mapper/cryptroot /mnt/opt`**\
+**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@srv /dev/mapper/cryptroot /mnt/srv`**\
+**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@tmp /dev/mapper/cryptroot /mnt/tmp`**\
+**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@usr_local /dev/mapper/cryptroot /mnt/usr/local`**\
+**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@var /dev/mapper/cryptroot /mnt/var`**\
+**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@snapshots /dev/mapper/cryptroot /mnt/.snapshots`**\
+**`# mount -o defaults,noatime,space_cache=v1,ssd,subvol=@swap /dev/mapper/cryptroot /mnt/swap`**\
 **`# sync`**
 
 Mount the boot partition.\
