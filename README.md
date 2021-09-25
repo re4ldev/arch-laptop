@@ -360,6 +360,7 @@ Create subvolumes.\
 **`# umount /mnt`**
 
 Mount root subvolume.\
+IMPORTANT: Make sure to revisit mount options to fit your hardware.\
 (TODO: review mount options)\
 **`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@ /dev/mapper/cryptroot /mnt`**
 
