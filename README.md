@@ -359,7 +359,7 @@ Create subvolumes.\
 **`# cd`**\
 **`# umount /mnt`**
 
-Mount the created subvolumes.\
+Mount root subvolume.\
 (TODO: review mount options)\
 **`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@ /dev/mapper/cryptroot /mnt`**
 
