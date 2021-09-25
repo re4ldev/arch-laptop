@@ -337,7 +337,7 @@ subvolume | directory | rationale
 @snapshots | /.snapshots | snapshots subvolume, do not snapshot the snapshots :)
 
 Mount the cryptroot mapper to /mnt.\
-**`# mount -o noatime,compress=lzo,discard,ssd,defaults /dev/mapper/cryptroot /mnt`**\
+**`# mount -o noatime,compress=lzo,discard,ssd,defaults /dev/mapper/cryptroot /mnt`**
 
 Create subvolumes. In @home_user substitute _user_ with the username.\
 **`# cd /mnt`**
