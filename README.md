@@ -367,7 +367,7 @@ Create the directories where the subvolumes will be mounted.\
 **`# mkdir /mnt/{boot,home,root,opt,srv,tmp,usr,var,swap,.snapshots}`**\
 **`# mkdir /mnt/home/user`**\
 **`# mkdir /mnt/home/user/.snapshots`**\
-**`# mkdir /mnt/usr/local`**\
+**`# mkdir /mnt/usr/local`**
 
 Mount the remaining subvolumes.\
 **`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@home /dev/mapper/cryptroot /mnt/home`**\
