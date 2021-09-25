@@ -361,22 +361,22 @@ Create subvolumes.\
 
 Mount the created subvolumes.\
 (TODO: review mount options)\
-**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=@ /dev/mapper/cryptroot /mnt`**\
+**`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@ /dev/mapper/cryptroot /mnt`**\
 **`# mkdir /mnt/{boot,home,root,opt,srv,tmp,usr,var,swap,.snapshots}`**\
 **`# mkdir /mnt/home/user`**\
 **`# mkdir /mnt/home/user/.snapshots`**\
 **`# mkdir /mnt/usr/local`**\
-**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=@home /dev/mapper/cryptroot /mnt/home`**\
-**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=@home_user /dev/mapper/cryptroot /mnt/home/user`**\
-**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=@home_user_snapshots /dev/mapper/cryptroot /mnt/home/user/.snapshots`**\
-**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=@root /dev/mapper/cryptroot /mnt/root`**\
-**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=@opt /dev/mapper/cryptroot /mnt/opt`**\
-**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=@srv /dev/mapper/cryptroot /mnt/srv`**\
-**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=@tmp /dev/mapper/cryptroot /mnt/tmp`**\
-**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=@usr_local /dev/mapper/cryptroot /mnt/usr/local`**\
-**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=@var /dev/mapper/cryptroot /mnt/var`**\
-**`# mount -o noatime,compress=lzo,discard,ssd,defaults,subvol=@swap /dev/mapper/cryptroot /mnt/swap`**\
-**`# mount -o noatime,discard,ssd,defaults,subvol=@snapshots /dev/mapper/cryptroot /mnt/.snapshots`**\
+**`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@home /dev/mapper/cryptroot /mnt/home`**\
+**`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@home_user /dev/mapper/cryptroot /mnt/home/user`**\
+**`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@home_user_snapshots /dev/mapper/cryptroot /mnt/home/user/.snapshots`**\
+**`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@root /dev/mapper/cryptroot /mnt/root`**\
+**`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@opt /dev/mapper/cryptroot /mnt/opt`**\
+**`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@srv /dev/mapper/cryptroot /mnt/srv`**\
+**`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@tmp /dev/mapper/cryptroot /mnt/tmp`**\
+**`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@usr_local /dev/mapper/cryptroot /mnt/usr/local`**\
+**`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@var /dev/mapper/cryptroot /mnt/var`**\
+**`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@swap /dev/mapper/cryptroot /mnt/swap`**\
+**`# mount -o defaults,noatime,discard,ssd,subvol=@snapshots /dev/mapper/cryptroot /mnt/.snapshots`**\
 **`# sync`**
 
 Mount the boot partition.\
