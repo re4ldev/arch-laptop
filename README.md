@@ -361,11 +361,15 @@ Create subvolumes.\
 
 Mount the created subvolumes.\
 (TODO: review mount options)\
-**`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@ /dev/mapper/cryptroot /mnt`**\
+**`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@ /dev/mapper/cryptroot /mnt`**
+
+Create the directories where the subvolumes will be mounted.\
 **`# mkdir /mnt/{boot,home,root,opt,srv,tmp,usr,var,swap,.snapshots}`**\
 **`# mkdir /mnt/home/user`**\
 **`# mkdir /mnt/home/user/.snapshots`**\
 **`# mkdir /mnt/usr/local`**\
+
+Mount the remaining subvolumes.\
 **`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@home /dev/mapper/cryptroot /mnt/home`**\
 **`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@home_user /dev/mapper/cryptroot /mnt/home/user`**\
 **`# mount -o defaults,noatime,compress=lzo,discard,ssd,subvol=@home_user_snapshots /dev/mapper/cryptroot /mnt/home/user/.snapshots`**\
