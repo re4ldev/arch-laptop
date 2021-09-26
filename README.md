@@ -327,7 +327,6 @@ subvolume | directory | rationale
 --------- | --------- | ---------
 @ | / | root directory is its own subvolume
 @home | /home | since /home does not reside on a separate partition it is excluded from snapshots to avoid data loss on rollbacks
-@home_user | /home/user | Users' home folder is excluded from snapshots to avoid data loss on rollbacks
 @root | /root | it is just a home directory for root users, excluded to avoid data loss on rollbacks
 @opt | /opt | third-party applications are usually installed here, it is excluded to avoid uninstalling these apps on rollbacks
 @srv | /srv | contains web and ftp servers, it is excluded to avoid data loss on rollbacks
@@ -339,7 +338,13 @@ subvolume | directory | rationale
 
 TODO: (\
 Add the following to step 27:\
+IMPORTANT: Make sure to use your username instead of _user_.
+@home_user | /home/user | Users' home folder is excluded from snapshots to avoid data loss on rollbacks\
 @home_user_snapshots - /home/user/.snapshots - Users' home folder snapshots, do not snapshot the snapshots :)\
+**`# mkdir /mnt/home/user`**\
+**`# btrfs subvolume create @home_user`**\
+**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@home_user /dev/mapper/cryptroot /mnt/home/user`**\
+**`# mkdir /mnt/home/user/.snapshots`**\
 **`# btrfs subvolume create @home_user_snapshots`**\
 **`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@home_user_snapshots /dev/mapper/cryptroot /mnt/home/user/.snapshots`**\
 )
@@ -347,13 +352,10 @@ Add the following to step 27:\
 Mount the cryptroot mapper to /mnt.\
 **`# mount -o noatime,compress=lzo,discard,ssd,defaults /dev/mapper/cryptroot /mnt`**
 
-IMPORTANT: Make sure to use your username instead of _user_.
-
-Create subvolumes.\
+Create System subvolumes.\
 **`# cd /mnt`**\
 **`# btrfs subvolume create @`**\
 **`# btrfs subvolume create @home`**\
-**`# btrfs subvolume create @home_user`**\
 **`# btrfs subvolume create @root`**\
 **`# btrfs subvolume create @opt`**\
 **`# btrfs subvolume create @srv`**\
@@ -371,13 +373,10 @@ IMPORTANT: Make sure to revisit mount options to fit your hardware.\
 
 Create the directories where the subvolumes will be mounted.\
 **`# mkdir /mnt/{boot,home,root,opt,srv,tmp,usr,var,swap,.snapshots}`**\
-**`# mkdir /mnt/home/user`**\
-**`# mkdir /mnt/home/user/.snapshots`**\
 **`# mkdir /mnt/usr/local`**
 
 Mount the remaining subvolumes.\
 **`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@home /dev/mapper/cryptroot /mnt/home`**\
-**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@home_user /dev/mapper/cryptroot /mnt/home/user`**\
 **`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@root /dev/mapper/cryptroot /mnt/root`**\
 **`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@opt /dev/mapper/cryptroot /mnt/opt`**\
 **`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@srv /dev/mapper/cryptroot /mnt/srv`**\
