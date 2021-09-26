@@ -350,7 +350,7 @@ IMPORTANT: Make sure to use your username instead of _user_.
 )
 
 Mount the cryptroot mapper to /mnt.\
-**`# mount -o default,noatime,compress=zstd,space_cache=v1,ssd /dev/mapper/cryptroot /mnt`**
+**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd /dev/mapper/cryptroot /mnt`**
 
 Create System subvolumes.\
 **`# cd /mnt`**\
