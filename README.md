@@ -56,7 +56,7 @@ This installation procedure heavily borrows from the following sources:
 11. Partition the disks.
 12. Setup an encryption.
 13. Format disk partitions.
-14. Create and mount btrfs subvolumes and non-btrfs partitions.
+14. Create and mount btrfs subvolumes and non-btrfs partitions for the System.
 15. Select the mirrors.
 16. Install system packages with pacstrap.
 17. Generate fstab.
@@ -69,6 +69,7 @@ This installation procedure heavily borrows from the following sources:
 24. Install bootloader.
 25. Boot into a newly installed system.
 26. Create a swapfile.
+27. Add the User and setup User's directory subvolume layout.
 
 ## 1. Acquire an installation image ##
 The updated list of mirrors can be found on [Arch Linux download page](https://archlinux.org/download). Download Arch Linux image (.iso) from preferred mirror, and the corresponding PGP signature file (.iso.sig) from Arch Linux download page directly.\
@@ -317,16 +318,16 @@ EFI partition requires FAT32 file system.\
 SYSTEM partition will use btrfs file system.\
 **`# mkfs.btrfs /dev/mapper/cryptroot`**
 
-## 14. Create and mount btrfs subvolumes. ##
-Subvolume layout for the system installation.\
+## 14. Create and mount btrfs subvolumes and non-btrfs partitions for the System. ##
 (TODO: review the subvolumes layout)\
 (TODO: for system integrity create subvolumes instead of directories for: /var/spool, /var/log, /var/run, /var/tmp)
+
+Subvolume flat layout is used for the SYSTEM installation.
 subvolume | directory | rationale
 --------- | --------- | ---------
 @ | / | root directory is its own subvolume
 @home | /home | since /home does not reside on a separate partition it is excluded from snapshots to avoid data loss on rollbacks
 @home_user | /home/user | Users' home folder is excluded from snapshots to avoid data loss on rollbacks
-@home_user_snapshots | /home/user/.snapshots | Users' home folder snapshots, do not snapshot the snapshots :)
 @root | /root | it is just a home directory for root users, excluded to avoid data loss on rollbacks
 @opt | /opt | third-party applications are usually installed here, it is excluded to avoid uninstalling these apps on rollbacks
 @srv | /srv | contains web and ftp servers, it is excluded to avoid data loss on rollbacks
@@ -335,6 +336,13 @@ subvolume | directory | rationale
 @var | /var | this directory contains many variable files, including logs, temporary caches, third party products in /var/opt, and is the default location for many virtual machine images and databases. Therefore this subvolume is created to exclude all of this variable data from snapshots and is created with Copy-On-Write disabled. 
 @swap | /swap | contains a swapfile which should be excluded from snapshots
 @snapshots | /.snapshots | snapshots subvolume, do not snapshot the snapshots :)
+
+TODO: (\
+Add the following to step 27:\
+@home_user_snapshots - /home/user/.snapshots - Users' home folder snapshots, do not snapshot the snapshots :)\
+**`# btrfs subvolume create @home_user_snapshots`**\
+**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@home_user_snapshots /dev/mapper/cryptroot /mnt/home/user/.snapshots`**\
+)
 
 Mount the cryptroot mapper to /mnt.\
 **`# mount -o noatime,compress=lzo,discard,ssd,defaults /dev/mapper/cryptroot /mnt`**
@@ -346,7 +354,6 @@ Create subvolumes.\
 **`# btrfs subvolume create @`**\
 **`# btrfs subvolume create @home`**\
 **`# btrfs subvolume create @home_user`**\
-**`# btrfs subvolume create @home_user_snapshots`**\
 **`# btrfs subvolume create @root`**\
 **`# btrfs subvolume create @opt`**\
 **`# btrfs subvolume create @srv`**\
@@ -371,7 +378,6 @@ Create the directories where the subvolumes will be mounted.\
 Mount the remaining subvolumes.\
 **`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@home /dev/mapper/cryptroot /mnt/home`**\
 **`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@home_user /dev/mapper/cryptroot /mnt/home/user`**\
-**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@home_user_snapshots /dev/mapper/cryptroot /mnt/home/user/.snapshots`**\
 **`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@root /dev/mapper/cryptroot /mnt/root`**\
 **`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@opt /dev/mapper/cryptroot /mnt/opt`**\
 **`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@srv /dev/mapper/cryptroot /mnt/srv`**\
