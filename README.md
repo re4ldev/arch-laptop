@@ -516,3 +516,4 @@ IMPORTANT: Make sure to use your username instead of _user_.
 )
 
 TODO: ( Test on hardware, for now the process is only tested on virtual machine )
+TODO: ( Add steps 22 and 23 )
