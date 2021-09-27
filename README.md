@@ -121,7 +121,7 @@ To modify the console font to support Polish special characters, append a font n
 **`# setfont lat2-16`**
 
 ## 6. Live environment network access setup ##
-Since network connectivity is a critical setting for successful Arch Linux installation we will describe four different network access scenarios:
+Since network connectivity is a critical component for successful Arch Linux installation we will describe four different network access scenarios:
 1. Wired connection with DHCP
 2. Wired connection without DHCP
 3. Wireless connection with DHCP
