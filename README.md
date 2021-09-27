@@ -142,9 +142,11 @@ If the card is not hard-blocked but soft-blocked then unblock it with rfkill.\
 **`# rfkill unblock wifi`**
 
 Wireless access point specification:
->SSID: MyTestLab\
->passphrase: myTestPass
->WPA/WPA2-PSK encryption mode\
+key | value
+--- | -----
+SSID | MyTestLab
+passphrase | myTestPass
+encryption | WPA/WPA2-PSK
 
 Check for available network interfaces, and apply one of the above scenarios to the preferred interface.\
 **`# ip link`**\
