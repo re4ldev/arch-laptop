@@ -338,19 +338,6 @@ subvolume | directory | rationale
 @swap | /swap | contains a swapfile which should be excluded from snapshots
 @snapshots | /.snapshots | snapshots subvolume, do not snapshot the snapshots :)
 
-TODO: (\
-Add the following to step 27:\
-IMPORTANT: Make sure to use your username instead of _user_.
-@home_user | /home/user | Users' home folder is excluded from snapshots to avoid data loss on rollbacks\
-@home_user_snapshots - /home/user/.snapshots - Users' home folder snapshots, do not snapshot the snapshots :)\
-**`# mkdir /mnt/home/user`**\
-**`# btrfs subvolume create @home_user`**\
-**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@home_user /dev/mapper/cryptroot /mnt/home/user`**\
-**`# mkdir /mnt/home/user/.snapshots`**\
-**`# btrfs subvolume create @home_user_snapshots`**\
-**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@home_user_snapshots /dev/mapper/cryptroot /mnt/home/user/.snapshots`**\
-)
-
 Mount the cryptroot mapper to /mnt.\
 **`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd /dev/mapper/cryptroot /mnt`**
 
@@ -418,4 +405,21 @@ Graphical environment | xf86-video-intel xorg-server xorg-xinit xorg-xsetroot |
 Window Manager | | dwm
 
 Use _pacstrap_ to install Arch Linux on the hard drive.\
-**`# pacstrap /mnt base base-devel linux linux-firmware dosfstools btrfs-progs e2fsprogs intel-ucode dhcpcd wpa_supplicant grub efibootmgr vim git openssh man-db man-pages texinfo networkmanager parted`**
+**`# pacstrap /mnt base base-devel linux linux-firmware dosfstools btrfs-progs e2fsprogs intel-ucode dhcpcd wpa_supplicant networkmanager grub efibootmgr vim git openssh parted man-db man-pages texinfo xf86-video-intel xorg-server xorg-xinit xorg-xsetroot`**
+
+\
+\
+\
+\
+TODO: (\
+Add the following to step 27:\
+IMPORTANT: Make sure to use your username instead of _user_.
+@home_user | /home/user | Users' home folder is excluded from snapshots to avoid data loss on rollbacks\
+@home_user_snapshots - /home/user/.snapshots - Users' home folder snapshots, do not snapshot the snapshots :)\
+**`# mkdir /mnt/home/user`**\
+**`# btrfs subvolume create @home_user`**\
+**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@home_user /dev/mapper/cryptroot /mnt/home/user`**\
+**`# mkdir /mnt/home/user/.snapshots`**\
+**`# btrfs subvolume create @home_user_snapshots`**\
+**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@home_user_snapshots /dev/mapper/cryptroot /mnt/home/user/.snapshots`**\
+)
