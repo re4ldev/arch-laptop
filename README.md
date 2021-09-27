@@ -506,7 +506,7 @@ Shutdown to safely remove the installation media (USD flash memory), and start t
 \
 \
 TODO: (\
-Add the following to step 27:\
+Add the following to step 23:\
 IMPORTANT: Make sure to use your username instead of _user_.
 @home_user | /home/user | Users' home folder is excluded from snapshots to avoid data loss on rollbacks\
 @home_user_snapshots - /home/user/.snapshots - Users' home folder snapshots, do not snapshot the snapshots :)\
