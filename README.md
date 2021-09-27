@@ -143,7 +143,7 @@ If the card is not hard-blocked but soft-blocked then unblock it with rfkill.\
 
 Wireless access point specification:
 key | value
---- | -----
+--- | ----
 SSID | MyTestLab
 passphrase | myTestPass
 encryption | WPA/WPA2-PSK
@@ -407,6 +407,14 @@ Window Manager | | dwm
 Use _pacstrap_ to install Arch Linux on the hard drive.\
 **`# pacstrap /mnt base base-devel linux linux-firmware dosfstools btrfs-progs e2fsprogs intel-ucode dhcpcd wpa_supplicant networkmanager grub efibootmgr vim git openssh parted man-db man-pages texinfo xf86-video-intel xorg-server xorg-xinit xorg-xsetroot`**
 
+## 17. Generate fstab ##
+Generate fstab file using UUIDs.\
+**`# genfstab -p -U /mnt >> /mnt/etc/fstab`**
+
+Verify the correct entries in fstab file.\
+**`# vim /mnt/etc/fstab`**
+
+\
 \
 \
 \
