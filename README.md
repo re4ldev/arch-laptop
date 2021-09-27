@@ -61,7 +61,7 @@ This installation procedure heavily borrows from the following sources:
 16. Install system packages with pacstrap.
 17. Generate fstab.
 18. Chroot into the new system and perform basic configuration.
-19. Set initramfs.
+19. Update mkinitcpio configuration and generate initramfs.
 20. Install bootloader.
 21. Boot into a newly installed system.
 22. Create a swapfile.
@@ -446,6 +446,21 @@ Enable network manager.\
 
 Enable sshd service.\
 **`# systemctl enable sshd.service`**
+
+## 19. Update mkinitcpio configuration and generate initramfs ##
+Since we have added btrfs file system and encryption, we have to include additional hook and binary in our initramfs.
+
+Update mkinitcpio.conf\
+**`# vim /etc/mkinitcpio.conf`**
+
+Update BINARIES.\
+`BINARIES=(btrfs)`
+
+Update HOOKS.\
+`HOOKS=(base udev autodetect modconf block encrypt filesystems keyboard fsck)`
+
+Generate initramfs.\
+**`# mkinitcpio -P`**
 
 \
 \
