@@ -106,6 +106,8 @@ Copy Arch Linux install image to USB drive.\
 Boot laptop with the USB drive prepared in the previous step. Arch Linux installation images does not support Secure Boot. If you are having trouble booting from the USB, please, consult [Arch Linux installation guide](https://wiki.archlinux.org/title/Installation_guide) for more details.
 
 ## 5. Live environment keyboard layout and console font setup ##
+This step is only required if you are going to perform the installation from the console, and not via SSH. Step 7 shows the steps to enable SSH access to the live environment. If you are going to connect to the live environment via SSH, the keymap and font from your SSH client will apply.
+
 By default console keymap is US. List the directory with available keyboard layouts.\
 **`# ls /usr/share/kbd/keymaps/**/*.map.gz`**
 
