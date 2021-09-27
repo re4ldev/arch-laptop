@@ -66,7 +66,8 @@ This installation procedure heavily borrows from the following sources:
 21. Boot into a newly installed system.
 22. Create a swapfile.
 23. Add the User and setup User's directory subvolume layout.
-24. Install DWM window manager.
+24. Configure snapper.
+25. Install DWM window manager.
 
 ## 1. Acquire an installation image ##
 The updated list of mirrors can be found on [Arch Linux download page](https://archlinux.org/download). Download Arch Linux image (.iso) from preferred mirror, and the corresponding PGP signature file (.iso.sig) from Arch Linux download page directly.\
@@ -320,7 +321,7 @@ SYSTEM partition will use btrfs file system.\
 **`# mkfs.btrfs /dev/mapper/cryptroot`**
 
 ## 14. Create and mount btrfs subvolumes and non-btrfs partitions for the System. ##
-IMPORTANT: TODO: ( revisit System and User directories/subvolumes to have CoW disabled, for example. virtual machine images ). Make sure to not use Copy on Write mechanism on Virtual Machines virtual disks and images.
+IMPORTANT: TODO: ( revisit System and User directories/subvolumes to have CoW disabled, for example. virtual machine images ). Make sure to not use Copy on Write mechanism on Virtual Machines virtual disks and images.\
 (TODO: review the subvolumes layout)\
 (TODO: for system integrity create subvolumes instead of directories for: /var/spool, /var/log, /var/run, /var/tmp)
 
@@ -517,5 +518,5 @@ IMPORTANT: Make sure to use your username instead of _user_.
 **`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@home_user_snapshots /dev/mapper/cryptroot /mnt/home/user/.snapshots`**\
 )
 
-TODO: ( Test on hardware, for now the process is only tested on virtual machine )
-TODO: ( Add steps 22 - 24 )
+TODO: ( Test on hardware, for now the process is only tested on virtual machine )\
+TODO: ( Add steps 22 - 25 )
