@@ -62,7 +62,7 @@ This installation procedure heavily borrows from the following sources:
 17. Generate fstab.
 18. Chroot into the new system and perform basic configuration.
 19. Update mkinitcpio configuration and generate initramfs.
-20. Install bootloader.
+20. Install and configure the boot loader.
 21. Boot into a newly installed system.
 22. Create a swapfile.
 23. Add the User and setup User's directory subvolume layout.
@@ -461,6 +461,24 @@ Update HOOKS.\
 
 Generate initramfs.\
 **`# mkinitcpio -P`**
+
+## 20. Install and configure the boot loader ##
+We will use GRUB as boot loader for our installation. Mainly because it supports both legacy BIOS and UEFI boot modes.
+
+Install GRUB for legacy BIOS.\
+**`# grub-install --target=i386-pc /dev/sda`**
+
+Install GRUB for UEFI.\
+**`# grub-install --target=x86_64-efi --efi-directory=/boot --boot-directory=/boot --bootloader-id=GRUB`**
+
+Update GRUB configuration to make sure we have access to encrypted SYSTEM partition.\
+**`# vim /etc/default/grub`**
+
+Update GRUB_CMDLINE_LINUX_DEFAULT.\
+`GRUB_CMDLINE_LINUX_DEFAULT="cryptdevice=/dev/sda3:cryptroot root=/dev/mapper/cryptroot rootflags=subvol=@ loglevel=3 quiet"`
+
+Configure GRUB.\
+**`# grub-mkconfig -o /boot/grub/grub.cfg`**
 
 \
 \
