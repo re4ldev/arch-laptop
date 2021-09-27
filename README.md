@@ -1,3 +1,5 @@
+IMPORTANT: Still under development
+
 In this repository I attempt to create a complete **Guide** for Arch Linux operating system deployment on a mobile personal computer (laptop). The solution should satisfy the list of requirements collected in section I. Requirements.
 
 I am Linux enthusiast with no system administration background. This **Guide** was put together by myself following a number of documents, tutorials and recommendations available online. Hopefully this is a living document, updated frequently to catch up with the latest developments.
