@@ -423,6 +423,9 @@ Setup timezone.\
 Generate /etc/adjtime\
 **`# hwclock --systohc`**
 
+Enable NTP time syncronization.\
+**`# timedatectl set-ntp true`**
+
 Edit locale.gen and uncomment the locales required for the system.\
 **`# vim /etc/locale.gen`**
 
