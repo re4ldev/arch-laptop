@@ -60,16 +60,12 @@ This installation procedure heavily borrows from the following sources:
 15. Select the mirrors.
 16. Install system packages with pacstrap.
 17. Generate fstab.
-18. Chroot into the new system.
-19. Set a timezone.
-20. Set locale.
-21. Set up the network.
-22. Set root password.
-23. Set initramfs.
-24. Install bootloader.
-25. Boot into a newly installed system.
-26. Create a swapfile.
-27. Add the User and setup User's directory subvolume layout.
+18. Chroot into the new system and perform basic configuration.
+19. Set initramfs.
+20. Install bootloader.
+21. Boot into a newly installed system.
+22. Create a swapfile.
+23. Add the User and setup User's directory subvolume layout.
 
 ## 1. Acquire an installation image ##
 The updated list of mirrors can be found on [Arch Linux download page](https://archlinux.org/download). Download Arch Linux image (.iso) from preferred mirror, and the corresponding PGP signature file (.iso.sig) from Arch Linux download page directly.\
@@ -413,6 +409,43 @@ Generate fstab file using UUIDs.\
 
 Verify the correct entries in fstab file.\
 **`# vim /mnt/etc/fstab`**
+
+## 18. Chroot into the new system and perform basic configuration ##
+Change root into the new system using Arch Linux provided tool.\
+**`# arch-chroot /mnt`**
+
+Setup root password.\
+**`# passwd`**
+
+Setup timezone.\
+**`# ln -sf /usr/share/zoneinfo/Europe/Warsaw /etc/localtime`**
+
+Generate /etc/adjtime\
+**`# hwclock --systohc`**
+
+Edit locale.gen and uncomment the locales required for the system.\
+**`# vim /etc/locale.gen`**
+
+Generate the locales.\
+**`# locale-gen`**
+
+Create locale.conf and set the LANG variable accordingly.\
+**`# echo "LANG=en_US.UTF-8" > /etc/locale.conf`**
+
+Setup the hostname.\
+**`# echo "myHostname" > /etc/hostname`**
+
+Add default entries to hosts file.\
+**`# vim /etc/hosts`**\
+`127.0.0.1 localhost`\
+`::1 localhost`\
+`127.0.1.1 myHostname.localdomain myHostname`
+
+Enable network manager.\
+**`# systemctl enable NetworkManager.service`**
+
+Enable sshd service.\
+**`# systemctl enable sshd.service`**
 
 \
 \
