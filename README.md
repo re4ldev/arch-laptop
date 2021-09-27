@@ -480,6 +480,18 @@ Update GRUB_CMDLINE_LINUX_DEFAULT.\
 Configure GRUB.\
 **`# grub-mkconfig -o /boot/grub/grub.cfg`**
 
+## 21. Boot into a newly installed system ##
+Finalize the installation and boot into a newly deployed Arch Linux system.
+
+Exit chroot environment.\
+**`# exit`**
+
+Unmount all the partitions from /mnt\
+**`# umount -R /mnt`**
+
+Shutdown to safely remove the installation media (USD flash memory), and start the system again.\
+**`# shutdown now`**
+
 \
 \
 \
