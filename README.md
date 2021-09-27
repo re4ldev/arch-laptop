@@ -514,3 +514,5 @@ IMPORTANT: Make sure to use your username instead of _user_.
 **`# btrfs subvolume create @home_user_snapshots`**\
 **`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@home_user_snapshots /dev/mapper/cryptroot /mnt/home/user/.snapshots`**\
 )
+
+TODO: ( Test on hardware, for now the process is only tested on virtual machine )
