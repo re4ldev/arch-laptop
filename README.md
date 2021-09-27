@@ -74,7 +74,7 @@ The updated list of mirrors can be found on [Arch Linux download page](https://a
 
 ## 2. Verify an installation image signature ##
 Execute the gpg command to verify .iso file agianst .iso.sig. Both files must be in the same directory. Make sure RSA key from the output matches PGP fingerprint provided on Arch Linux download website.\
-**`$ gpg --keyserver-options auto-key-retrieve --verify archlinux-2021.09.01-x86_64.iso.sig`**\
+**`$ gpg --verify archlinux-2021.09.01-x86_64.iso.sig`**\
 `gpg: assuming signed data in 'archlinux-2021.09.01-x86_64.iso'`\
 `gpg: Signature made Sun 01 Aug 2021 10:32:22 AM CEST`\
 `gpg:                using RSA key 4AA4767BBC9C4B1D18AE28B77F2D434B9741E8AC`\
