@@ -1,4 +1,4 @@
-IMPORTANT: Still under development
+IMPORTANT: This **Guide** is still under development.
 
 In this repository I attempt to create a complete **Guide** for Arch Linux operating system deployment on a mobile personal computer (laptop). The solution should satisfy the list of requirements collected in section I. Requirements.
 
