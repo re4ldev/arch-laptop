@@ -2,14 +2,15 @@ IMPORTANT: This **Guide** is still under development.
 
 In this repository I attempt to create a complete **Guide** for Arch Linux operating system deployment on a mobile personal computer aka laptop. The solution should satisfy the list of requirements collected in section I. Requirements following a number of assumptions listed in section II. Assumptions.
 
-I am Linux enthusiast with no system administration background. This **Guide** was put together by myself following a number of documents, tutorials and recommendations available online. Hopefully this is a living document, updated frequently to catch up with the latest developments.
+I am Linux enthusiast with no system administration background. This **Guide** was put together by myself following a number of documents, tutorials and videos available online which I list below in the section A. Sources. Hopefully this is a living document, updated frequently to catch up with the latest developments.
 
-I would appreciate all kind of constructive feedback about the below procedure steps, applied solutions, and used software. You can use Issues section for that purpose.
+I would appreciate all kind of constructive feedback about the below procedure steps, applied solutions, and used software. You can use Issues section for that purpose. Feel free to share this **Guide** with larger audience and open for discussion. All kind of best practices and recommendations are more than welcome.
 
 **DISCLAIMER**: No liability for the contents of this documents can be accepted. Use the concepts, examples and other content at your own risk. There may be errors and inaccuracies, that may of course be damaging to your system. Although this is highly unlikely, you should proceed with caution. The author does not accept any responsibility for any damage incurred.
 
 **IMPORTANT**: If applied incorrectly, some of the steps described in the **Guide** may irreversibly erase data from, and damage your computer.
 
+# A. Sources #
 This installation procedure heavily borrows from the following sources:
 * [Arch Linux Wiki](https://wiki.archlinux.org/)
 * [Arch Linux Installation guide (archlinux wiki)](https://wiki.archlinux.org/title/Installation_guide)
