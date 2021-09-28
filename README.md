@@ -19,7 +19,7 @@ This installation procedure heavily borrows from the following sources:
 * [EF - Linux Made Simple (youtube channel)](https://www.youtube.com/c/EFLinuxMadeSimple)
 * [Luke Smith (youtube channel)](https://www.youtube.com/c/LukeSmithxyz)
 * [Installing Arch on an encrypted BRTFS with EFI (blog)](https://gareth.com/index.php/2020/07/15/installing-arch-on-an-encrypted-btrfs-with-efi/)
-* [Jortan Williams blog](https://www.jwillikers.com/btrfs-layout)
+* [Jortan Williams (blog)](https://www.jwillikers.com/btrfs-layout)
 * [OpenSUSE Wiki](https://en.opensuse.org/SDB:BTRFS#Default_Subvolumes)
 * [LinuxFoundation - Filesystem Hierarchy Standard](https://refspecs.linuxfoundation.org/FHS_3.0/fhs-3.0.html)
 
