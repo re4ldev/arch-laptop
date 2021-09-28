@@ -31,8 +31,8 @@ This installation procedure heavily borrows from the following sources:
 4. Snapshot system (to easily restore to previous state in case of failure).
 5. Periodic full backup to NAS when connected to LAN.
 6. Graphical environment.
-7. Should be a minimal install, include only essential packages required for each functionality.
-8. Apply the latest software versions as soon as they are released (to make sure the latest security best practives are applied).
+7. Minimal installation (include only essential packages required for each functionality).
+8. Rolling release distribution (apply the latest versions available for the used software).
 9. Allow booting from both, UEFI and BIOS modes (in case the disk needs to be attached to a different laptop which supports different boot mode).
 
 # II. Assumptions #
