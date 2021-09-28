@@ -46,38 +46,35 @@ This installation procedure heavily borrows from the following sources:
 
 # III. Installation steps #
 
-1. Acquire an installation image.
-2. Verify an installation image signature.
-3. Prepare an installation medium.
-4. Boot the live environment.
-5. Live environment keyboard layout and console font setup.
-6. Live environment network access setup.
-7. Live environment SSH access setup.
-8. Live environment boot mode verification.
-9. Live environment system clock update.
-10. Wipe out the disk.
-11. Partition the disks.
-12. Setup an encryption.
-13. Format disk partitions.
-14. Create and mount btrfs subvolumes and non-btrfs partitions for the System.
-15. Select the mirrors.
-16. Install system packages with pacstrap.
-17. Generate fstab.
-18. Chroot into the new system and perform basic configuration.
-19. Update mkinitcpio configuration and generate initramfs.
-20. Install and configure the boot loader.
-21. Boot into a newly installed system.
-22. Create a swapfile.
-23. Add the User and setup User's directory subvolume layout.
-24. Configure snapper.
-25. Install DWM window manager.
+1. Acquire and verify an installation image.
+2. Prepare an installation medium.
+3. Boot the live environment, and configure console keymap and font.
+4. Live environment network access setup.
+5. Live environment SSH access setup.
+6. Live environment system clock update.
+7. Live environment boot mode verification.
+8. Wipe out the disk.
+9. Partition the disks.
+10. Setup an encryption.
+11. Format disk partitions.
+12. Create and mount btrfs subvolumes and non-btrfs partitions for the System.
+13. Select the mirrors.
+14. Install system packages with pacstrap.
+15. Generate fstab.
+16. Chroot into the new system and perform basic configuration.
+17. Update mkinitcpio configuration and generate initramfs.
+18. Install and configure the boot loader.
+19. Boot into a newly installed system.
+20. Create a swapfile.
+21. Add the User and setup User's directory subvolume layout.
+22. Configure snapper.
+23. Install DWM window manager.
 
-## 1. Acquire an installation image ##
+## 1. Acquire and verify an installation image ##
 The updated list of mirrors can be found on [Arch Linux download page](https://archlinux.org/download). Download Arch Linux image (.iso) from preferred mirror, and the corresponding PGP signature file (.iso.sig) from Arch Linux download page directly.\
 **`$ wget https://ftp.icm.edu.pl/pub/Linux/dist/archlinux/iso/2021.09.01/archlinux-2021.09.01-x86_64.iso`**\
 **`$ wget https://archlinux.org/iso/2021.09.01/archlinux-2021.09.01-x86_64.iso.sig`**
 
-## 2. Verify an installation image signature ##
 Execute the gpg command to verify .iso file agianst .iso.sig. Both files must be in the same directory. Make sure RSA key from the output matches PGP fingerprint provided on Arch Linux download website.\
 **`$ gpg --verify archlinux-2021.09.01-x86_64.iso.sig`**\
 `gpg: assuming signed data in 'archlinux-2021.09.01-x86_64.iso'`\
@@ -85,7 +82,7 @@ Execute the gpg command to verify .iso file agianst .iso.sig. Both files must be
 `gpg:                using RSA key 4AA4767BBC9C4B1D18AE28B77F2D434B9741E8AC`\
 `gpg: Can't check signature: No public key`
 
-## 3. Prepare an installation medium ##
+## 2. Prepare an installation medium ##
 **IMPORTANT**: Make sure you are applying the changes to the USB drive. After this step the data will be permanently erased from the device on which you apply the commands.
 
 Find out the name of the USB drive device.\
@@ -107,10 +104,9 @@ In case the device is not empty, wipe out the device prior to .iso copy.\
 Copy Arch Linux install image to USB drive.\
 **`# dd if=archlinux-2021.08.01-x86_64.iso of=/dev/sda bs=4M conv=fsync oflag=direct status=progress`**
 
-## 4. Boot the live environment ##
+## 3. Boot the live environment, and configure console keymap and font ##
 Boot laptop with the USB drive prepared in the previous step. Arch Linux installation images does not support Secure Boot. If you are having trouble booting from the USB, please, consult [Arch Linux installation guide](https://wiki.archlinux.org/title/Installation_guide) for more details.
 
-## 5. Live environment keyboard layout and console font setup ##
 This step is only required if you are going to perform the installation from the console, and not via SSH. Step 7 shows the steps to enable SSH access to the live environment. If you are going to connect to the live environment via SSH, the keymap and font from your SSH client will apply.
 
 By default console keymap is US. List the directory with available keyboard layouts.\
@@ -125,7 +121,7 @@ List the directory with available console fonts.\
 To modify the console font to support Polish special characters, append a font name without extension (.psfu.gz) to setfont.\
 **`# setfont lat2-16`**
 
-## 6. Live environment network access setup ##
+## 4. Live environment network access setup ##
 Since network connectivity is a critical component for successful Arch Linux installation we will describe four different network access scenarios:
 1. Wired connection with DHCP
 2. Wired connection without DHCP
@@ -176,21 +172,21 @@ Once applied the procedure from one of the above scenarios, you should verify In
 `64 bytes from archlinux.org (95.217.163.246): icmp_seq=2 ttl=49 time=44.3 ms`\
 `64 bytes from archlinux.org (95.217.163.246): icmp_seq=3 ttl=49 time=44.3 ms`
 
-### 6-1. Wired connection with DHCP ###
+### 4-1. Wired connection with DHCP ###
 Connect network cable to the laptop. If DHCP server is available in the network, ethernet network interface will be configured automatically.
 
-### 6-2. Wired connection without DHCP ###
+### 4-2. Wired connection without DHCP ###
 Add an IP address to the interface.\
 **`# ip address add 10.0.0.2/24 broadcast + dev enp0s3`**
 
 Add default route to access Internet.\
 **`# ip route add default via 10.0.0.1/24 dev enp0s3`**
 
-### 6-3. Wireless connection with DHCP ###
+### 4-3. Wireless connection with DHCP ###
 Connect to wireless LAN.\
 **`# iwctl --passphrase myTestPass station wlan0 connect MyTestLab`**
 
-### 6-4. Wireless connection without DHCP ###
+### 4-4. Wireless connection without DHCP ###
 Connect to wireless LAN.\
 **`# iwctl --passphrase myTestPass station wlan0 connect MyTestLab`**
 
@@ -200,7 +196,7 @@ Add an IP address to the interface.\
 Add default route to access Internet.\
 **`# ip route add default via 10.0.0.1/24 dev enp0s3`**
 
-## 7. Live environment SSH access setup ##
+## 5. Live environment SSH access setup ##
 To be able to login via ssh we need to set a root password.\
 **`# passwd root`**
 
@@ -213,12 +209,7 @@ If ssh is not running start the service.\
 
 You can now connect via ssh to the live environment from another machine.
 
-## 8. Live environment boot mode verification ##
-We need verify that we are actually booted in UEFI mode. If the following command is executed without error that means we run UEFI, similarly to the below output.\
-**`# mount | grep efi`**\
-`efivarfs on /sys/firmware/efi/efivars type efivarfs (rw,nosuid,nodev,noexec,realtime)`
-
-## 9. Live environment system clock update ##
+## 6. Live environment system clock update ##
 Use NTP server to syncronize time.\
 **`# timedatectl set-ntp true`**
 
@@ -235,7 +226,12 @@ Verify the clock is correctly configured.\
 `TimeUSec=Sun 2021-08-29 10:48:17 CEST`\
 `RTCTimeUSec=Sun 2021-08-29 10:48:17 CEST`
 
-## 10. Wipe out the disk ##
+## 7. Live environment boot mode verification ##
+We need verify that we are actually booted in UEFI mode. If the following command is executed without error that means we run UEFI, similarly to the below output.\
+**`# mount | grep efi`**\
+`efivarfs on /sys/firmware/efi/efivars type efivarfs (rw,nosuid,nodev,noexec,realtime)`
+
+## 8. Wipe out the disk ##
 **IMPORTANT**: If you follow the instructions included in this step, the data on the disk will be erased. If you apply incorrectly the following steps you may erase the data from your computer irreversibly. Proceed with caution.
 
 This step is optional but recommended. It ensures that random data is written to the disk prior to the encryption making it almost impossible to distinguish the free space from the occupied one.
@@ -274,7 +270,7 @@ The drive is now erased, let's verify that security is not enabled.\
 Fill the disk with random bytes stream. Depending on the drive size, this step will take an extended period of time.\
 **`shred -v -n 1 /dev/sda`**
 
-## 11. Partition the disks ##
+## 9. Partition the disks ##
 **IMPORTANT**: If you follow the instructions included in this step, the data on the disk will be erased. If you apply incorrectly the following steps you may erase the data from your computer irreversibly. Proceed with caution.
 
 We will create three partitions. One for the legacy BIOS, second one for the UEFI boot, and the last one for the System. We will not use swap partition, instead we will use swapfile on subvolume.
@@ -307,14 +303,14 @@ Verify the partitions are correcrtly created.\
 `└─sda3 8:3 0 19.5G 0 part`\
 `sr0 11:0 1 831.3M 0 rom /run/archiso/bootmnt`
 
-## 12. Setup an encryption on the main partition ##
+## 10. Setup an encryption on the main partition ##
 We will encrypt the system partition with LUKS.
 
 Setup encryption on the SYSTEM partition and open the encrypted partition to work with it.\
 **`# cryptsetup luksFormat /dev/sda3`**\
 **`# cryptsetup luksOpen /dev/sda3 cryptroot`**
 
-## 13. Format disk partitions ##
+## 11. Format disk partitions ##
 Format SYSTEM and EFI partition with its respective file systems.
 
 EFI partition requires FAT32 file system.\
@@ -323,7 +319,7 @@ EFI partition requires FAT32 file system.\
 SYSTEM partition will use btrfs file system.\
 **`# mkfs.btrfs /dev/mapper/cryptroot`**
 
-## 14. Create and mount btrfs subvolumes and non-btrfs partitions for the System. ##
+## 12. Create and mount btrfs subvolumes and non-btrfs partitions for the System. ##
 IMPORTANT: TODO: ( revisit System and User directories/subvolumes to have CoW disabled, for example. virtual machine images ). Make sure to not use Copy on Write mechanism on Virtual Machines virtual disks and images.\
 (TODO: review the subvolumes layout)\
 (TODO: for system integrity create subvolumes instead of directories for: /var/spool, /var/log, /var/run, /var/tmp)
@@ -383,7 +379,7 @@ Mount the remaining subvolumes.\
 Mount the boot partition.\
 **`# mount /dev/sda2 /mnt/boot`**
 
-## 15. Update the mirror list ##
+## 13. Update the mirror list ##
 Arch Linux installation is performed via network. The packages are downloaded from the mirrors.
 
 We will use _reflector_ - python script to update pacman mirror list. Sort the 20 most recently synchronized mirrors accessible via https.\
@@ -392,7 +388,7 @@ We will use _reflector_ - python script to update pacman mirror list. Sort the 2
 We can verify the selected mirrors viewing /etc/pacmand.d/mirrorlist file.\
 **`# vim /etc/pacman.d/mirrorlist`**
 
-## 16. Install system packages with pacstrap ##
+## 14. Install system packages with pacstrap ##
 _pacstrap_ script is used to install the selected system packages and copy the mirror list established in the previous step into a hard drive.
 
 This is a complete list of packages that will be installed to satisfy the system requirements from section I. Not all the packages from the below list will be installed in this step. Graphical environment related packages will be installed in a separate step later in the process.
@@ -411,14 +407,14 @@ Window Manager | | dwm
 Use _pacstrap_ to install Arch Linux on the hard drive.\
 **`# pacstrap /mnt base base-devel linux linux-firmware dosfstools btrfs-progs e2fsprogs intel-ucode dhcpcd wpa_supplicant networkmanager grub efibootmgr vim git openssh parted man-db man-pages texinfo xf86-video-intel xorg-server xorg-xinit xorg-xsetroot`**
 
-## 17. Generate fstab ##
+## 15. Generate fstab ##
 Generate fstab file using UUIDs.\
 **`# genfstab -p -U /mnt >> /mnt/etc/fstab`**
 
 Verify the correct entries in fstab file.\
 **`# vim /mnt/etc/fstab`**
 
-## 18. Chroot into the new system and perform basic configuration ##
+## 16. Chroot into the new system and perform basic configuration ##
 Change root into the new system using Arch Linux provided tool.\
 **`# arch-chroot /mnt`**
 
@@ -458,7 +454,7 @@ Enable network manager.\
 Enable sshd service.\
 **`# systemctl enable sshd.service`**
 
-## 19. Update mkinitcpio configuration and generate initramfs ##
+## 17. Update mkinitcpio configuration and generate initramfs ##
 Since we have added btrfs file system and encryption, we have to include additional hook and binary in our initramfs.
 
 Update mkinitcpio.conf\
@@ -473,7 +469,7 @@ Update HOOKS.\
 Generate initramfs.\
 **`# mkinitcpio -P`**
 
-## 20. Install and configure the boot loader ##
+## 18. Install and configure the boot loader ##
 We will use GRUB as boot loader for our installation. Mainly because it supports both legacy BIOS and UEFI boot modes.
 
 Install GRUB for legacy BIOS.\
@@ -491,7 +487,7 @@ Update GRUB_CMDLINE_LINUX_DEFAULT.\
 Configure GRUB.\
 **`# grub-mkconfig -o /boot/grub/grub.cfg`**
 
-## 21. Boot into a newly installed system ##
+## 19. Boot into a newly installed system ##
 Finalize the installation and boot into a newly deployed Arch Linux system.
 
 Exit chroot environment.\
@@ -509,7 +505,7 @@ Shutdown to safely remove the installation media (USD flash memory), and start t
 \
 \
 TODO: (\
-Add the following to step 23:\
+Add the following to step "Add the User and setup User's directory subvolume layout":\
 IMPORTANT: Make sure to use your username instead of _user_.
 @home_user | /home/user | Users' home folder is excluded from snapshots to avoid data loss on rollbacks\
 @home_user_snapshots - /home/user/.snapshots - Users' home folder snapshots, do not snapshot the snapshots :)\
@@ -522,4 +518,4 @@ IMPORTANT: Make sure to use your username instead of _user_.
 )
 
 TODO: ( Test on hardware, for now the process is only tested on virtual machine )\
-TODO: ( Add steps 22 - 25 )
+TODO: ( Add steps 20 - 23 )
