@@ -38,9 +38,9 @@ This installation procedure heavily borrows from the following sources:
 # II. Assumptions #
 
 1. To create an installation medium we will use Linux distribution with the following tools: GnuPG, wget, dd. For instructions to create installation medium from Windows or MacOS, please refer to Arch Linux installation guide.
-2. USB flash drive (pendrive) is used as installation medium.
+2. USB flash drive aka pendrive is used as installation medium.
 3. We are using the following Arch Linux image file: _**archlinux-2021.09.01-x86_64.iso**_ and corresponding _**archlinux-2021.09.01-x86_64.iso.sig**_
-4. There is a LAN network with Internet access available.
+4. Arch Linux installation process requires Internet access. There is a LAN network with Internet access available.
 5. Arch Linux live environment will be accessed via SSH to perform the installation procedure.
 6. All storage devices are SSD SATA.
 
