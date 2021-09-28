@@ -25,7 +25,7 @@ This installation procedure heavily borrows from the following sources:
 
 # I. Requirements #
 
-1. Data at rest encryption (at least data partitions and swap).
+1. Data-at-rest encryption (at least data partitions and swap).
 2. Battery saving features (hibernation to disk on lid close or button press).
 3. Wireless connectivity (wifi, bluetooth, wwan), if available.
 4. Snapshot system (to easily restore to previous state in case of failure).
