@@ -66,8 +66,9 @@ This installation procedure heavily borrows from the following sources:
 18. Boot into a newly installed system.
 19. Create a swapfile.
 20. Add the User and setup User's directory subvolume layout.
-21. Configure snapper.
-22. Install DWM window manager.
+21. Install DWM window manager.
+22. Configure snapper.
+23. Configure backup to NAS and perform initial full backup.
 
 ## 1. Acquire and verify an installation image ##
 The updated list of mirrors can be found on [Arch Linux download page](https://archlinux.org/download). Download Arch Linux image (.iso) from preferred mirror, and the corresponding PGP signature file (.iso.sig) from Arch Linux download page directly.\
@@ -498,8 +499,9 @@ Shutdown to safely remove the installation media (USD flash memory), and start t
 
 ## 19. Create a swapfile ##
 ## 20. Add the User and setup User's directory subvolume layout ##
-## 21. Configure snapper ##
-## 22. Install DWM window manager ##
+## 21. Install DWM window manager ##
+## 22. Configure snapper ##
+## 23. Configure backup to NAS and perform initial full backup ##
 
 \
 \
