@@ -496,6 +496,11 @@ Unmount all the partitions from /mnt\
 Shutdown to safely remove the installation media (USD flash memory), and start the system again.\
 **`# shutdown now`**
 
+## 19. Create a swapfile ##
+## 20. Add the User and setup User's directory subvolume layout ##
+## 21. Configure snapper ##
+## 22. Install DWM window manager ##
+
 \
 \
 \
