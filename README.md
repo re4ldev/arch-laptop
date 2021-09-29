@@ -130,7 +130,7 @@ Since network connectivity is a critical component for successful Arch Linux ins
 
 (TODO: Include WWAN configuration procedure)
 
-Make sure the card is not blocked.\
+Make sure the wireless network adapter is not blocked.\
 **`# rfkill list`**\
 `0: phy0: Wireless LAN`\
 `Soft blocked: no`\
