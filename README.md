@@ -57,18 +57,19 @@ This installation procedure heavily borrows from the following sources:
 9. Partition the disks.
 10. Setup an encryption and format the partitions.
 11. Create and mount btrfs subvolumes and non-btrfs partitions for the System.
-12. Select the mirrors.
-13. Install system packages with pacstrap.
-14. Generate fstab.
-15. Chroot into the new system and perform basic configuration.
-16. Update mkinitcpio configuration and generate initramfs.
-17. Install and configure the boot loader.
-18. Boot into a newly installed system.
-19. Create a swapfile.
+12. Create a swap area: swapfile.
+13. Select the mirrors.
+14. Install system packages with pacstrap.
+15. Generate fstab.
+16. Chroot into the new system and perform basic configuration.
+17. Update mkinitcpio configuration and generate initramfs.
+18. Install and configure the boot loader.
+19. Boot into a newly installed system.
 20. Add the User and setup User's directory subvolume layout.
 21. Install DWM window manager.
 22. Configure snapper.
 23. Configure backup to NAS and perform initial full backup.
+
 
 ## 1. Acquire and verify an installation image ##
 The updated list of mirrors can be found on [Arch Linux download page](https://archlinux.org/download). Download Arch Linux image (.iso) from preferred mirror, and the corresponding PGP signature file (.iso.sig) from Arch Linux download page directly.\
@@ -377,7 +378,47 @@ Mount the remaining subvolumes.\
 Mount the boot partition.\
 **`# mount /dev/sda2 /mnt/boot`**
 
-## 12. Update the mirror list ##
+## 12. Create a swap area: swapfile ##
+To be able to hibarnate the system on button press or lid close we will need to create a swap area. In the previous steps we have created @swap volume to make sure it is not part of the snapshots, and mounted it to the /swapspace directory.
+
+Create a zero length file.\
+**`# truncate -s 0 /swapspace/swapfile`**
+
+Disable CoW mechanism on the swap file.\
+**`# chattr +C /swapspace/swapfile`**
+
+Make sure the compression is disbled on swap file.\
+**`# btrfs property set /swapspace/swapfile compression none`**
+
+Set the correct swap file size. Swap file should be a little bit more larger then the available RAM.\
+**`# fallocate -l 9G /swapspace/swapfile`**
+
+Format the swap file to Linux swap.\
+**`# mkswap  /swapspace/swapfile`**
+
+Set the right permissions.\
+**`# chmod 600 /swapspace/swapfile`**
+
+Activate swap file.\
+**`# swapon /swapspace/swapfile`**
+
+To be abl;e to resume from hibernation we need to calculate the resume_offset number. As recommended in Arch Linux Wiki we will use [tool btrfs_map_physical.c]{https://github.com/osandov/osandov-linux/blob/master/scripts/btrfs_map_physical.c) to compute resume_offset.\
+
+Download and compile the tool.\
+**`# cd ~`**\
+**`# wget https://raw.githubusercontent.com/osandov/osandov-linux/master/scripts/btrfs_map_physical.c`**\
+**`# gcc -O2 -o btrfs_map_physical btrfs_map_physical.c`**
+
+Run the tool and make a note of the first physical offset.\
+**`# ./btrfs_map_physical /swapspace/swapfile`**\
+
+Found out the PAGESIZE.\
+**`# getconf PAGESIZE`**
+
+To compute the resume_offset value, divide the physical offset by the pagesize.\
+In my example: 4009762816 / 4096 = **978946**
+
+## 13. Update the mirror list ##
 Arch Linux installation is performed via network. The packages are downloaded from the mirrors.
 
 We will use _reflector_ - python script to update pacman mirror list. Sort the 20 most recently synchronized mirrors accessible via https.\
@@ -386,7 +427,7 @@ We will use _reflector_ - python script to update pacman mirror list. Sort the 2
 We can verify the selected mirrors viewing /etc/pacmand.d/mirrorlist file.\
 **`# vim /etc/pacman.d/mirrorlist`**
 
-## 13. Install system packages with pacstrap ##
+## 14. Install system packages with pacstrap ##
 _pacstrap_ script is used to install the selected system packages and copy the mirror list established in the previous step into a hard drive.
 
 This is a complete list of packages that will be installed to satisfy the system requirements from section I. Not all the packages from the below list will be installed in this step. Graphical environment related packages will be installed in a separate step later in the process.
@@ -405,14 +446,16 @@ Window Manager | | dwm
 Use _pacstrap_ to install Arch Linux on the hard drive.\
 **`# pacstrap /mnt base base-devel linux linux-firmware dosfstools btrfs-progs e2fsprogs intel-ucode dhcpcd wpa_supplicant networkmanager grub efibootmgr vim git openssh parted man-db man-pages texinfo xf86-video-intel xorg-server xorg-xinit xorg-xsetroot`**
 
-## 14. Generate fstab ##
+## 15. Generate fstab ##
 Generate fstab file using UUIDs.\
 **`# genfstab -p -U /mnt >> /mnt/etc/fstab`**
 
-Verify the correct entries in fstab file.\
+Verify the correct entries in fstab file. Make sure swapfile and swapspace are mounted on boot as well.\
 **`# vim /mnt/etc/fstab`**
+`/dev/mapper/cryptroot /swapspace btrfs rw,defaults,noatime,space_cache=v1,ssd,subvol=@swap 0 0`\
+`/swapspace/swapfile none swap defaults,discard 0 0`
 
-## 15. Chroot into the new system and perform basic configuration ##
+## 16. Chroot into the new system and perform basic configuration ##
 Change root into the new system using Arch Linux provided tool.\
 **`# arch-chroot /mnt`**
 
@@ -452,7 +495,7 @@ Enable network manager.\
 Enable sshd service.\
 **`# systemctl enable sshd.service`**
 
-## 16. Update mkinitcpio configuration and generate initramfs ##
+## 17. Update mkinitcpio configuration and generate initramfs ##
 Since we have added btrfs file system and encryption, we have to include additional hook and binary in our initramfs.
 
 Update mkinitcpio.conf\
@@ -467,7 +510,7 @@ Update HOOKS.\
 Generate initramfs.\
 **`# mkinitcpio -P`**
 
-## 17. Install and configure the boot loader ##
+## 18. Install and configure the boot loader ##
 We will use GRUB as boot loader for our installation. Mainly because it supports both legacy BIOS and UEFI boot modes.
 
 Install GRUB for legacy BIOS.\
@@ -485,7 +528,7 @@ Update GRUB_CMDLINE_LINUX_DEFAULT.\
 Configure GRUB.\
 **`# grub-mkconfig -o /boot/grub/grub.cfg`**
 
-## 18. Boot into a newly installed system ##
+## 19. Boot into a newly installed system ##
 Finalize the installation and boot into a newly deployed Arch Linux system.
 
 Exit chroot environment.\
@@ -497,16 +540,21 @@ Unmount all the partitions from /mnt\
 Shutdown to safely remove the installation media (USD flash memory), and start the system again.\
 **`# shutdown now`**
 
-## 19. Create a swapfile ##
 ## 20. Add the User and setup User's directory subvolume layout ##
 ## 21. Install DWM window manager ##
 ## 22. Configure snapper ##
 ## 23. Configure backup to NAS and perform initial full backup ##
+
 
 \
 \
 \
 \
 \
+TODO: ( Step - Create swapfile: configure return from hibernation:\
+https://wiki.archlinux.org/title/Dm-crypt/Swap_encryption#With_suspend-to-disk_support \
+https://wiki.archlinux.org/title/Power_management/Suspend_and_hibernate#Hibernation_into_swap_file_on_Btrfs \
+https://wiki.archlinux.org/title/Dm-crypt/System_configuration#resume \
+ )\
 TODO: ( Test on hardware, for now the process is only tested on virtual machine )\
 TODO: ( Add steps 19 - 22 )
