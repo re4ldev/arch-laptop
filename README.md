@@ -501,6 +501,5 @@ Shutdown to safely remove the installation media (USD flash memory), and start t
 \
 \
 \
-
 TODO: ( Test on hardware, for now the process is only tested on virtual machine )\
 TODO: ( Add steps 19 - 22 )
