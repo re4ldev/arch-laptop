@@ -402,7 +402,7 @@ Set the right permissions.\
 Activate swap file.\
 **`# swapon /swapspace/swapfile`**
 
-To be abl;e to resume from hibernation we need to calculate the resume_offset number. As recommended in Arch Linux Wiki we will use [tool btrfs_map_physical.c]{https://github.com/osandov/osandov-linux/blob/master/scripts/btrfs_map_physical.c) to compute resume_offset.\
+To be able to resume from hibernation we need to calculate the resume_offset number. As recommended in Arch Linux Wiki we will use [tool btrfs_map_physical.c]{https://github.com/osandov/osandov-linux/blob/master/scripts/btrfs_map_physical.c) to compute resume_offset.\
 
 Download and compile the tool.\
 **`# cd ~`**\
