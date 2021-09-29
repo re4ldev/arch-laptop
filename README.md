@@ -212,8 +212,8 @@ You can now connect via ssh to the live environment from another machine.
 Use NTP server to syncronize time.\
 **`# timedatectl set-ntp true`**
 
-Set CET timezone.\
-**`# timedatectl set-timezone Europe/Warsaw`**
+Set your timezone. Make sure to use your respective _Region_ and _City_ instead.\
+**`# timedatectl set-timezone Region/City`**
 
 Verify the clock is correctly configured.\
 **`# timedatectl show`**\
