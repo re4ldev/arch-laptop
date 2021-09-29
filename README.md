@@ -332,7 +332,7 @@ subvolume | directory | rationale
 @tmp | /tmp | all directories containing temporary files and caches are excluded from snapshots
 @usr_local | /usr/local | used to manually install software, it is excluded to avoid uninstalling this softare on rollbacks
 @var | /var | this directory contains many variable files, including logs, temporary caches, third party products in /var/opt, and is the default location for many virtual machine images and databases. Therefore this subvolume is created to exclude all of this variable data from snapshots and is created with Copy-On-Write disabled. 
-@swap | /swap | contains a swapfile which should be excluded from snapshots
+@swap | /swapspace | contains a swapfile which should be excluded from snapshots
 @snapshots | /.snapshots | snapshots subvolume, do not snapshot the snapshots :)
 
 Mount the cryptroot mapper to /mnt.\
@@ -358,7 +358,7 @@ IMPORTANT: Make sure to revisit mount options to fit your hardware.\
 **`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@ /dev/mapper/cryptroot /mnt`**
 
 Create the directories where the subvolumes will be mounted.\
-**`# mkdir /mnt/{boot,home,root,opt,srv,tmp,usr,var,swap,.snapshots}`**\
+**`# mkdir /mnt/{boot,home,root,opt,srv,tmp,usr,var,swapspace,.snapshots}`**\
 **`# mkdir /mnt/usr/local`**
 
 Mount the remaining subvolumes.\
@@ -370,7 +370,7 @@ Mount the remaining subvolumes.\
 **`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@usr_local /dev/mapper/cryptroot /mnt/usr/local`**\
 **`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@var /dev/mapper/cryptroot /mnt/var`**\
 **`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@snapshots /dev/mapper/cryptroot /mnt/.snapshots`**\
-**`# mount -o defaults,noatime,space_cache=v1,ssd,subvol=@swap /dev/mapper/cryptroot /mnt/swap`**\
+**`# mount -o defaults,noatime,space_cache=v1,ssd,subvol=@swap /dev/mapper/cryptroot /mnt/swapspace`**\
 **`# sync`**
 
 Mount the boot partition.\
