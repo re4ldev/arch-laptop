@@ -55,20 +55,19 @@ This installation procedure heavily borrows from the following sources:
 7. Live environment boot mode verification.
 8. Wipe out the disk.
 9. Partition the disks.
-10. Setup an encryption.
-11. Format disk partitions.
-12. Create and mount btrfs subvolumes and non-btrfs partitions for the System.
-13. Select the mirrors.
-14. Install system packages with pacstrap.
-15. Generate fstab.
-16. Chroot into the new system and perform basic configuration.
-17. Update mkinitcpio configuration and generate initramfs.
-18. Install and configure the boot loader.
-19. Boot into a newly installed system.
-20. Create a swapfile.
-21. Add the User and setup User's directory subvolume layout.
-22. Configure snapper.
-23. Install DWM window manager.
+10. Setup an encryption and format the partitions.
+11. Create and mount btrfs subvolumes and non-btrfs partitions for the System.
+12. Select the mirrors.
+13. Install system packages with pacstrap.
+14. Generate fstab.
+15. Chroot into the new system and perform basic configuration.
+16. Update mkinitcpio configuration and generate initramfs.
+17. Install and configure the boot loader.
+18. Boot into a newly installed system.
+19. Create a swapfile.
+20. Add the User and setup User's directory subvolume layout.
+21. Configure snapper.
+22. Install DWM window manager.
 
 ## 1. Acquire and verify an installation image ##
 The updated list of mirrors can be found on [Arch Linux download page](https://archlinux.org/download). Download Arch Linux image (.iso) from preferred mirror, and the corresponding PGP signature file (.iso.sig) from Arch Linux download page directly.\
@@ -302,14 +301,13 @@ Verify the partitions are correcrtly created.\
 `└─sda3 8:3 0 19.5G 0 part`\
 `sr0 11:0 1 831.3M 0 rom /run/archiso/bootmnt`
 
-## 10. Setup an encryption on the main partition ##
+## 10. Setup an encryption and format the partitions ##
 We will encrypt the system partition with LUKS.
 
 Setup encryption on the SYSTEM partition and open the encrypted partition to work with it.\
 **`# cryptsetup luksFormat /dev/sda3`**\
 **`# cryptsetup luksOpen /dev/sda3 cryptroot`**
 
-## 11. Format disk partitions ##
 Format SYSTEM and EFI partition with its respective file systems.
 
 EFI partition requires FAT32 file system.\
@@ -318,7 +316,7 @@ EFI partition requires FAT32 file system.\
 SYSTEM partition will use btrfs file system.\
 **`# mkfs.btrfs /dev/mapper/cryptroot`**
 
-## 12. Create and mount btrfs subvolumes and non-btrfs partitions for the System. ##
+## 11. Create and mount btrfs subvolumes and non-btrfs partitions for the System. ##
 IMPORTANT: TODO: ( revisit System and User directories/subvolumes to have CoW disabled, for example. virtual machine images ). Make sure to not use Copy on Write mechanism on Virtual Machines virtual disks and images.\
 (TODO: review the subvolumes layout)\
 (TODO: for system integrity create subvolumes instead of directories for: /var/spool, /var/log, /var/run, /var/tmp)
@@ -378,7 +376,7 @@ Mount the remaining subvolumes.\
 Mount the boot partition.\
 **`# mount /dev/sda2 /mnt/boot`**
 
-## 13. Update the mirror list ##
+## 12. Update the mirror list ##
 Arch Linux installation is performed via network. The packages are downloaded from the mirrors.
 
 We will use _reflector_ - python script to update pacman mirror list. Sort the 20 most recently synchronized mirrors accessible via https.\
@@ -387,7 +385,7 @@ We will use _reflector_ - python script to update pacman mirror list. Sort the 2
 We can verify the selected mirrors viewing /etc/pacmand.d/mirrorlist file.\
 **`# vim /etc/pacman.d/mirrorlist`**
 
-## 14. Install system packages with pacstrap ##
+## 13. Install system packages with pacstrap ##
 _pacstrap_ script is used to install the selected system packages and copy the mirror list established in the previous step into a hard drive.
 
 This is a complete list of packages that will be installed to satisfy the system requirements from section I. Not all the packages from the below list will be installed in this step. Graphical environment related packages will be installed in a separate step later in the process.
@@ -406,14 +404,14 @@ Window Manager | | dwm
 Use _pacstrap_ to install Arch Linux on the hard drive.\
 **`# pacstrap /mnt base base-devel linux linux-firmware dosfstools btrfs-progs e2fsprogs intel-ucode dhcpcd wpa_supplicant networkmanager grub efibootmgr vim git openssh parted man-db man-pages texinfo xf86-video-intel xorg-server xorg-xinit xorg-xsetroot`**
 
-## 15. Generate fstab ##
+## 14. Generate fstab ##
 Generate fstab file using UUIDs.\
 **`# genfstab -p -U /mnt >> /mnt/etc/fstab`**
 
 Verify the correct entries in fstab file.\
 **`# vim /mnt/etc/fstab`**
 
-## 16. Chroot into the new system and perform basic configuration ##
+## 15. Chroot into the new system and perform basic configuration ##
 Change root into the new system using Arch Linux provided tool.\
 **`# arch-chroot /mnt`**
 
@@ -453,7 +451,7 @@ Enable network manager.\
 Enable sshd service.\
 **`# systemctl enable sshd.service`**
 
-## 17. Update mkinitcpio configuration and generate initramfs ##
+## 16. Update mkinitcpio configuration and generate initramfs ##
 Since we have added btrfs file system and encryption, we have to include additional hook and binary in our initramfs.
 
 Update mkinitcpio.conf\
@@ -468,7 +466,7 @@ Update HOOKS.\
 Generate initramfs.\
 **`# mkinitcpio -P`**
 
-## 18. Install and configure the boot loader ##
+## 17. Install and configure the boot loader ##
 We will use GRUB as boot loader for our installation. Mainly because it supports both legacy BIOS and UEFI boot modes.
 
 Install GRUB for legacy BIOS.\
@@ -486,7 +484,7 @@ Update GRUB_CMDLINE_LINUX_DEFAULT.\
 Configure GRUB.\
 **`# grub-mkconfig -o /boot/grub/grub.cfg`**
 
-## 19. Boot into a newly installed system ##
+## 18. Boot into a newly installed system ##
 Finalize the installation and boot into a newly deployed Arch Linux system.
 
 Exit chroot environment.\
@@ -517,4 +515,4 @@ IMPORTANT: Make sure to use your username instead of _user_.
 )
 
 TODO: ( Test on hardware, for now the process is only tested on virtual machine )\
-TODO: ( Add steps 20 - 23 )
+TODO: ( Add steps 19 - 22 )
