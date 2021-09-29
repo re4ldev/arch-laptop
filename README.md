@@ -136,8 +136,7 @@ Make sure the wireless network adapter is not blocked.\
 `Soft blocked: no`\
 `Hard blocked: no`
 
-If the card is hard-blocked then use the hardware button (switch) to unblock it.\
-If the card is not hard-blocked but soft-blocked then unblock it with rfkill.\
+If the wireless network adapter is hard-blocked then use the hardware button (switch) to unblock it. If it is not hard-blocked but soft-blocked then unblock it with rfkill.\
 **`# rfkill unblock wifi`**
 
 Wireless access point specification:
