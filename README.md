@@ -418,8 +418,8 @@ Change root into the new system using Arch Linux provided tool.\
 Setup root password.\
 **`# passwd`**
 
-Setup timezone.\
-**`# ln -sf /usr/share/zoneinfo/Europe/Warsaw /etc/localtime`**
+Setup your timezone. Make sure to replace Region/City with your respective values.\
+**`# ln -sf /usr/share/zoneinfo/Region/City /etc/localtime`**
 
 Generate /etc/adjtime\
 **`# hwclock --systohc`**
