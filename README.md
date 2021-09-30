@@ -390,8 +390,8 @@ Disable CoW mechanism on the swap file.\
 Make sure the compression is disbled on swap file.\
 **`# btrfs property set /swapspace/swapfile compression none`**
 
-Set the swap file size. Swap file should be a little bit larger then the available RAM.\
-**`# fallocate -l 9G /swapspace/swapfile`**
+Set the swap file size. Swap file should two times the size of available RAM.\
+**`# fallocate -l 8G /swapspace/swapfile`**
 
 Format the swap file to Linux swap.\
 **`# mkswap  /swapspace/swapfile`**
