@@ -412,7 +412,7 @@ Download and compile the tool.\
 Run the tool and make a note of the first physical offset.\
 **`# ./btrfs_map_physical /swapspace/swapfile`**\
 
-Found out the PAGESIZE.\
+Find out the PAGESIZE.\
 **`# getconf PAGESIZE`**
 
 To compute the resume_offset value, divide the physical offset by the pagesize.\
