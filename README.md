@@ -505,7 +505,7 @@ Update BINARIES.\
 `BINARIES=(btrfs)`
 
 Update HOOKS.\
-`HOOKS=(base udev autodetect modconf block encrypt filesystems keyboard fsck)`
+`HOOKS=(base udev autodetect modconf block encrypt filesystems keyboard resume fsck)`
 
 Generate initramfs.\
 **`# mkinitcpio -P`**
