@@ -25,15 +25,17 @@ This installation procedure heavily borrows from the following sources:
 
 # I. Requirements #
 
-1. Data-at-rest encryption (at least data partitions and swap).
-2. Battery saving features (hibernation to disk on lid close or button press).
-3. Wireless connectivity (wifi, bluetooth, wwan), if available.
-4. Snapshot system (to easily restore to previous state in case of failure).
-5. Periodic full backup to NAS when connected to LAN.
-6. Graphical environment.
-7. Minimal installation (include only essential packages required for each functionality).
-8. Rolling release distribution (apply the latest versions available for the used software).
-9. Allow booting from both, UEFI and BIOS modes (in case the disk needs to be attached to a different laptop which supports different boot mode).
+id | Requirement | Rationale | Solution
+-- | ----------- | --------- | --------
+1 | Data-at-rest encryption | If the device is lost, the data and swap area can not be easily accessible. | LUKS encryption for data partition and swapfile on the encrypted data partition
+2 | Battery saving | Mobile device should work without grid connection for longer periods of time. | TLP and hibernation to disk on lid close or button press
+3 | Wireless connectivity | Connection to LAN or WAN should be supported without wire connectivity in case only wireless access points are available in the environment. | Network Manager
+4 | Snapshot system | To reduce the risk of failure the snapshot system must be available. Atomic snapshots should be take prior to system upgrades or on-demand. | BTRFS file system and Snapper
+5 | Periodic backup to NAS | When connected to home LAN full system/data backup to NAS should be available | !!! TBD !!!
+6 | Graphical environment | Graphical environment must be available to support graphical content (ex. X window applications, Internet browsing) | Suckless DWM
+7 | Minimal installation | The solution should provide only the bare minimum number of packages to support required functionalites. | Arch Linux OS
+8 | Rolling release Linux distro | The latest available software versions should be applied as soon as possible to keep up with the latest developments and security patches. | Arch Linux OS
+9 | Hybrid boot | In case the hard drive containing the OS must be connected to a different hardware. Must be able to boot in UEFI and legacy BIOS modes. | GRUB bootloader
 
 # II. Assumptions #
 
