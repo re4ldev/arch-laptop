@@ -2,9 +2,9 @@ IMPORTANT: This **Guide** is still under development.
 
 # 0. Introduction #
 
-In this repository I attempt to create a complete **Guide** for [Arch Linux](https://archlinux.org/) operating system deployment on a mobile personal computer aka laptop. The solution should satisfy the list of requirements collected in section [I. Requirements](#i-requirements) following a number of assumptions listed in section [II. Assumptions](#ii-assumptions).
+In this repository I attempt to create a complete **Guide** for [Arch Linux](https://archlinux.org/) operating system deployment on a mobile personal computer aka laptop. The solution should satisfy the list of requirements collected in section I. [Requirements](#i-requirements) following a number of assumptions listed in section II. [Assumptions](#ii-assumptions).
 
-I am Linux enthusiast with no system administration background. This **Guide** was put together by myself following a number of documents, tutorials and videos available online which I list below in the section [A. Sources](#a-sources). Hopefully this is a living document, updated frequently to catch up with the latest developments.
+I am Linux enthusiast with no system administration background. This **Guide** was put together by myself following a number of documents, tutorials and videos available online which I list below in the section A. [Sources](#a-sources). Hopefully this is a living document, updated frequently to catch up with the latest developments.
 
 I would appreciate all kind of constructive feedback about the below procedure steps, applied solutions, and used software. You can use [Issues](../../issues) section for that purpose. Feel free to share this **Guide** with larger audience and open for discussion. All kind of best practices and recommendations are more than welcome.
 
@@ -50,9 +50,9 @@ id | Requirement | Rationale | Solution
 
 # III. Installation steps #
 
-1. Acquire and verify an installation image.
-2. Prepare an installation medium.
-3. Boot the live environment, and configure console keymap and font.
+1. [Acquire and verify an installation image.](#1-acquire-and-verify-an-installation-image)
+2. [Prepare an installation medium.](#2-prepare-an-installation-medium)
+3. [Boot the live environment, and configure console keymap and font.]
 4. Live environment network access setup.
 5. Live environment SSH access setup.
 6. Live environment system clock update.
