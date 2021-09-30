@@ -52,28 +52,27 @@ id | Requirement | Rationale | Solution
 
 1. [Acquire and verify an installation image.](#1-acquire-and-verify-an-installation-image)
 2. [Prepare an installation medium.](#2-prepare-an-installation-medium)
-3. [Boot the live environment, and configure console keymap and font.]
-4. Live environment network access setup.
-5. Live environment SSH access setup.
-6. Live environment system clock update.
-7. Live environment boot mode verification.
-8. Wipe out the disk.
-9. Partition the disks.
-10. Setup an encryption and format the partitions.
-11. Create and mount btrfs subvolumes and non-btrfs partitions for the System.
-12. Create a swap area: swapfile.
-13. Select the mirrors.
-14. Install system packages with pacstrap.
-15. Generate fstab.
-16. Chroot into the new system and perform basic configuration.
-17. Update mkinitcpio configuration and generate initramfs.
-18. Install and configure the boot loader.
-19. Boot into a newly installed system.
-20. Add the User and setup User's directory subvolume layout.
-21. Install DWM window manager.
-22. Configure snapper.
-23. Configure backup to NAS and perform initial full backup.
-
+3. [Boot the live environment, and configure console keymap and font.](#3-boot-the-live-environment-and-configure-console-keymap-and-font)
+4. [Live environment network access setup.](#4-live-environment-network-access-setup)
+5. [Live environment SSH access setup.](#5-live-environment-ssh-access-setup)
+6. [Live environment system clock update.](#6-live-environment-system-clock-update)
+7. [Live environment boot mode verification.](#7-live-environment-boot-mode-verification)
+8. [Wipe out the disk.](#8-wipe-out-the-disk)
+9. [Partition the disks.](#9-partition-the-disks)
+10. [Setup an encryption and format the partitions.](#10-setup-an-encryption-and-format-the-partitions)
+11. [Create and mount btrfs subvolumes and non-btrfs partitions for the System.](#11-create-and-mount-btrfs-subvolumes-and-non-btrfs-partitions-for-the-system)
+12. [Create a swap area: swapfile.](#12-create-a-swap-area-swapfile)
+13. [Select the mirrors.](#13-update-the-mirror-list)
+14. [Install system packages with pacstrap.](#14-install-system-packages-with-pacstrap)
+15. [Generate fstab.](#15-generate-fstab)
+16. [Chroot into the new system and perform basic configuration.](#16-chroot-into-the-new-system-and-perform-basic-configuration)
+17. [Update mkinitcpio configuration and generate initramfs.](#17-update-mkinitcpio-configuration-and-generate-initramfs)
+18. [Install and configure the boot loader.](#18-install-and-configure-the-boot-loader)
+19. [Boot into a newly installed system.](#19-boot-into-a-newly-installed-system)
+20. [Add the User and setup User's directory subvolume layout.](#20-add-the-user-and-setup-users-directory-subvolume-layout)
+21. [Install DWM window manager.](#21-install-dwm-window-manager)
+22. [Configure snapper.](#22-configure-snapper)
+23. [Configure backup to NAS and perform initial full backup.](#23-configure-backup-to-nas-and-perform-initial-full-backup)
 
 ## 1. Acquire and verify an installation image ##
 The updated list of mirrors can be found on [Arch Linux download page](https://archlinux.org/download). Download Arch Linux image (.iso) from preferred mirror, and the corresponding PGP signature file (.iso.sig) from Arch Linux download page directly.\
