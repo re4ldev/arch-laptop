@@ -2,9 +2,9 @@ IMPORTANT: This **Guide** is still under development.
 
 # 0. Introduction #
 
-In this repository I attempt to create a complete **Guide** for [Arch Linux](https://archlinux.org/) operating system deployment on a mobile personal computer aka laptop. The solution should satisfy the list of requirements collected in section I. [Requirements](#i-requirements) following a number of assumptions listed in section II. [Assumptions](#ii-assumptions).
+In this repository I attempt to create a complete **Guide** for [Arch Linux](https://archlinux.org/) operating system deployment on a mobile personal computer aka laptop. The solution should satisfy the list of requirements collected in section [I. Requirements](#i-requirements) following a number of assumptions listed in section [II. Assumptions](#ii-assumptions).
 
-I am Linux enthusiast with no system administration background. This **Guide** was put together by myself following a number of documents, tutorials and videos available online which I list below in the section A. [Sources](#a-sources). Hopefully this is a living document, updated frequently to catch up with the latest developments.
+I am Linux enthusiast with no system administration background. This **Guide** was put together by myself following a number of documents, tutorials and videos available online which I list below in the section [A. Sources](#a-sources). Hopefully this is a living document, updated frequently to catch up with the latest developments.
 
 I would appreciate all kind of constructive feedback about the below procedure steps, applied solutions, and used software. You can use [Issues](../../issues) section for that purpose. Feel free to share this **Guide** with larger audience and open for discussion. All kind of best practices and recommendations are more than welcome.
 
@@ -80,24 +80,24 @@ The updated list of mirrors can be found on [Arch Linux download page](https://a
 **`$ wget https://archlinux.org/iso/2021.09.01/archlinux-2021.09.01-x86_64.iso.sig`**
 
 Execute the gpg command to verify .iso file agianst .iso.sig. Both files must be in the same directory. Make sure RSA key from the output matches PGP fingerprint provided on Arch Linux download website.\
-**`$ gpg --verify archlinux-2021.09.01-x86_64.iso.sig`**\
-`gpg: assuming signed data in 'archlinux-2021.09.01-x86_64.iso'`\
-`gpg: Signature made Sun 01 Sep 2021 10:32:22 AM CEST`\
-`gpg:                using RSA key 4AA4767BBC9C4B1D18AE28B77F2D434B9741E8AC`\
-`gpg: Can't check signature: No public key`
+**`$ gpg --verify archlinux-2021.09.01-x86_64.iso.sig`**
+>`gpg: assuming signed data in 'archlinux-2021.09.01-x86_64.iso'`\
+>`gpg: Signature made Sun 01 Sep 2021 10:32:22 AM CEST`\
+>`gpg:                using RSA key 4AA4767BBC9C4B1D18AE28B77F2D434B9741E8AC`\
+>`gpg: Can't check signature: No public key`
 
 ## 2. Prepare an installation medium ##
 **IMPORTANT**: Make sure you are applying the changes to the USB drive. After this step the data will be permanently erased from the device on which you apply the commands.
 
 Find out the name of the USB drive device.\
-**`$ lsblk`**\
-`NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT`\
-`sda           8:0    1 14.5G  0 disk`\
-`├─sda1        8:1    1  711M  0 part /media/pi/ARCH_202107`\
-`└─sda2        8:2    1   68M  0 part`\
-`sdb         179:0    0 59.5G  0 disk`\
-`├─sdb1      179:6    0   66M  0 part /boot`\
-`└─sdb2      179:7    0 57.8G  0 part /`
+**`$ lsblk`**
+>`NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT`\
+>`sda           8:0    1 14.5G  0 disk`\
+>`├─sda1        8:1    1  711M  0 part /media/pi/ARCH_202107`\
+>`└─sda2        8:2    1   68M  0 part`\
+>`sdb         179:0    0 59.5G  0 disk`\
+>`├─sdb1      179:6    0   66M  0 part /boot`\
+>`└─sdb2      179:7    0 57.8G  0 part /`
 
 In the above example, the USB drive is the _**sda**_ device. Make sure the device is not mounted.\
 **`$ umount /dev/sda1`**
@@ -135,10 +135,10 @@ Since network connectivity is a critical component for successful Arch Linux ins
 (TODO: Include WWAN configuration procedure)
 
 Make sure the wireless network adapter is not blocked.\
-**`# rfkill list`**\
-`0: phy0: Wireless LAN`\
-`Soft blocked: no`\
-`Hard blocked: no`
+**`# rfkill list`**
+>`0: phy0: Wireless LAN`\
+>`Soft blocked: no`\
+>`Hard blocked: no`
 
 If the wireless network adapter is hard-blocked then use the hardware button (switch) to unblock it. If it is not hard-blocked but soft-blocked then unblock it with rfkill.\
 **`# rfkill unblock wifi`**
@@ -151,29 +151,29 @@ passphrase | myTestPass
 encryption | WPA/WPA2-PSK
 
 Check for available network interfaces, and apply one of the above scenarios to the preferred interface.\
-**`# ip link`**\
-`1: lo <LOOPBACK,UP,LOWER_UP> mtu 65535 qdisc noqueue state UNKNOWN mode DEFAULT group qlen 1000`\
-`link/loopacbk 00:00:00:00:00:00 brd 00:00:00:00:00:00`\
-`2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel UP mode DEFAULT group default qlen 1000`\
-`link/ether 08:00:27:8f:69:ff brd ff:ff:ff:ff:ff:ff`\
-`3: wlan0: <BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN mode DORMANT group default qlen 1000`\
-`link/ether 08:00:27:aa:bb:cc brd ff:ff:ff:ff:ff:ff` 
+**`# ip link`**
+>`1: lo <LOOPBACK,UP,LOWER_UP> mtu 65535 qdisc noqueue state UNKNOWN mode DEFAULT group qlen 1000`\
+>`link/loopacbk 00:00:00:00:00:00 brd 00:00:00:00:00:00`\
+>`2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel UP mode DEFAULT group default qlen 1000`\
+>`link/ether 08:00:27:8f:69:ff brd ff:ff:ff:ff:ff:ff`\
+>`3: wlan0: <BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN mode DORMANT group default qlen 1000`\
+>`link/ether 08:00:27:aa:bb:cc brd ff:ff:ff:ff:ff:ff` 
 
 Once applied the procedure for any of the DHCP scenarios, you should verify local IP address.\
-**`# ip addr`**\
-`2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel UP mode DEFAULT group default qlen 1000`\
-`link/ether 08:00:27:8f:69:ff brd ff:ff:ff:ff:ff:ff`\
-`inet 10.0.0.2/24 metric 100 brd 10.0.0.255 scope global dynamic enp0s3`\
-`valid_lft 83738sec preferred_lft 83738sec`\
-`inet6 fe80::a12:abcd:a12b:1234/64 scope link`\
-`valid_lft forever preferred_lft forever`
+**`# ip addr`**
+>`2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel UP mode DEFAULT group default qlen 1000`\
+>`link/ether 08:00:27:8f:69:ff brd ff:ff:ff:ff:ff:ff`\
+>`inet 10.0.0.2/24 metric 100 brd 10.0.0.255 scope global dynamic enp0s3`\
+>`valid_lft 83738sec preferred_lft 83738sec`\
+>`inet6 fe80::a12:abcd:a12b:1234/64 scope link`\
+>`valid_lft forever preferred_lft forever`
 
 Once applied the procedure from one of the above scenarios, you should verify Internet access.\
-**`# ping archlinux.org`**\
-`PING archlinux.org (95.217.163.246) 56(84) bytes of data.`\
-`64 bytes from archlinux.org (95.217.163.246): icmp_seq=1 ttl=49 time=44.3 ms`\
-`64 bytes from archlinux.org (95.217.163.246): icmp_seq=2 ttl=49 time=44.3 ms`\
-`64 bytes from archlinux.org (95.217.163.246): icmp_seq=3 ttl=49 time=44.3 ms`
+**`# ping archlinux.org`**
+>`PING archlinux.org (95.217.163.246) 56(84) bytes of data.`\
+>`64 bytes from archlinux.org (95.217.163.246): icmp_seq=1 ttl=49 time=44.3 ms`\
+>`64 bytes from archlinux.org (95.217.163.246): icmp_seq=2 ttl=49 time=44.3 ms`\
+>`64 bytes from archlinux.org (95.217.163.246): icmp_seq=3 ttl=49 time=44.3 ms`
 
 ### 4-1. Wired connection with DHCP ###
 Connect network cable to the laptop. If DHCP server is available in the network, ethernet network interface will be configured automatically.
@@ -204,8 +204,8 @@ To be able to login via ssh we need to set a root password.\
 **`# passwd root`**
 
 If ssh service is already enabled/running you can try to connect via ssh. Check if ssh service is already running.\
-**`# systemctl list-unit-files -t service | grep ssh`**\
-`sshd.service enabled disabled`
+**`# systemctl list-unit-files -t service | grep ssh`**
+>`sshd.service enabled disabled`
 
 If ssh is not running start the service.\
 **`# systemctl start sshd`**
@@ -220,19 +220,19 @@ Set your timezone. Make sure to use your respective _Region_ and _City_ instead.
 **`# timedatectl set-timezone Region/City`**
 
 Verify the clock is correctly configured.\
-**`# timedatectl show`**\
-`Timezone=Europe/Warsaw`\
-`LocalRTC=no`\
-`CanNTP=yes`\
-`NTP=yes`\
-`NTPSynchronized=yes`\
-`TimeUSec=Sun 2021-08-29 10:48:17 CEST`\
-`RTCTimeUSec=Sun 2021-08-29 10:48:17 CEST`
+**`# timedatectl show`**
+>`Timezone=Europe/Warsaw`\
+>`LocalRTC=no`\
+>`CanNTP=yes`\
+>`NTP=yes`\
+>`NTPSynchronized=yes`\
+>`TimeUSec=Sun 2021-08-29 10:48:17 CEST`\
+>`RTCTimeUSec=Sun 2021-08-29 10:48:17 CEST`
 
 ## 7. Live environment boot mode verification ##
 We need verify that we are actually booted in UEFI mode. If the following command is executed without error that means we run UEFI, similarly to the below output.\
-**`# mount | grep efi`**\
-`efivarfs on /sys/firmware/efi/efivars type efivarfs (rw,nosuid,nodev,noexec,realtime)`
+**`# mount | grep efi`**
+>`efivarfs on /sys/firmware/efi/efivars type efivarfs (rw,nosuid,nodev,noexec,realtime)`
 
 ## 8. Wipe out the disk ##
 **IMPORTANT**: If you follow the instructions included in this step, the data on the disk will be erased. If you apply incorrectly the following steps you may erase the data from your computer irreversibly. Proceed with caution.
@@ -240,20 +240,20 @@ We need verify that we are actually booted in UEFI mode. If the following comman
 This step is optional but recommended. It ensures that random data is written to the disk prior to the encryption making it almost impossible to distinguish the free space from the occupied one.
 
 Verify the disk device name on which we will install Arch Linux.\
-**`# lsblk`**\
-`NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS`\
-`loop0 7:0 0 662.1M 1 loop /run/archiso/airootfs`\
-`sda 8:0 0 20G 0 disk`\
-`sr0 11:0 1 831.3M 0 rom /run/archiso/bootmnt`
+**`# lsblk`**
+>`NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS`\
+>`loop0 7:0 0 662.1M 1 loop /run/archiso/airootfs`\
+>`sda 8:0 0 20G 0 disk`\
+>`sr0 11:0 1 831.3M 0 rom /run/archiso/bootmnt`
 
 Make sure the drive security is not frozen.\
-**`hdparm -I /dev/sda | grep frozen`**\
-`frozen`
+**`hdparm -I /dev/sda | grep frozen`**
+>`frozen`
 
 If it says _frozen_ it is not possible to proceed with the next step. To unfreeze the drive you may try to suspend the system. Upon waking up, it is likely that the freeze will be lifted. If this trick does not work for you, please, follow up on Arch Linux wiki [SSD/Memory cell cleaning](https://wiki.archlinux.org/title/Solid_state_drive/Memory_cell_clearing).\
 **`# systemctl suspend`**\
-**`# hdparm -I /dev/sda | grep frozen`**\
-`not frozen`
+**`# hdparm -I /dev/sda | grep frozen`**
+>`not frozen`
 
 **IMPORTANT**: Do not reboot after applying this step.\
 Enable security by setting a user password.\
@@ -298,13 +298,13 @@ Make partition for the system.\
 **`# parted -s /dev/sda mkpart SYSTEM btrfs 551MiB 100%`**
 
 Verify the partitions are correcrtly created.\
-**`# lsblk`**\
-`loop0 7:0 0 662.1M 1 loop /run/archiso/airootfs`\
-`sda 8:0 0 20G 0 disk`\
-`└─sda1 8:1 0 1007K 0 part`\
-`└─sda2 8:2 0 550M 0 part`\
-`└─sda3 8:3 0 19.5G 0 part`\
-`sr0 11:0 1 831.3M 0 rom /run/archiso/bootmnt`
+**`# lsblk`**
+>`loop0 7:0 0 662.1M 1 loop /run/archiso/airootfs`\
+>`sda 8:0 0 20G 0 disk`\
+>`└─sda1 8:1 0 1007K 0 part`\
+>`└─sda2 8:2 0 550M 0 part`\
+>`└─sda3 8:3 0 19.5G 0 part`\
+>`sr0 11:0 1 831.3M 0 rom /run/archiso/bootmnt`
 
 ## 10. Setup an encryption and format the partitions ##
 We will encrypt the system partition with LUKS.
@@ -439,8 +439,8 @@ Generate fstab file using UUIDs.\
 
 Verify the correct entries in fstab file. Make sure swapfile and swapspace are mounted on boot as well.\
 **`# vim /mnt/etc/fstab`**
-`/dev/mapper/cryptroot /swapspace btrfs rw,defaults,noatime,space_cache=v1,ssd,subvol=@swap 0 0`\
-`/swapspace/swapfile none swap defaults,discard 0 0`
+>`/dev/mapper/cryptroot /swapspace btrfs rw,defaults,noatime,space_cache=v1,ssd,subvol=@swap 0 0`\
+>`/swapspace/swapfile none swap defaults,discard 0 0`
 
 ## 16. Chroot into the new system and perform basic configuration ##
 Change root into the new system using Arch Linux provided tool.\
@@ -471,10 +471,10 @@ Setup the hostname.\
 **`# echo "myHostname" > /etc/hostname`**
 
 Add default entries to hosts file.\
-**`# vim /etc/hosts`**\
-`127.0.0.1 localhost`\
-`::1 localhost`\
-`127.0.1.1 myHostname.localdomain myHostname`
+**`# vim /etc/hosts`**
+>`127.0.0.1 localhost`\
+>`::1 localhost`\
+>`127.0.1.1 myHostname.localdomain myHostname`
 
 Enable network manager.\
 **`# systemctl enable NetworkManager.service`**
@@ -488,11 +488,11 @@ Since we have added btrfs file system and encryption, we have to include additio
 Update mkinitcpio.conf\
 **`# vim /etc/mkinitcpio.conf`**
 
-Update BINARIES.\
-`BINARIES=(btrfs)`
+Update BINARIES.
+>`BINARIES=(btrfs)`
 
-Update HOOKS.\
-`HOOKS=(base udev autodetect modconf block encrypt filesystems keyboard resume fsck)`
+Update HOOKS.
+>`HOOKS=(base udev autodetect modconf block encrypt filesystems keyboard resume fsck)`
 
 Generate initramfs.\
 **`# mkinitcpio -P`**
@@ -531,8 +531,8 @@ Obtain UUID for the root directory.\
 Update GRUB configuration to make sure we have access to encrypted SYSTEM partition and the resume from hibernation details.\
 **`# vim /etc/default/grub`**
 
-Update GRUB_CMDLINE_LINUX_DEFAULT.\
-`GRUB_CMDLINE_LINUX_DEFAULT="cryptdevice=/dev/sda3:cryptroot root=/dev/mapper/cryptroot rootflags=subvol=@ resume=UUID=<swapfile UUID> resume_offset=<your offset value> loglevel=3 quiet"`
+Update GRUB_CMDLINE_LINUX_DEFAULT.
+>`GRUB_CMDLINE_LINUX_DEFAULT="cryptdevice=/dev/sda3:cryptroot root=/dev/mapper/cryptroot rootflags=subvol=@ resume=UUID=<swapfile UUID> resume_offset=<your offset value> loglevel=3 quiet"`
 
 Configure GRUB.\
 **`# grub-mkconfig -o /boot/grub/grub.cfg`**
@@ -560,7 +560,7 @@ Shutdown to safely remove the installation media (USD flash memory), and start t
 \
 \
 \
-TODO: ( Step - Create swapfile: configure return from hibernation:\
+TODO: ( Step - Create swapfile: test the configuration:\
 https://wiki.archlinux.org/title/Dm-crypt/Swap_encryption#With_suspend-to-disk_support \
 https://wiki.archlinux.org/title/Power_management/Suspend_and_hibernate#Hibernation_into_swap_file_on_Btrfs \
 https://wiki.archlinux.org/title/Dm-crypt/System_configuration#resume \
