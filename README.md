@@ -402,22 +402,6 @@ Set the right permissions.\
 Activate swap file.\
 **`# swapon /swapspace/swapfile`**
 
-To be able to resume from hibernation we need to calculate the resume_offset number. As recommended in Arch Linux Wiki we will use [tool btrfs_map_physical.c](https://github.com/osandov/osandov-linux/blob/master/scripts/btrfs_map_physical.c) to compute resume_offset.\
-
-Download and compile the tool.\
-**`# cd ~`**\
-**`# wget https://raw.githubusercontent.com/osandov/osandov-linux/master/scripts/btrfs_map_physical.c`**\
-**`# gcc -O2 -o btrfs_map_physical btrfs_map_physical.c`**
-
-Run the tool and make a note of the first physical offset.\
-**`# ./btrfs_map_physical /swapspace/swapfile`**\
-
-Find out the PAGESIZE.\
-**`# getconf PAGESIZE`**
-
-To compute the resume_offset value, divide the physical offset by the pagesize.\
-In my example: 4009762816 / 4096 = **978946**
-
 ## 13. Update the mirror list ##
 Arch Linux installation is performed via network. The packages are downloaded from the mirrors.
 
@@ -519,11 +503,33 @@ Install GRUB for legacy BIOS.\
 Install GRUB for UEFI.\
 **`# grub-install --target=x86_64-efi --efi-directory=/boot --boot-directory=/boot --bootloader-id=GRUB`**
 
-Update GRUB configuration to make sure we have access to encrypted SYSTEM partition.\
+Add resume entries to GRUB configuration file.
+
+To be able to resume from hibernation we need to calculate the resume_offset number. As recommended in Arch Linux Wiki we will use [tool btrfs_map_physical.c](https://github.com/osandov/osandov-linux/blob/master/scripts/btrfs_map_physical.c) to compute resume_offset.\
+
+Download and compile the tool.\
+**`# cd ~`**\
+**`# wget https://raw.githubusercontent.com/osandov/osandov-linux/master/scripts/btrfs_map_physical.c`**\
+**`# gcc -O2 -o btrfs_map_physical btrfs_map_physical.c`**
+
+Run the tool and make a note of the first physical offset.\
+**`# ./btrfs_map_physical /swapspace/swapfile`**\
+
+Find out the PAGESIZE.\
+**`# getconf PAGESIZE`**
+
+To compute the resume_offset value, divide the physical offset by the pagesize.\
+In my example: 4009762816 / 4096 = **978946**
+
+Obtain UUID for the root directory.\
+**`# blkid -g`**\
+**`# blkid`**
+
+Update GRUB configuration to make sure we have access to encrypted SYSTEM partition and the resume from hibernation details.\
 **`# vim /etc/default/grub`**
 
 Update GRUB_CMDLINE_LINUX_DEFAULT.\
-`GRUB_CMDLINE_LINUX_DEFAULT="cryptdevice=/dev/sda3:cryptroot root=/dev/mapper/cryptroot rootflags=subvol=@ loglevel=3 quiet"`
+`GRUB_CMDLINE_LINUX_DEFAULT="cryptdevice=/dev/sda3:cryptroot root=/dev/mapper/cryptroot rootflags=subvol=@ resume=UUID=<swapfile UUID> resume_offset=<your offset value> loglevel=3 quiet"`
 
 Configure GRUB.\
 **`# grub-mkconfig -o /boot/grub/grub.cfg`**
