@@ -76,14 +76,15 @@ id | Requirement | Rationale | Solution
 
 ## 1. Acquire and verify an installation image ##
 The updated list of mirrors can be found on [Arch Linux download page](https://archlinux.org/download). Download Arch Linux image (.iso) from preferred mirror, and the corresponding PGP signature file (.iso.sig) from Arch Linux download page directly.\
-**`$ wget https://ftp.icm.edu.pl/pub/Linux/dist/archlinux/iso/2021.09.01/archlinux-2021.09.01-x86_64.iso`**\
-**`$ wget https://archlinux.org/iso/2021.09.01/archlinux-2021.09.01-x86_64.iso.sig`**
+**`$ wget http://ftp.icm.edu.pl/pub/Linux/dist/archlinux/iso/2021.10.01/archlinux-2021.10.01-x86_64.iso`**\
+**`$ wget https://archlinux.org/iso/2021.10.01/archlinux-2021.10.01-x86_64.iso.sig`**
 
 Execute the gpg command to verify .iso file agianst .iso.sig. Both files must be in the same directory. Make sure RSA key from the output matches PGP fingerprint provided on Arch Linux download website.\
-**`$ gpg --verify archlinux-2021.09.01-x86_64.iso.sig`**
->`gpg: assuming signed data in 'archlinux-2021.09.01-x86_64.iso'`\
->`gpg: Signature made Sun 01 Sep 2021 10:32:22 AM CEST`\
->`gpg:                using RSA key 4AA4767BBC9C4B1D18AE28B77F2D434B9741E8AC`\
+**`$ gpg --verify archlinux-2021.10.01-x86_64.iso.sig`**
+>`gpg: assuming signed data in 'archlinux-2021.10.01-x86_64.iso'`
+>`gpg: Signature made Fri 01 Oct 2021 07:03:20 PM CEST`
+>`gpg:                using RSA key 4AA4767BBC9C4B1D18AE28B77F2D434B9741E8AC`
+>`gpg:                issuer "pierre@archlinux.de"`
 >`gpg: Can't check signature: No public key`
 
 ## 2. Prepare an installation medium ##
