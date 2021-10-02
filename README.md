@@ -530,6 +530,9 @@ Run the tool and make a note of the first physical offset.\
 
 The first physical offset returned is 575668224.
 
+Remove the tool.\
+**`# rm btrfs_map_physical btrfs_map_physical.c`**
+
 Find out the PAGESIZE.\
 **`# getconf PAGESIZE`**
 
