@@ -221,7 +221,7 @@ Set your timezone. Make sure to use your respective _Region_ and _City_ instead.
 
 Verify the clock is correctly configured.\
 **`# timedatectl show`**
->`Timezone=Europe/Warsaw`\
+>`Timezone=Region/City`\
 >`LocalRTC=no`\
 >`CanNTP=yes`\
 >`NTP=yes`\
