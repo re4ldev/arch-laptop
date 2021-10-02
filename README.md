@@ -431,13 +431,13 @@ File System tools | dosfstools btrfs-progs ef2sprogs |
 CPU microcode | intel-ucode |
 Network | dhcpcd wpa_supplicant networkmanager | 
 Bootloader | grub efibootmgr | 
-Utils | vim git openssh parted |
+Utils | vim git openssh parted wget |
 Documentation | man-db man-pages texinfo |
 Graphical environment | xf86-video-intel xorg-server xorg-xinit xorg-xsetroot |
 Window Manager | | dwm
 
 Use _pacstrap_ to install Arch Linux on the hard drive.\
-**`# pacstrap /mnt base base-devel linux linux-firmware dosfstools btrfs-progs e2fsprogs intel-ucode dhcpcd wpa_supplicant networkmanager grub efibootmgr vim git openssh parted man-db man-pages texinfo xf86-video-intel xorg-server xorg-xinit xorg-xsetroot`**
+**`# pacstrap /mnt base base-devel linux linux-firmware dosfstools btrfs-progs e2fsprogs intel-ucode dhcpcd wpa_supplicant networkmanager grub efibootmgr vim git openssh parted wget man-db man-pages texinfo xf86-video-intel xorg-server xorg-xinit xorg-xsetroot`**
 
 ## 15. Generate fstab ##
 Generate fstab file using UUIDs.\
