@@ -580,10 +580,5 @@ Shutdown to safely remove the installation media (USD flash memory), and start t
 \
 \
 \
-TODO: ( Step - Create swapfile: test the configuration:\
-https://wiki.archlinux.org/title/Dm-crypt/Swap_encryption#With_suspend-to-disk_support \
-https://wiki.archlinux.org/title/Power_management/Suspend_and_hibernate#Hibernation_into_swap_file_on_Btrfs \
-https://wiki.archlinux.org/title/Dm-crypt/System_configuration#resume \
- )\
 TODO: ( Test on hardware, for now the process is only tested on virtual machine )\
-TODO: ( Add steps 19 - 22 )
+TODO: ( Add steps 20 - 23 )
