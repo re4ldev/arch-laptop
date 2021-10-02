@@ -48,7 +48,7 @@ id | Requirement | Rationale | Solution
 5. Arch Linux live environment will be accessed via SSH to perform the installation procedure.
 6. All storage devices are SSD SATA.
 
-# III. Installation steps #
+# III. Installation steps index #
 
 1. [Acquire and verify an installation image.](#1-acquire-and-verify-an-installation-image)
 2. [Prepare an installation medium.](#2-prepare-an-installation-medium)
