@@ -546,7 +546,7 @@ Obtain UUID for the root directory.\
 >`/dev/loop0: TYPE="squashfs"`\
 >`/dev/mapper/cryptroot: UUID="8c2f932c-e8c8-4152-9a96-50ecb40d511c" UUID_SUB="aa2bd66d-8c73-4b0e-87ca-65939507561c" BLOCK_SIZE="4096" TYPE="btrfs"`
 
-The UUID for the root directory is 8c2f932c-e8c8-4152-9a96-50ecb40d511c.\
+The UUID for the root directory is 8c2f932c-e8c8-4152-9a96-50ecb40d511c.
 
 Update GRUB configuration to make sure we have access to encrypted SYSTEM partition and the resume from hibernation details.\
 **`# vim /etc/default/grub`**
