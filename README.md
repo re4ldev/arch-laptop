@@ -385,25 +385,25 @@ Mount the boot partition.\
 To be able to hibarnate the system on button press or lid close we will need to create a swap area. In the previous steps we have created @swap volume to make sure it is not part of the snapshots, and mounted it to the /swapspace directory.
 
 Create a zero length file.\
-**`# truncate -s 0 /swapspace/swapfile`**
+**`# truncate -s 0 /mnt/swapspace/swapfile`**
 
 Disable CoW mechanism on the swap file.\
-**`# chattr +C /swapspace/swapfile`**
+**`# chattr +C /mnt/swapspace/swapfile`**
 
 Make sure the compression is disbled on swap file.\
-**`# btrfs property set /swapspace/swapfile compression none`**
+**`# btrfs property set /mnt/swapspace/swapfile compression none`**
 
 Set the swap file size. Swap file should two times the size of available RAM.\
-**`# fallocate -l 8G /swapspace/swapfile`**
+**`# fallocate -l 8G /mnt/swapspace/swapfile`**
 
 Format the swap file to Linux swap.\
-**`# mkswap  /swapspace/swapfile`**
+**`# mkswap /mnt/swapspace/swapfile`**
 
 Set the right permissions.\
-**`# chmod 600 /swapspace/swapfile`**
+**`# chmod 600 /mnt/swapspace/swapfile`**
 
 Activate swap file.\
-**`# swapon /swapspace/swapfile`**
+**`# swapon /mnt/swapspace/swapfile`**
 
 ## 13. Update the mirror list ##
 Arch Linux installation is performed via network. The packages are downloaded from the mirrors.
