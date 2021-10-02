@@ -43,7 +43,7 @@ id | Requirement | Rationale | Solution
 
 1. To create an installation medium we will use Linux distribution with the following tools: GnuPG, wget, dd. For instructions to create installation medium from Windows or MacOS, please refer to Arch Linux installation guide.
 2. USB flash drive aka pendrive is used as installation medium.
-3. We are using the following Arch Linux image file: _**archlinux-2021.09.01-x86_64.iso**_ and corresponding _**archlinux-2021.09.01-x86_64.iso.sig**_
+3. We are using the following Arch Linux image file: _**archlinux-2021.10.01-x86_64.iso**_ and corresponding _**archlinux-2021.10.01-x86_64.iso.sig**_
 4. Arch Linux installation process requires Internet access. There is a LAN network with Internet access available.
 5. Arch Linux live environment will be accessed via SSH to perform the installation procedure.
 6. All storage devices are SSD SATA.
@@ -82,9 +82,8 @@ The updated list of mirrors can be found on [Arch Linux download page](https://a
 Execute the gpg command to verify .iso file agianst .iso.sig. Both files must be in the same directory. Make sure RSA key from the output matches PGP fingerprint provided on Arch Linux download website.\
 **`$ gpg --verify archlinux-2021.10.01-x86_64.iso.sig`**
 >`gpg: assuming signed data in 'archlinux-2021.10.01-x86_64.iso'`\
->`gpg: Signature made Fri 01 Oct 2021 07:03:20 PM CEST`\
+>`gpg: Signature made Fri 01 Oct 2021 10:32:22 AM CEST`\
 >`gpg:                using RSA key 4AA4767BBC9C4B1D18AE28B77F2D434B9741E8AC`\
->`gpg:                issuer "pierre@archlinux.de"`\
 >`gpg: Can't check signature: No public key`
 
 ## 2. Prepare an installation medium ##
