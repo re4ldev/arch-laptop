@@ -445,7 +445,7 @@ Generate fstab file using UUIDs.\
 
 Verify the correct entries in fstab file. Make sure swapfile and swapspace are mounted on boot as well.\
 **`# vim /mnt/etc/fstab`**
->`/dev/mapper/cryptroot /swapspace btrfs rw,defaults,noatime,space_cache=v1,ssd,subvol=@swap 0 0`\
+>`UUID=<cryptroot UUID> /swapspace btrfs rw,noatime,ssd,space_cache,subvol=@swap 0 0`\
 >`/swapspace/swapfile none swap defaults,discard 0 0`
 
 ## 16. Chroot into the new system and perform basic configuration ##
