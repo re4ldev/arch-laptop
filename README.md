@@ -523,22 +523,33 @@ Download and compile the tool.\
 
 Run the tool and make a note of the first physical offset.\
 **`# ./btrfs_map_physical /swapspace/swapfile`**
+>`FILE OFFSET     FILE SIZE       EXTENT OFFSET   EXTENT TYPE     LOGICAL SIZE    LOGICAL OFFSET  PHYSICAL SIZE   DEVID   PHYSICAL OFFSET`\
+>`0       4096    0       regular 268435456       298844160       268435456       1       575668224`\
+>`4096    268431360       4096    prealloc        268435456       298844160       268435456       1       575668224`\
+>`268435456       268435456       0       prealloc        268435456       567279616       268435456       1       844103680`
+
+The first physical offset returned is 575668224.
 
 Find out the PAGESIZE.\
 **`# getconf PAGESIZE`**
 
 To compute the resume_offset value, divide the physical offset by the pagesize.\
-In my example: 4009762816 / 4096 = **978946**
+In my example: 575668224 / 4096 = **140544**
 
 Obtain UUID for the root directory.\
 **`# blkid -g`**\
-**`# blkid`**
+**`# blkid`**\
+>`/dev/sr0: BLOCK_SIZE="2048" UUID="2021-09-01-11-25-35-00" LABEL="ARCH_202109" TYPE="iso9660" PTUUID="8ee531bd" PTTYPE="dos"`\
+>`/dev/loop0: TYPE="squashfs"`\
+>`/dev/mapper/cryptroot: UUID="8c2f932c-e8c8-4152-9a96-50ecb40d511c" UUID_SUB="aa2bd66d-8c73-4b0e-87ca-65939507561c" BLOCK_SIZE="4096" TYPE="btrfs"`
+
+The UUID for the root directory is 8c2f932c-e8c8-4152-9a96-50ecb40d511c.\
 
 Update GRUB configuration to make sure we have access to encrypted SYSTEM partition and the resume from hibernation details.\
 **`# vim /etc/default/grub`**
 
 Update GRUB_CMDLINE_LINUX_DEFAULT.
->`GRUB_CMDLINE_LINUX_DEFAULT="cryptdevice=/dev/sda3:cryptroot root=/dev/mapper/cryptroot rootflags=subvol=@ resume=UUID=<swapfile UUID> resume_offset=<your offset value> loglevel=3 quiet"`
+>`GRUB_CMDLINE_LINUX_DEFAULT="cryptdevice=/dev/sda3:cryptroot root=/dev/mapper/cryptroot rootflags=subvol=@ resume=UUID=8c2f932c-e8c8-4152-9a96-50ecb40d511c resume_offset=140544 loglevel=3 quiet"`
 
 Configure GRUB.\
 **`# grub-mkconfig -o /boot/grub/grub.cfg`**
