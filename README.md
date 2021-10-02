@@ -522,7 +522,7 @@ Download and compile the tool.\
 **`# gcc -O2 -o btrfs_map_physical btrfs_map_physical.c`**
 
 Run the tool and make a note of the first physical offset.\
-**`# ./btrfs_map_physical /swapspace/swapfile`**\
+**`# ./btrfs_map_physical /swapspace/swapfile`**
 
 Find out the PAGESIZE.\
 **`# getconf PAGESIZE`**
