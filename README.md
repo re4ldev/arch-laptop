@@ -405,6 +405,12 @@ Set the right permissions.\
 Activate swap file.\
 **`# swapon /mnt/swapspace/swapfile`**
 
+Verify swap area is on.\
+**`# free -m`**
+>`               total        used        free      shared  buff/cache   available`\
+>`Mem:            3913         133        3241         165         538        3403`\
+>`Swap:           8191           0        8191`
+
 ## 13. Update the mirror list ##
 Arch Linux installation is performed via network. The packages are downloaded from the mirrors.
 
