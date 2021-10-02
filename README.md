@@ -109,7 +109,7 @@ Copy Arch Linux install image to USB drive.\
 **`# dd if=archlinux-2021.10.01-x86_64.iso of=/dev/sda bs=4M conv=fsync oflag=direct status=progress`**
 
 ## 3. Boot the live environment, and configure console keymap and font ##
-Boot laptop with the USB drive prepared in the previous step. Arch Linux installation images does not support Secure Boot. If you are having trouble booting from the USB, please, consult [Arch Linux installation guide](https://wiki.archlinux.org/title/Installation_guide) for more details.
+Boot laptop with the USB drive prepared in the previous step. Arch Linux installation images do not support Secure Boot. If you are having trouble booting from the USB, please, consult [Arch Linux installation guide](https://wiki.archlinux.org/title/Installation_guide) for more details.
 
 This step is only required if you are going to perform the installation from the console, and not via SSH. Step 7 shows the steps to enable SSH access to the live environment. If you are going to connect to the live environment via SSH, the keymap and font from your SSH client will apply.
 
