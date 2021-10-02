@@ -271,7 +271,7 @@ The drive is now erased, let's verify that security is not enabled.\
 **`# hdparm -I /dev/sda`**
 
 Fill the disk with random bytes stream. Depending on the drive size, this step will take an extended period of time.\
-**`shred -v -n 1 /dev/sda`**
+**`# shred -v -n 1 /dev/sda`**
 
 ## 9. Partition the disks ##
 **IMPORTANT**: If you follow the instructions included in this step, the data on the disk will be erased. If you apply incorrectly the following steps you may erase the data from your computer irreversibly. Proceed with caution.
