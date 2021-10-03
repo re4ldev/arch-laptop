@@ -423,7 +423,18 @@ We can verify the selected mirrors viewing /etc/pacmand.d/mirrorlist file.\
 ## 14. Install system packages with pacstrap ##
 _pacstrap_ script is used to install the selected system packages and copy the mirror list established in the previous step into a hard drive.
 
-This is a complete list of packages that will be installed to satisfy the system requirements from section I. Not all the packages from the below list will be installed in this step. Graphical environment related packages will be installed in a separate step later in the process.
+This is a complete list of packages that will be installed to satisfy the system requirements from section [I. Requirements](#i-requirements).
+
+NOTE: Make sure to chose video driver for your particular hardware. More details can be found on Arch Linux Wiki [Xorg: Driver Installation](https://wiki.archlinux.org/title/Xorg#Driver_installation)
+
+Identify the graphics card.\
+**`# lspci -v | grep -A1 -e VGA -e 3D`**
+>`00:02.0 VGA compatible controller: VMware SVGA II Adapter (prog-if 00 [VGA controller])`\
+>`		  Subsystem: VMware SVGA II Adapter`\
+>`		  Flags: bus master, fast devsel, latency 64, IRQ 18`
+
+Depending on your system hardware include the video drivers packages in the following _pacstrap_ command. In this example we will use _xf86-video-intel_ package.
+ 
 categoty | official | AUR 
 -------- | -------- | --------
 Base System | base base-devel linux linux-firmware |
@@ -433,11 +444,12 @@ Network | dhcpcd wpa_supplicant networkmanager |
 Bootloader | grub efibootmgr | 
 Utils | vim git openssh parted wget |
 Documentation | man-db man-pages texinfo |
-Graphical environment | xf86-video-intel xorg-server xorg-xinit xorg-xsetroot |
+Graphical environment | xorg-server xorg-xinit xorg-xsetroot |
+Video drivers | xf86-video-intel |
 Window Manager | | dwm
 
 Use _pacstrap_ to install Arch Linux on the hard drive.\
-**`# pacstrap /mnt base base-devel linux linux-firmware dosfstools btrfs-progs e2fsprogs intel-ucode dhcpcd wpa_supplicant networkmanager grub efibootmgr vim git openssh parted wget man-db man-pages texinfo xf86-video-intel xorg-server xorg-xinit xorg-xsetroot`**
+**`# pacstrap /mnt base base-devel linux linux-firmware dosfstools btrfs-progs e2fsprogs intel-ucode dhcpcd wpa_supplicant networkmanager grub efibootmgr vim git openssh parted wget man-db man-pages texinfo xorg-server xorg-xinit xorg-xsetroot xf86-video-intel`**
 
 ## 15. Generate fstab ##
 Generate fstab file using UUIDs.\
