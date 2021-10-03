@@ -220,14 +220,14 @@ Set your timezone. Make sure to use your respective _Region_ and _City_ instead.
 **`# timedatectl set-timezone Region/City`**
 
 Verify the clock is correctly configured.\
-**`# timedatectl show`**
->`Timezone=Region/City`\
->`LocalRTC=no`\
->`CanNTP=yes`\
->`NTP=yes`\
->`NTPSynchronized=yes`\
->`TimeUSec=Sun 2021-08-29 10:48:17 CEST`\
->`RTCTimeUSec=Sun 2021-08-29 10:48:17 CEST`
+**`# timedatectl`**
+>`               Local time: Sun 2021-10-03 17:52:39 CEST`\
+>`           Universal time: Sun 2021-10-03 15:52:39 UTC`\
+>`                 RTC time: Sun 2021-10-03 15:52:39`\
+>`                Time zone: Europe/Warsaw (CEST, +0200)`\
+>`System clock synchronized: yes`\
+>`              NTP service: active`\
+>`          RTC in local TZ: no`
 
 ## 7. Live environment boot mode verification ##
 We need verify that we are actually booted in UEFI mode. If the following command is executed without error that means we run UEFI, similarly to the below output.\
