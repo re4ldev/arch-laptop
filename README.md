@@ -217,7 +217,7 @@ Use NTP server to syncronize time.\
 **`# timedatectl set-ntp true`**
 
 Set your timezone. Make sure to use your respective _Region_ and _City_ instead.\
-**`# timedatectl set-timezone Region/City`**
+**`# timedatectl set-timezone Europe/Warsaw`**
 
 Verify the clock is correctly configured.\
 **`# timedatectl`**
@@ -468,7 +468,7 @@ Setup root password.\
 **`# passwd`**
 
 Setup your timezone. Make sure to replace Region/City with your respective values.\
-**`# ln -sf /usr/share/zoneinfo/Region/City /etc/localtime`**
+**`# ln -sf /usr/share/zoneinfo/Europe/Warsaw /etc/localtime`**
 
 Generate /etc/adjtime\
 **`# hwclock --systohc`**
