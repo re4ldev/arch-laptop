@@ -427,7 +427,7 @@ This is a complete list of packages that will be installed to satisfy the system
 
 NOTE: Make sure to chose video driver for your particular hardware. More details can be found on Arch Linux Wiki [Xorg: Driver Installation](https://wiki.archlinux.org/title/Xorg#Driver_installation)
 
-Identify the graphics card.\
+Identify the video card.\
 **`# lspci -v | grep -A1 -e VGA -e 3D`**
 >`00:02.0 VGA compatible controller: VMware SVGA II Adapter (prog-if 00 [VGA controller])`\
 >`		  Subsystem: VMware SVGA II Adapter`\
