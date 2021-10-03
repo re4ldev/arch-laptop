@@ -554,6 +554,8 @@ To be able to resume from hibernation we need to calculate the resume_offset num
 
 Download and compile the tool.\
 **`# cd`**\
+**`# mkdir bin`**\
+**`# cd bin`**\
 **`# wget https://raw.githubusercontent.com/osandov/osandov-linux/master/scripts/btrfs_map_physical.c`**\
 **`# gcc -O2 -o btrfs_map_physical btrfs_map_physical.c`**
 
@@ -565,9 +567,6 @@ Run the tool and make a note of the first physical offset.\
 >`268435456       268435456       0       prealloc        268435456       567279616       268435456       1       844103680`
 
 The first physical offset returned is 575668224.
-
-Remove the tool.\
-**`# rm btrfs_map_physical btrfs_map_physical.c`**
 
 Find out the PAGESIZE.\
 **`# getconf PAGESIZE`**
