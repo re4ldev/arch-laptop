@@ -605,7 +605,7 @@ Shutdown to safely remove the installation media (USD flash memory), and start t
 **`# shutdown now`**
 
 ## 20. Add the User and setup User's directory subvolume layout ##
-## 21. Install DWM window manager ##
+## 21. Install Graphical Environment ##
 ## 22. Configure snapper ##
 ## 23. Configure backup to NAS and perform initial full backup ##
 
