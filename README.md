@@ -529,7 +529,7 @@ Add resume entries to GRUB configuration file.
 To be able to resume from hibernation we need to calculate the resume_offset number. As recommended in Arch Linux Wiki we will use [tool btrfs_map_physical.c](https://github.com/osandov/osandov-linux/blob/master/scripts/btrfs_map_physical.c) to compute resume_offset.\
 
 Download and compile the tool.\
-**`# cd ~`**\
+**`# cd`**\
 **`# wget https://raw.githubusercontent.com/osandov/osandov-linux/master/scripts/btrfs_map_physical.c`**\
 **`# gcc -O2 -o btrfs_map_physical btrfs_map_physical.c`**
 
