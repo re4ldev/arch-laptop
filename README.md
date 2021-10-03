@@ -70,7 +70,7 @@ id | Requirement | Rationale | Solution
 18. [Install and configure the boot loader.](#18-install-and-configure-the-boot-loader)
 19. [Boot into a newly installed system.](#19-boot-into-a-newly-installed-system)
 20. [Add the User and setup User's directory subvolume layout.](#20-add-the-user-and-setup-users-directory-subvolume-layout)
-21. [Install DWM window manager.](#21-install-dwm-window-manager)
+21. [Install Graphical Environment.](#21-install-graphical-environment)
 22. [Configure snapper.](#22-configure-snapper)
 23. [Configure backup to NAS and perform initial full backup.](#23-configure-backup-to-nas-and-perform-initial-full-backup)
 
@@ -455,12 +455,11 @@ Use _pacstrap_ to install Arch Linux on the hard drive.\
 Generate fstab file using UUIDs.\
 **`# genfstab -p -U /mnt >> /mnt/etc/fstab`**
 
-Verify the correct entries in fstab file. Make sure swapfile and swapspace are mounted on boot as well.\
+Verify the correct entries in fstab file. Make sure swapfile and swapspace are mounted on boot as well and the compression is not enabled on /swapspace. Example of fstab file is in the below output.\
 **`# vim /mnt/etc/fstab`**
 >`# Static information about the filesystems.`\
 >`# See fstab(5) for details.`\
 >`# <file system> <dir> <type> <options> <dump> <pass>`\
->`# /dev/mapper/cryptroot`\
 >`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 / btrfs rw,noatime,compress=zstd:3,ssd,space_cache,subvolid=256,subvol=/@ 0 0`\
 >`# /dev/sda2`\
 >`UUID=8D9C-13EE /boot vfat rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro 0 2`\
@@ -483,6 +482,8 @@ Verify the correct entries in fstab file. Make sure swapfile and swapspace are m
 >`# /dev/mapper/cryptroot`\
 >`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /swapspace btrfs rw,noatime,compress=zstd:3,ssd,space_cache,subvolid=265,subvol=/@swap 0 0`\
 >`/swapspace/swapfile none swap defaults 0 0`
+
+Make note for /dev/mapper/cryptroot UUID we will need it later in the process. In this case it is UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2
 
 ## 16. Chroot into the new system and perform basic configuration ##
 Change root into the new system using Arch Linux provided tool.\
@@ -556,6 +557,8 @@ Download and compile the tool.\
 **`# cd`**\
 **`# mkdir bin`**\
 **`# cd bin`**\
+**`# mkdir btrfs_map_physical`**\
+**`# cd btrfs_map_physical`**\
 **`# wget https://raw.githubusercontent.com/osandov/osandov-linux/master/scripts/btrfs_map_physical.c`**\
 **`# gcc -O2 -o btrfs_map_physical btrfs_map_physical.c`**
 
@@ -574,20 +577,17 @@ Find out the PAGESIZE.\
 To compute the resume_offset value, divide the physical offset by the pagesize.\
 In my example: 575668224 / 4096 = **140544**
 
-Obtain UUID for the root directory.\
-**`# blkid -g`**\
-**`# blkid`**\
->`/dev/sr0: BLOCK_SIZE="2048" UUID="2021-09-01-11-25-35-00" LABEL="ARCH_202109" TYPE="iso9660" PTUUID="8ee531bd" PTTYPE="dos"`\
->`/dev/loop0: TYPE="squashfs"`\
->`/dev/mapper/cryptroot: UUID="8c2f932c-e8c8-4152-9a96-50ecb40d511c" UUID_SUB="aa2bd66d-8c73-4b0e-87ca-65939507561c" BLOCK_SIZE="4096" TYPE="btrfs"`
+We will not need the tool anymore so we remove it.\
+**`# cd`**\
+**`# rm -r bin`**
 
-The UUID for the root directory is 8c2f932c-e8c8-4152-9a96-50ecb40d511c.
+Previously we have made a note of /dev/mapper/cryptroot UUID which is d72f6385-bb67-4ce2-810c-8eb8935402a2.
 
 Update GRUB configuration to make sure we have access to encrypted SYSTEM partition and the resume from hibernation details.\
 **`# vim /etc/default/grub`**
 
 Update GRUB_CMDLINE_LINUX_DEFAULT.
->`GRUB_CMDLINE_LINUX_DEFAULT="cryptdevice=/dev/sda3:cryptroot root=/dev/mapper/cryptroot rootflags=subvol=@ resume=UUID=8c2f932c-e8c8-4152-9a96-50ecb40d511c resume_offset=140544 loglevel=3 quiet"`
+>`GRUB_CMDLINE_LINUX_DEFAULT="cryptdevice=/dev/sda3:cryptroot root=/dev/mapper/cryptroot rootflags=subvol=@ resume=UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 resume_offset=140544 loglevel=3 quiet"`
 
 Configure GRUB.\
 **`# grub-mkconfig -o /boot/grub/grub.cfg`**
