@@ -457,8 +457,32 @@ Generate fstab file using UUIDs.\
 
 Verify the correct entries in fstab file. Make sure swapfile and swapspace are mounted on boot as well.\
 **`# vim /mnt/etc/fstab`**
->`UUID=<cryptroot UUID> /swapspace btrfs rw,noatime,ssd,space_cache,subvol=@swap 0 0`\
->`/swapspace/swapfile none swap defaults,discard 0 0`
+>`# Static information about the filesystems.`\
+>`# See fstab(5) for details.`\
+>`# <file system> <dir> <type> <options> <dump> <pass>`\
+>`# /dev/mapper/cryptroot`\
+>`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 / btrfs rw,noatime,compress=zstd:3,ssd,space_cache,subvolid=256,subvol=/@ 0 0`\
+>`# /dev/sda2`\
+>`UUID=8D9C-13EE /boot vfat rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro 0 2`\
+>`# /dev/mapper/cryptroot`\
+>`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /home btrfs rw,noatime,compress=zstd:3,ssd,space_cache,subvolid=258,subvol=/@home 0 0`\
+>`# /dev/mapper/cryptroot`\
+>`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /root btrfs rw,noatime,compress=zstd:3,ssd,space_cache,subvolid=259,subvol=/@root 0 0`\
+>`# /dev/mapper/cryptroot`\
+>`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /opt btrfs rw,noatime,compress=zstd:3,ssd,space_cache,subvolid=260,subvol=/@opt 0 0`\
+>`# /dev/mapper/cryptroot`\
+>`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /srv btrfs rw,noatime,compress=zstd:3,ssd,space_cache,subvolid=261,subvol=/@srv 0 0`\
+>`# /dev/mapper/cryptroot`\
+>`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /tmp btrfs rw,noatime,compress=zstd:3,ssd,space_cache,subvolid=262,subvol=/@tmp 0 0`\
+>`# /dev/mapper/cryptroot`\
+>`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /usr/local btrfs rw,noatime,compress=zstd:3,ssd,space_cache,subvolid=263,subvol=/@usr_local 0 0`\
+>`# /dev/mapper/cryptroot`\
+>`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /var btrfs rw,noatime,compress=zstd:3,ssd,space_cache,subvolid=264,subvol=/@var 0 0`\
+>`# /dev/mapper/cryptroot`\
+>`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /.snapshots btrfs rw,noatime,ssd,space_cache,subvolid=266,subvol=/@snapshots 0 0`\
+>`# /dev/mapper/cryptroot`\
+>`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /swapspace btrfs rw,noatime,compress=zstd:3,ssd,space_cache,subvolid=265,subvol=/@swap 0 0`\
+>`/swapspace/swapfile none swap defaults 0 0`
 
 ## 16. Chroot into the new system and perform basic configuration ##
 Change root into the new system using Arch Linux provided tool.\
