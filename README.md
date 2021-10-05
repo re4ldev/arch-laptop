@@ -557,7 +557,7 @@ Enable sshd service.\
 **`# systemctl enable sshd.service`**
 
 ## 17. Update mkinitcpio configuration and generate initramfs ##
-Since we have added btrfs file system and encryption, we have to include additional hook and binary in our initramfs.
+Since we have added to our system some features that are not default, we have to include additional hook and binary in our initramfs.
 
 Update mkinitcpio.conf\
 **`# vim /etc/mkinitcpio.conf`**
