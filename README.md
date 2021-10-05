@@ -340,7 +340,7 @@ Verify the partitions are correcrtly created.\
 ## 10. Setup an encryption and format the partitions ##
 We will encrypt the system partition with LUKS.
 
-Setup encryption on the SYSTEM partition and open the encrypted partition to work with it.\
+Setup encryption on the SYSTEM partition and open the encrypted partition to work with.\
 **`# cryptsetup luksFormat /dev/sda3`**\
 **`# cryptsetup luksOpen /dev/sda3 cryptroot`**
 
