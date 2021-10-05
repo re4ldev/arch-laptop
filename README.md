@@ -263,14 +263,34 @@ Enable security by setting a user password.\
 
 As a sanity check, let's verify that security is enabled.\
 **`# hdparm -I /dev/sda`**
+>`Security:`\
+>`        Master password revision code = 65534`\
+>`                supported`\
+>`                enabled`\
+>`        not     locked`\
+>`        not     frozen`\
+>`        not     expired: security count`\
+>`                supported: enhanced erase`\
+>`        Security level high`\
+>`        2min for SECURITY ERASE UNIT. 2min for ENHANCED SECURITY ERASE UNIT.`
 
 **IMPORTANT**: After this command the SSD will be wiped and data will be lost.\
 **IMPORTANT**: Ensure that the drive is not mounted.\
 Issue the ATA Secure Erase command.\
 **`# hdparm --user-master u --security-erase PasSWorD /dev/sda`**
 
-The drive is now erased, let's verify that security is not enabled.\
+The drive is now erased, let's verify that security is disabled.\
 **`# hdparm -I /dev/sda`**
+>`Security:`\
+>`        Master password revision code = 65534`\
+>`                supported`\
+>`        not     enabled`\
+>`        not     locked`\
+>`        not     frozen`\
+>`        not     expired: security count`\
+>`                supported: enhanced erase`\
+>`        Security level high`\
+>`        2min for SECURITY ERASE UNIT. 2min for ENHANCED SECURITY ERASE UNIT.`
 
 Fill the disk with random bytes stream. Depending on the drive size, this step will take an extended period of time.\
 **`# shred -v -n 1 /dev/sda`**
