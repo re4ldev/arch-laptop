@@ -306,6 +306,15 @@ BIOS | boot_grub | 1MiB | N/A
 ESP | esp | 550MiB | fat32
 SYSTEM | linux | ~ | btrfs
 
+In case you skipped the previous step, where we wiped out the disk, you need to verify the disk device name on which we will install Arch Linux.\
+**`# lsblk -o +VENDOR,MODEL`**
+>`NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS      VENDOR   MODEL`\
+>`loop0 7:0 0 662.1M 1 loop /run/archiso/airootfs`\
+>`sda 8:0 0 20G 0 disk                       	ATA      VBOX HARDDISK`\
+>`sr0 11:0 1 831.3M 0 rom /run/archiso/bootmnt  VBOX     VBOX CD-ROM`
+
+In this case the disk device is _**sda**_.
+
 We will use GNU parted to partition the disk.\
 First create GUID Partition Table.\
 **`# parted -s /dev/sda mklabel gpt`**
