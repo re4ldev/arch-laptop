@@ -2,7 +2,7 @@ IMPORTANT: This **Guide** is still under development.
 
 # 0. Introduction #
 
-In this repository I attempt to create a complete **Guide** for [Arch Linux](https://archlinux.org/) operating system deployment on a mobile personal computer aka laptop. The solution should satisfy the list of requirements collected in section [I. Requirements](#i-requirements) following a number of assumptions listed in section [II. Assumptions](#ii-assumptions).
+In this repository I attempt to create a complete **Guide** for [Arch Linux](https://archlinux.org/) operating system deployment on a mobile personal computer aka laptop. The solution should satisfy the list of requirements collected in section [I. Requirements](#i-requirements), following a number of assumptions listed in section [II. Assumptions](#ii-assumptions).
 
 I am Linux enthusiast with no system administration background. This **Guide** was put together by myself following a number of documents, guides and tutorials available online which I list below in the section [A. Sources](#a-sources). Hopefully this is a living document, updated frequently, to catch up with the latest developments.
 
@@ -69,7 +69,7 @@ id | Requirement | Rationale | Solution
 17. [Update mkinitcpio configuration and generate initramfs.](#17-update-mkinitcpio-configuration-and-generate-initramfs)
 18. [Install and configure the boot loader.](#18-install-and-configure-the-boot-loader)
 19. [Boot into a newly installed system.](#19-boot-into-a-newly-installed-system)
-20. [Add the User and setup User's directory subvolume layout.](#20-add-the-user-and-setup-users-directory-subvolume-layout)
+20. [Setup User's home directory subvolume layout.](#20-setup-users-home-directory-subvolume-layout)
 21. [Install Graphical Environment.](#21-install-graphical-environment)
 22. [Configure snapper.](#22-configure-snapper)
 23. [Configure backup to NAS and perform initial full backup.](#23-configure-backup-to-nas-and-perform-initial-full-backup)
@@ -247,7 +247,7 @@ Verify the disk device name on which we will install Arch Linux.\
 >`sr0 11:0 1 831.3M 0 rom /run/archiso/bootmnt  VBOX     VBOX CD-ROM`
 
 In the above example the hard drive we will use is _**sda**_.
-
+ 
 Make sure the drive security is not frozen.\
 **`hdparm -I /dev/sda | grep frozen`**
 >`frozen`
@@ -354,8 +354,6 @@ SYSTEM partition will use btrfs file system.\
 
 ## 11. Create and mount btrfs subvolumes and non-btrfs partitions for the System. ##
 IMPORTANT: TODO: ( revisit System and User directories/subvolumes to have CoW disabled, for example. virtual machine images ). Make sure to not use Copy on Write mechanism on Virtual Machines virtual disks and images.\
-(TODO: review the subvolumes layout)\
-(TODO: for system integrity create subvolumes instead of directories for: /var/spool, /var/log, /var/run, /var/tmp)
 
 Subvolume flat layout is used for the SYSTEM installation.
 subvolume | directory | rationale
@@ -408,6 +406,9 @@ Mount the remaining subvolumes.\
 **`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@snapshots /dev/mapper/cryptroot /mnt/.snapshots`**\
 **`# mount -o defaults,noatime,space_cache=v1,ssd,subvol=@swap /dev/mapper/cryptroot /mnt/swapspace`**\
 **`# sync`**
+
+Disable Copy-on-write mechanism on /var directory.\
+**`# chattr +C /mnt/var`**
 
 Mount the boot partition.\
 **`# mount /dev/sda2 /mnt/boot`**
@@ -550,6 +551,14 @@ Add default entries to hosts file.\
 >`::1 localhost`\
 >`127.0.1.1 myHostname.localdomain myHostname`
 
+Add user and include it to _wheel_ group for sudo access. Make sure th change _UserName_ to a correct user name.\
+**`# useradd -G wheel UserName`**
+
+Grant your user admin privilages via sudo. Uncomment a respective line in sudoers file.\
+**`# EDITOR=vim visudo`**
+>`## Same thing without a password`\
+>`%wheel ALL=(ALL) NOPASSWD: ALL`
+
 Enable network manager.\
 **`# systemctl enable NetworkManager.service`**
 
@@ -600,7 +609,7 @@ Run the tool and make a note of the first physical offset.\
 >`4096    268431360       4096    prealloc        268435456       298844160       268435456       1       575668224`\
 >`268435456       268435456       0       prealloc        268435456       567279616       268435456       1       844103680`
 
-In the above example, the first physical offset returned is _**575668224**_
+In the above example, the first physical offset returned is _**575668224**_.
 
 Find out the PAGESIZE.\
 **`# getconf PAGESIZE`**
@@ -636,7 +645,40 @@ Unmount all the partitions from /mnt\
 Shutdown to safely remove the installation media (USD flash memory), and start the system again.\
 **`# shutdown now`**
 
-## 20. Add the User and setup User's directory subvolume layout ##
+## 20. Setup User's home directory subvolume layout ##
+To take advantage of btrfs file system snapshot capabilities, we will create some subvolumes in users home directory.
+
+TODO: ( Revisit subvolumes layout for User home directory )
+
+subvolume | description
+--------- | -----------
+/home/UserName | user's home directory is a separate subvolume
+~/.cache | temporary local cache files should be excluded from snapshots
+~/.local | user-specific data directories, executables and libraries
+~/bin | user-specific binaries that should no be rolled back with the home directory, but should be snapshoted separately
+~/bin/.snapshots | bin subvolume requires its own subvolume dedicated to snapshots
+~/vms | virtual machines directory, make sure to disable CoW
+~/Downloads | should be excluded from snapshots
+~/Projects | directory to store project related files, it should be snapshoted separately
+~/Projects/.snapshots | Projects will require its own subvolume dedicated to snapshots
+
+Create subvolumes. Make sure to change _UserName_ to the correct user name.\
+**`$ cd /home`**\
+**`$ btrfs subvolume create UserName`**\
+**`$ cd UserName`**\
+**`$ btrfs subvolume create .cache`**\
+**`$ btrfs subvolume create .local`**\
+**`$ btrfs subvolume create bin`**\
+**`$ cd bin`**\
+**`$ btrfs subvolume create .snapshots`**\
+**`$ cd ..`**\
+**`$ btrfs subvolume create vms`**\
+**`$ chattr +C vms`**\
+**`$ btrfs subvolume create Downloads`**\
+**`$ btrfs subvolume create Projects`**\
+**`$ cd Projects`**\
+**`$ btrfs subvolume create .snapshots`**
+
 ## 21. Install Graphical Environment ##
 ## 22. Configure snapper ##
 ## 23. Configure backup to NAS and perform initial full backup ##
