@@ -600,13 +600,14 @@ Run the tool and make a note of the first physical offset.\
 >`4096    268431360       4096    prealloc        268435456       298844160       268435456       1       575668224`\
 >`268435456       268435456       0       prealloc        268435456       567279616       268435456       1       844103680`
 
-The first physical offset returned is 575668224.
+In the above example, the first physical offset returned is _**575668224**_
 
 Find out the PAGESIZE.\
 **`# getconf PAGESIZE`**
+>`4096`
 
 To compute the resume_offset value, divide the physical offset by the pagesize.\
-In my example: 575668224 / 4096 = **140544**
+In this example, 575668224 / 4096 = _**140544**_
 
 We will not need the tool anymore so we remove it.\
 **`# cd`**\
