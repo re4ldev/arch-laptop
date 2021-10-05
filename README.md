@@ -90,9 +90,9 @@ Execute the gpg command to verify .iso file agianst .iso.sig. Both files must be
 **IMPORTANT**: Make sure you are applying the changes to the USB drive. After this step the data will be permanently erased from the device on which you apply the commands.
 
 Find out the name of the USB drive device.\
-**`$ lsblk`**
->`NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT`\
->`sda           8:0    1 14.5G  0 disk`\
+**`$ lsblk -o +VENDOR,MODEL`**
+>`NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT            VENDOR   MODEL`\
+>`sda           8:0    1 14.5G  0 disk                       SanDisk  Ultra`\
 >`├─sda1        8:1    1  711M  0 part /media/pi/ARCH_202107`\
 >`└─sda2        8:2    1   68M  0 part`\
 >`sdb         179:0    0 59.5G  0 disk`\
