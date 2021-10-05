@@ -240,11 +240,13 @@ We need verify that we are actually booted in UEFI mode. If the following comman
 This step is optional but recommended. It ensures that random data is written to the disk prior to the encryption making it almost impossible to distinguish the free space from the occupied one.
 
 Verify the disk device name on which we will install Arch Linux.\
-**`# lsblk`**
->`NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS`\
+**`# lsblk -o +VENDOR,MODEL`**
+>`NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS      VENDOR   MODEL`\
 >`loop0 7:0 0 662.1M 1 loop /run/archiso/airootfs`\
->`sda 8:0 0 20G 0 disk`\
->`sr0 11:0 1 831.3M 0 rom /run/archiso/bootmnt`
+>`sda 8:0 0 20G 0 disk                       	ATA      VBOX HARDDISK`\
+>`sr0 11:0 1 831.3M 0 rom /run/archiso/bootmnt  VBOX     VBOX CD-ROM`
+
+In the above example the hard drive we will use is _**sda**_.
 
 Make sure the drive security is not frozen.\
 **`hdparm -I /dev/sda | grep frozen`**
