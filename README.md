@@ -454,8 +454,6 @@ We can verify the selected mirrors viewing /etc/pacmand.d/mirrorlist file.\
 ## 14. Install system packages with pacstrap ##
 _pacstrap_ script is used to install the selected system packages and copy the mirror list established in the previous step into a hard drive.
 
-This is a complete list of packages that will be installed to satisfy the system requirements from section [I. Requirements](#i-requirements).
-
 NOTE: Make sure to chose video driver for your particular hardware. More details can be found on Arch Linux Wiki [Xorg: Driver Installation](https://wiki.archlinux.org/title/Xorg#Driver_installation)
 
 Identify the video card.\
@@ -465,6 +463,8 @@ Identify the video card.\
 >`		  Flags: bus master, fast devsel, latency 64, IRQ 18`
 
 Depending on your system hardware include the video drivers packages in the following _pacstrap_ command. In this example we will use _xf86-video-intel_ package.
+
+This is a complete list of packages that will be installed to satisfy the system requirements from section [I. Requirements](#i-requirements).
  
 categoty | official | AUR 
 -------- | -------- | --------
