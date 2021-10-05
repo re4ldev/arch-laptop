@@ -116,7 +116,7 @@ This step is only required if you are going to perform the installation from the
 By default console keymap is US. List the directory with available keyboard layouts.\
 **`# ls /usr/share/kbd/keymaps/**/*.map.gz`**
 
-To modify the layout, append a corresponding file name without extension (.map.gz) to loadkeys. For example, for Polish programmers layout.\
+To modify the layout, append a corresponding file name without extension (.map.gz) to loadkeys. For example, for "Polish programmers" layout.\
 **`# loadkeys pl`**
 
 List the directory with available console fonts.\
