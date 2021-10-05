@@ -514,7 +514,7 @@ Verify the correct entries in fstab file. Make sure swapfile and swapspace are m
 >`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /swapspace btrfs rw,noatime,compress=zstd:3,ssd,space_cache,subvolid=265,subvol=/@swap 0 0`\
 >`/swapspace/swapfile none swap defaults 0 0`
 
-Make note for /dev/mapper/cryptroot UUID we will need it later in the process. In this case it is UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2
+Make note for /dev/mapper/cryptroot UUID we will need it later in the process. In this case it is _**d72f6385-bb67-4ce2-810c-8eb8935402a2**_
 
 ## 16. Chroot into the new system and perform basic configuration ##
 Change root into the new system using Arch Linux provided tool.\
