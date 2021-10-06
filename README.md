@@ -688,7 +688,7 @@ Create _UserName_ home directory subvolumes structure.\
 **`$ cd`**
 
 ## 21. Install Graphical Environment ##
-The following steps are coming from the procedure published by [Nice Micro](https://www.youtube.com/c/NiceMicroLinux) on his Youtube channel as part of ["Understanding the Arch Linux installation procedure"](https://www.youtube.com/watch?v=wZr9WTfFed0&list=PL2t9VWDusOo-0jF18YvEVhwpxTXlXPunG) series.
+The following steps are coming from the procedure published by [Nice Micro](https://www.youtube.com/c/NiceMicroLinux) on his [Youtube channel](https://www.youtube.com/c/NiceMicroLinux) as part of ["Understanding the Arch Linux installation procedure"](https://www.youtube.com/watch?v=wZr9WTfFed0&list=PL2t9VWDusOo-0jF18YvEVhwpxTXlXPunG) series.
 As per the author, this method tries to preserve both suckless philosophy and Arch Linux best practices. To fully understand the process, I encourage you to watch both videos published by Nice Micro:\
 [Installing DWM on Arch Linux the proper Arch Way](https://youtu.be/-Hw9WLztuqM)\
 [Arch Linux: Customizing and "patching" DWM through PKGBUILD](https://youtu.be/WOACiOXEuaI)
