@@ -1,4 +1,4 @@
-IMPORTANT: This **Guide** is still under development.
+IMPORTANT: This **Guide** is pending to be tested.
 
 # 0. Introduction #
 
@@ -476,12 +476,12 @@ Network | dhcpcd wpa_supplicant networkmanager |
 Bootloader | grub efibootmgr | 
 Utils | vim git openssh parted wget |
 Documentation | man-db man-pages texinfo |
-Graphical environment | xorg-server xorg-xinit xorg-xsetroot |
+Graphical environment | xorg-server xorg-xinit xorg-xsetroot tty-dejavu |
 Video drivers | xf86-video-intel |
 Window Manager | | dwm
 
 Use _pacstrap_ to install Arch Linux on the hard drive.\
-**`# pacstrap /mnt base base-devel linux linux-firmware dosfstools btrfs-progs e2fsprogs intel-ucode dhcpcd wpa_supplicant networkmanager grub efibootmgr vim git openssh parted wget man-db man-pages texinfo xorg-server xorg-xinit xorg-xsetroot xf86-video-intel`**
+**`# pacstrap /mnt base base-devel linux linux-firmware dosfstools btrfs-progs e2fsprogs intel-ucode dhcpcd wpa_supplicant networkmanager grub efibootmgr vim git openssh parted wget man-db man-pages texinfo xorg-server xorg-xinit xorg-xsetroot tty-dejavu xf86-video-intel`**
 
 ## 15. Generate fstab ##
 Generate fstab file using UUIDs.\
@@ -508,11 +508,11 @@ Verify the correct entries in fstab file. Make sure swapfile and swapspace are m
 >`# /dev/mapper/cryptroot`\
 >`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /usr/local btrfs rw,noatime,compress=zstd:3,ssd,space_cache,subvolid=263,subvol=/@usr_local 0 0`\
 >`# /dev/mapper/cryptroot`\
->`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /var btrfs rw,noatime,compress=zstd:3,ssd,space_cache,subvolid=264,subvol=/@var 0 0`\
+>`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /var btrfs rw,noatime,nodatacow,ssd,space_cache,subvolid=264,subvol=/@var 0 0`\
 >`# /dev/mapper/cryptroot`\
 >`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /.snapshots btrfs rw,noatime,ssd,space_cache,subvolid=266,subvol=/@snapshots 0 0`\
 >`# /dev/mapper/cryptroot`\
->`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /swapspace btrfs rw,noatime,compress=zstd:3,ssd,space_cache,subvolid=265,subvol=/@swap 0 0`\
+>`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /swapspace btrfs rw,noatime,ssd,space_cache,subvolid=265,subvol=/@swap 0 0`\
 >`/swapspace/swapfile none swap defaults 0 0`
 
 Make note for /dev/mapper/cryptroot UUID we will need it later in the process. In this case it is _**d72f6385-bb67-4ce2-810c-8eb8935402a2**_
@@ -524,7 +524,7 @@ Change root into the new system using Arch Linux provided tool.\
 Setup root password.\
 **`# passwd`**
 
-Setup your timezone. Make sure to replace Region/City with your respective values.\
+Setup your timezone. Make sure to replace Europe/Warsaw with your respective values.\
 **`# ln -sf /usr/share/zoneinfo/Europe/Warsaw /etc/localtime`**
 
 Generate /etc/adjtime\
@@ -553,6 +553,9 @@ Add default entries to hosts file.\
 
 Add user and include it to _wheel_ group for sudo access. Make sure th change _UserName_ to a correct user name.\
 **`# useradd -G wheel UserName`**
+
+Set the user password.\
+**`# passwd UserName`**
 
 Grant your user admin privilages via sudo. Uncomment a respective line in sudoers file.\
 **`# EDITOR=vim visudo`**
@@ -662,24 +665,166 @@ subvolume | description
 ~/Projects | directory to store project related files, it should be snapshoted separately
 ~/Projects/.snapshots | Projects will require its own subvolume dedicated to snapshots
 
-Create subvolumes. Make sure to change _UserName_ to the correct user name.\
+Create _UserName_ home directory and set the correct permissions and ownership. Make sure to change _UserName_ to the correct user name.\
 **`$ cd /home`**\
-**`$ btrfs subvolume create UserName`**\
+**`$ sudo btrfs subvolume create UserName`**\
+**`$ sudo chown UserName:UserName UserName`**\
+**`$ chmod 700 UserName`**
+
+Create _UserName_ home directory subvolumes structure.\
 **`$ cd UserName`**\
 **`$ btrfs subvolume create .cache`**\
 **`$ btrfs subvolume create .local`**\
 **`$ btrfs subvolume create bin`**\
 **`$ cd bin`**\
 **`$ btrfs subvolume create .snapshots`**\
-**`$ cd ..`**\
+**`$ cd`**\
 **`$ btrfs subvolume create vms`**\
 **`$ chattr +C vms`**\
 **`$ btrfs subvolume create Downloads`**\
 **`$ btrfs subvolume create Projects`**\
 **`$ cd Projects`**\
-**`$ btrfs subvolume create .snapshots`**
+**`$ btrfs subvolume create .snapshots`**\
+**`$ cd`**
 
 ## 21. Install Graphical Environment ##
+The following steps are coming from the procedure published by [Nice Micro](https://www.youtube.com/c/NiceMicroLinux) on his Youtube channel as part of ["Understanding the Arch Linux installation procedure"](https://www.youtube.com/watch?v=wZr9WTfFed0&list=PL2t9VWDusOo-0jF18YvEVhwpxTXlXPunG) series.
+As per the author, this method tries to preserve both suckless philosophy and Arch Linux best practices. To fully understand the process, I encourage you to watch both videos published by Nice Micro:\
+[Installing DWM on Arch Linux the proper Arch Way](https://youtu.be/-Hw9WLztuqM)\
+[Arch Linux: Customizing and "patching" DWM through PKGBUILD](https://youtu.be/WOACiOXEuaI)
+
+Perform initial git configuration. Make sure to use a correct _User Name_, _username_ and _domain.com_.\
+**`$ git config --global user.email "username@domain.com"`**\
+**`$ git config --global user.name "User Name"`**
+
+We will use suckless [dinamic window manager](https://dwm.suckless.org/) and [simple terminal](https://st.suckless.org/) to build Graphical Environmnet. We will use AUR to prepare the build.\
+**`$ cd ~/bin`**\
+
+**`$ git clone https://aur.archlinux.org/st`**\
+**`$ git clone https://aur.archlinux.org/dwm`**
+
+Create our own branch for ST.\
+**`$ cd st`**\
+**`$ git branch my-config`**\
+**`$ git switch my-config`**
+
+Make sure git keeps track of config.h and config.def.h files. Remove those files from .gitignore. Also change the _/pkg.tar.xz_ to _/pkg.tar.zst_, since this is a new format.\
+**`$ vim .gitignore`**\
+>`/*pkg.tar.zst`\
+>`/pkg/`\
+>`/src/`\
+>`/st-*.tar.gz`
+
+Commit the changes to .gitignore file.\
+**`$ git add .`**\
+**`$ git commit -m "modified .gitignore file"`**
+
+Create a new branch for DWM.\
+**`$ cd ../dwm`**\
+**`$ git branch my-config`**\
+**`$ git switch my-config`**
+
+Remove config.h file.\
+**`$ rm config.h`**
+
+Update PKGBUILD file from DWM directory.\
+**`$ vim PKGBUILD`**
+
+Remove reference config.h in source section.
+>`source=(dwm.desktop`\
+>`        https://dl.suckless.org/dwm/dwm-$pkgver.tar.gz)`\
+>`sha256sums=('bc36426772e1471d6dd8c8aed91f288e16949e3463a9933fee6390ee0ccd3f81'`\
+>`            '97902e2e007aaeaa3c6e3bed1f81785b817b7413947f1db1d3b62b8da4cd110e')`
+
+Add _sourcedir line.
+>`_sourcedir=$pkgname-$pkgver`
+
+Change the content of prepare() function.
+>`prepare() {`\
+>`  # This package provides a mechanism to provide a custom config.h. Multiple`\
+>`  # configuration states are determined by the presence of two files in`\
+>`  # $BUILDDIR:`\
+>`  #`\
+>`  # config.h  config.def.h  state`\
+>`  # ========  ============  =====`\
+>`  # absent    absent        Initial state. The user receives a message on how`\
+>`  #                         to configure this package.`\
+>`  # absent    present       The user was previously made aware of the`\
+>`  #                         configuration options and has not made any`\
+>`  #                         configuration changes. The package is built using`\
+>`  #                         default values.`\
+>`  # present                 The user has supplied his or her configuration. The`\
+>`  #                         file will be copied to $srcdir and used during`\
+>`  #                         build.`\
+>`  #`\
+>`  # After this test, config.def.h is copied from $srcdir to $BUILDDIR to`\
+>`  # provide an up to date template for the user.`\
+>`  if [ -e "$BUILDDIR/config.h" ]`\
+>`  then`\
+>`    cp "$BUILDDIR/config.h" "$_sourcedir"`\
+>`  elif [ ! -e "$BUILDDIR/config.def.h" ]`\
+>`  then`\
+>`    msg='This package can be configured in config.h. Copy the config.def.h '`\
+>`    msg+='that was just placed into the package directory to config.h and '`\
+>`    msg+='modify it to change the configuration. Or just leave it alone to '`\
+>`    msg+='continue to use default values.'`\
+>`    echo "$msg"`\
+>`  fi`\
+>`  cp "$_sourcedir/config.def.h" "$BUILDDIR"`\
+>`}`\
+
+Copy .gitignore file rom ST to DWM directory.\
+**`$ cp ../st/.gitignore .`**\
+
+Update the last line to match DWM requirements.\
+**`$ vim .gitignore`**
+>`/dwm-*.tar.gz`
+
+Commit the changes to dwm.\
+**`$ git add .`**\
+**`$ git commit -m "modify PKGBUILD (delete config.h, add _sourcedir and update prepare() function), and add .gitignore file"`**
+
+Install ST and the missing dependencies.\
+**`$ cd ../st`**\
+**`$ makepkg -sif --clean`**\
+
+Verify the ST package is installed on the system.\
+**`$ pacman -Qi st`**
+
+Configure ST.\
+**`$ cp config.def.h config.h`**\
+**`$ vim config.h`**
+
+Once the changes in config.h are done, rebuild the package.\
+**`$ makepkg -sif --clean`**
+
+Install DWM and the missing dependencies.\
+**`$ cd ../dwm`**\
+**`$ makepkg -sif --clean`**
+
+Verify the DWM package is installed on the system.\
+**`$ pacman -Qi dwm`**
+
+Configure DWM.\
+**`$ cp config.def.h config.h`**\
+**`$ vim config.h`**
+
+Go to user home directory and create .xinitrc file.\
+**`$ cd`**\
+**`$ cp /etc/X11/xinit/xinitrc ./.xinitrc`**
+
+Update .xinitrc to make it start DWM.\
+**`$ vim .xinitrc`**
+
+Remove the last 5 lines and add the following lines instead.
+>`setxkbmap pl`\
+>`exec dwm`
+
+You can now start Graphical Environment.\
+**`$ startx`**
+
+TODO: Use LY display manager. This is a console based display manager that will allow to start DWM at boot.
+
 ## 22. Configure snapper ##
 ## 23. Configure backup to NAS and perform initial full backup ##
 
@@ -690,4 +835,4 @@ Create subvolumes. Make sure to change _UserName_ to the correct user name.\
 \
 \
 TODO: ( Test on hardware, for now the process is only tested on virtual machine )\
-TODO: ( Add steps 20 - 23 )
+TODO: ( Add steps 22 - 23 )
