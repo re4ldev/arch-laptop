@@ -823,11 +823,6 @@ Remove the last 5 lines and add the following lines instead.
 You can now start Graphical Environment.\
 **`$ startx`**
 
-To be able to start the Graphical Environment on boot we will use LY display manager.\
-https://github.com/nullgemm/ly
-https://aur.archlinux.org/ly.git
-https://www.youtube.com/watch?v=sBzAC4glyvE&t=104s
-
 TODO: Use LY display manager. This is a console based display manager that will allow to start DWM at boot.
 
 ## 22. Configure snapper ##
