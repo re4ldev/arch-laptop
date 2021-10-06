@@ -698,7 +698,7 @@ Perform initial git configuration. Make sure to use a correct _User Name_, _user
 **`$ git config --global user.name "User Name"`**
 
 We will use suckless [dinamic window manager](https://dwm.suckless.org/) and [simple terminal](https://st.suckless.org/) to build Graphical Environmnet. We will use AUR to prepare the build.\
-**`$ cd ~/bin`**\
+**`$ cd ~/bin`**
 
 **`$ git clone https://aur.archlinux.org/st`**\
 **`$ git clone https://aur.archlinux.org/dwm`**
@@ -709,7 +709,7 @@ Create our own branch for ST.\
 **`$ git switch my-config`**
 
 Make sure git keeps track of config.h and config.def.h files. Remove those files from .gitignore. Also change the _/pkg.tar.xz_ to _/pkg.tar.zst_, since this is a new format.\
-**`$ vim .gitignore`**\
+**`$ vim .gitignore`**
 >`/*pkg.tar.zst`\
 >`/pkg/`\
 >`/src/`\
@@ -771,10 +771,10 @@ Change the content of prepare() function.
 >`    echo "$msg"`\
 >`  fi`\
 >`  cp "$_sourcedir/config.def.h" "$BUILDDIR"`\
->`}`\
+>`}`
 
 Copy .gitignore file rom ST to DWM directory.\
-**`$ cp ../st/.gitignore .`**\
+**`$ cp ../st/.gitignore .`**
 
 Update the last line to match DWM requirements.\
 **`$ vim .gitignore`**
@@ -786,7 +786,7 @@ Commit the changes to dwm.\
 
 Install ST and the missing dependencies.\
 **`$ cd ../st`**\
-**`$ makepkg -sif --clean`**\
+**`$ makepkg -sifc`**
 
 Verify the ST package is installed on the system.\
 **`$ pacman -Qi st`**
@@ -796,11 +796,11 @@ Configure ST.\
 **`$ vim config.h`**
 
 Once the changes in config.h are done, rebuild the package.\
-**`$ makepkg -sif --clean`**
+**`$ makepkg -sifc`**
 
 Install DWM and the missing dependencies.\
 **`$ cd ../dwm`**\
-**`$ makepkg -sif --clean`**
+**`$ makepkg -sifc`**
 
 Verify the DWM package is installed on the system.\
 **`$ pacman -Qi dwm`**
@@ -822,6 +822,11 @@ Remove the last 5 lines and add the following lines instead.
 
 You can now start Graphical Environment.\
 **`$ startx`**
+
+To be able to start the Graphical Environment on boot we will use LY display manager.\
+https://github.com/nullgemm/ly
+https://aur.archlinux.org/ly.git
+https://www.youtube.com/watch?v=sBzAC4glyvE&t=104s
 
 TODO: Use LY display manager. This is a console based display manager that will allow to start DWM at boot.
 
