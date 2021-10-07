@@ -809,6 +809,9 @@ Configure DWM.\
 **`$ cp config.def.h config.h`**\
 **`$ vim config.h`**
 
+Once the changes in config.h are done, rebuild the package.\
+**`$ makepkg -sifc`**
+
 Go to user home directory and create .xinitrc file.\
 **`$ cd`**\
 **`$ cp /etc/X11/xinit/xinitrc ./.xinitrc`**
