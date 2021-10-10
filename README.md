@@ -830,17 +830,6 @@ Clone Ly AUR git repository.\
 **`$ cd ~/bin`**\
 **`$ git clone https://aur.archlinux.org/ly`**
 
-At this moment PKGBUILD file needs to be update to use a new repository location for ctypes.\
-**`$ cd ly`**\
-**`$ vim PKGBUILD`**
->`source=("git+https://github.com/nullgemm/${pkgname}.git#tag=v${pkgver}"`\
->`        "git+https://github.com/nullgemm/argoat.git"`\
->`        "git+https://github.com/nullgemm/configator.git"`\
->`        "git+https://git.nullgemm.fr/nullgemm/ctypes"`\
->`        "git+https://github.com/nullgemm/dragonfail.git"`\
->`        "git+https://github.com/nullgemm/termbox_next.git")`
-
-
 Install the package, and enable the service to start on boot.\
 **`$ makepkg -sifc`**\
 **`$ sudo systemctl enable ly`**
