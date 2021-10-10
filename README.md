@@ -351,7 +351,7 @@ SYSTEM partition will use btrfs file system.\
 **`# mkfs.btrfs /dev/mapper/cryptroot`**
 
 ## 11. Create and mount btrfs subvolumes and non-btrfs partitions for the System. ##
-IMPORTANT: TODO: ( revisit System and User directories/subvolumes to have CoW disabled, for example. virtual machine images ). Make sure to not use Copy on Write mechanism on Virtual Machines virtual disks and images.\
+IMPORTANT: TODO: ( revisit System and User directories/subvolumes to have CoW disabled, for example. virtual machine images ). Make sure to not use Copy on Write mechanism on Virtual Machines virtual disks and images.
 
 Subvolume flat layout is used for the SYSTEM installation.
 subvolume | directory | rationale
