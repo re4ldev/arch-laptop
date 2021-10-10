@@ -831,6 +831,7 @@ Clone Ly AUR git repository.\
 **`$ git clone https://aur.archlinux.org/ly`**
 
 At this moment PKGBUILD file needs to be update to use a new repository location for ctypes.\
+**`$ cd ly`**\
 **`$ vim PKGBUILDS`**
 >`source=("git+https://github.com/nullgemm/${pkgname}.git#tag=v${pkgver}"`\
 >`        "git+https://github.com/nullgemm/argoat.git"`\
