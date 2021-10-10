@@ -646,6 +646,9 @@ Unmount all the partitions from /mnt\
 Shutdown to safely remove the installation media (USD flash memory), and start the system again.\
 **`# shutdown now`**
 
+Wireless network connectivity needs to be configured on a first boot into new system.\
+**`$ nmcli device wifi connect MyTestLab password myTestPass`**
+
 ## 20. Setup User's home directory subvolume layout ##
 To take advantage of btrfs file system snapshot capabilities, we will create some subvolumes in users home directory.
 
