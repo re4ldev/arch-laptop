@@ -846,7 +846,8 @@ Clone Ly AUR git repository.\
 
 Install the package, and enable the service to start on boot.\
 **`$ makepkg -sifc`**\
-**`$ sudo systemctl enable ly`**
+**`$ sudo systemctl enable ly`**\
+**`$ cd ly`**
 
 After reboot you will be greeted by Ly login screen.
 
