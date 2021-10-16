@@ -99,13 +99,13 @@ Find out the name of the USB drive device. In this example, the USB drive is the
 >`├─sdb1      179:6    0   66M  0 part /boot`\
 >`└─sdb2      179:7    0 57.8G  0 part /`
 
-Make sure the device is not mounted. Make sure to replace _**sdXY**_ with the corresponding partition name.\
+Make sure the device is not mounted. Make sure to replace _**sdXY**_ with the corresponding partition name specific to your deployment.\
 **`$ umount /dev/sdXY`**
 
-In case the device is not empty, wipe out the device prior to .iso copy. Make sure to replace _**sdX**_ with the corresponding device name.\
+In case the device is not empty, wipe out the device prior to .iso copy. Make sure to replace _**sdX**_ with the corresponding device name specific to your deployment.\
 **`# wipefs --all /dev/sdX`**
 
-Copy Arch Linux install image to USB drive. Make sure to replace _**sdX**_ with the corresponding device name.\
+Copy Arch Linux install image to USB drive. Make sure to replace _**sdX**_ with the corresponding device name specific to your deployment.\
 **`# dd if=archlinux-2021.10.01-x86_64.iso of=/dev/sdX bs=4M conv=fsync oflag=direct status=progress`**
 
 ## 3. Boot the live environment, and configure console keymap and font ##
@@ -141,13 +141,6 @@ Make sure the wireless network adapter is not blocked.\
 If the wireless network adapter is hard-blocked then use the hardware button (switch) to unblock it. If it is not hard-blocked but soft-blocked then unblock it with rfkill.\
 **`# rfkill unblock wifi`**
 
-Wireless access point specification:
-key | value
---- | ----
-SSID | MyTestLab
-passphrase | myTestPass
-encryption | WPA/WPA2-PSK
-
 Check for available network interfaces, and apply one of the above scenarios to the preferred interface.\
 **`# ip link`**
 >`1: lo <LOOPBACK,UP,LOWER_UP> mtu 65535 qdisc noqueue state UNKNOWN mode DEFAULT group qlen 1000`\
@@ -177,25 +170,25 @@ Once applied the procedure from one of the above scenarios, you should verify In
 Connect network cable to the laptop. If DHCP server is available in the network, ethernet network interface will be configured automatically.
 
 ### 4-2. Wired connection without DHCP ###
-Add an IP address to the interface.\
-**`# ip address add 10.0.0.2/24 broadcast + dev enp0s3`**
+Add an IP address to the interface. Make sure to replace _**ip_address/net_mask**_ and _**interface_name**_ with the respective values specific to your deployment.\
+**`# ip address add ip_address/net_mask broadcast + dev interface_name`**
 
-Add default route to access Internet.\
-**`# ip route add default via 10.0.0.1/24 dev enp0s3`**
+Add default route to access Internet. Make sure to replace _**gateway_address/net_mask**_ and _**interface_name**_ with the respective values specific to your deployment.\
+**`# ip route add default via gateway_address/net_mask dev interface_name`**
 
 ### 4-3. Wireless connection with DHCP ###
-Connect to wireless LAN.\
-**`# iwctl --passphrase myTestPass station wlan0 connect MyTestLab`**
+Connect to wireless LAN. Make sure to replace _**your_wifi_password**_, _**wireless_interface**_, and _**your_ssid**_ with the respective values specific to your deployment.\
+**`# iwctl --passphrase your_wifi_password station wireless_interface connect your_ssid`**
 
 ### 4-4. Wireless connection without DHCP ###
-Connect to wireless LAN.\
-**`# iwctl --passphrase myTestPass station wlan0 connect MyTestLab`**
+Connect to wireless LAN. Make sure to replace _**your_wifi_password**_, _**wireless_interface**_, and _**your_ssid**_ with the respective values specific to your deployment.\
+**`# iwctl --passphrase your_wifi_password station wireless_interface connect your_ssid`**
 
-Add an IP address to the interface.\
-**`# ip address add 10.0.0.2/24 broadcast + dev enp0s3`**
+Add an IP address to the interface. Make sure to replace _**ip_address/net_mask**_ and _**interface_name**_ with the respective values specific to your deployment.\
+**`# ip address add ip_address/net_mask broadcast + dev interface_name`**
 
-Add default route to access Internet.\
-**`# ip route add default via 10.0.0.1/24 dev enp0s3`**
+Add default route to access Internet. Make sure to replace _**gateway_address/net_mask**_ and _**interface_name**_ with the respective values specific to your deployment.\
+**`# ip route add default via gateway_address/net_mask dev interface_name`**
 
 ## 5. Live environment SSH access setup ##
 To be able to login via ssh we need to set a root password.\
@@ -214,18 +207,11 @@ You can now connect via ssh to the live environment from another machine.
 Use NTP server to syncronize time.\
 **`# timedatectl set-ntp true`**
 
-Set your timezone. Make sure to use your respective _Region_ and _City_ instead.\
-**`# timedatectl set-timezone Europe/Warsaw`**
+Set your timezone. Make sure to use your respective _**Region**_ and _**City**_ instead.\
+**`# timedatectl set-timezone Region/City`**
 
 Verify the clock is correctly configured.\
 **`# timedatectl`**
->`               Local time: Sun 2021-10-03 17:52:39 CEST`\
->`           Universal time: Sun 2021-10-03 15:52:39 UTC`\
->`                 RTC time: Sun 2021-10-03 15:52:39`\
->`                Time zone: Europe/Warsaw (CEST, +0200)`\
->`System clock synchronized: yes`\
->`              NTP service: active`\
->`          RTC in local TZ: no`
 
 ## 7. Live environment boot mode verification ##
 We need verify that we are actually booted in UEFI mode. If the following command is executed without error that means we run UEFI, similarly to the below output.\
@@ -246,8 +232,8 @@ Verify the disk device name on which we will install Arch Linux.\
 
 In the above example the hard drive we will use is _**sda**_.
  
-Make sure the drive security is not frozen.\
-**`hdparm -I /dev/sda | grep frozen`**
+Check if the drive security is frozen. Make sure to replace _**sdX**_ with the corresponding device name specific to your deployment.\
+**`hdparm -I /dev/sdX | grep frozen`**
 >`frozen`
 
 If it says _frozen_ it is not possible to proceed with the next step. To unfreeze the drive you may try to suspend the system. Upon waking up, it is likely that the freeze will be lifted. If this trick does not work for you, please, follow up on Arch Linux wiki [SSD/Memory cell cleaning](https://wiki.archlinux.org/title/Solid_state_drive/Memory_cell_clearing).\
@@ -255,15 +241,16 @@ If it says _frozen_ it is not possible to proceed with the next step. To unfreez
 
 If you are performing the installation via ssh, you have now lost your connection. Resume the device from suspension and reconnect via ssh to proceed.
 
-**`# hdparm -I /dev/sda | grep frozen`**
+Check if the drive security is still frozen. Make sure to replace _**sdX**_ with the corresponding device name specific to your deployment.\
+**`# hdparm -I /dev/sdX | grep frozen`**
 >`not frozen`
 
 **IMPORTANT**: Do not reboot after applying this step.\
-Enable security by setting a user password.\
-**`# hdparm --user-master u --security-set-pass PasSWorD /dev/sda`**
+Enable security by setting a user password. Make sure to replace _**sdX**_ with the corresponding device name specific to your deployment.\
+**`# hdparm --user-master u --security-set-pass PasSWorD /dev/sdX`**
 
-As a sanity check, let's verify that security is enabled.\
-**`# hdparm -I /dev/sda`**
+As a sanity check, let's verify that security is enabled. Make sure to replace _**sdX**_ with the corresponding device name specific to your deployment.\
+**`# hdparm -I /dev/sdX`**
 >`Security:`\
 >`        Master password revision code = 65534`\
 >`                supported`\
@@ -277,11 +264,11 @@ As a sanity check, let's verify that security is enabled.\
 
 **IMPORTANT**: After this command the SSD will be wiped and data will be lost.\
 **IMPORTANT**: Ensure that the drive is not mounted.\
-Issue the ATA Secure Erase command.\
-**`# hdparm --user-master u --security-erase PasSWorD /dev/sda`**
+Issue the ATA Secure Erase command. Make sure to replace _**sdX**_ with the corresponding device name specific to your deployment.\
+**`# hdparm --user-master u --security-erase PasSWorD /dev/sdX`**
 
-The drive is now erased, let's verify that security is disabled.\
-**`# hdparm -I /dev/sda`**
+The drive is now erased, let's verify that security is disabled. Make sure to replace _**sdX**_ with the corresponding device name specific to your deployment.\
+**`# hdparm -I /dev/sdX`**
 >`Security:`\
 >`        Master password revision code = 65534`\
 >`                supported`\
@@ -293,8 +280,8 @@ The drive is now erased, let's verify that security is disabled.\
 >`        Security level high`\
 >`        2min for SECURITY ERASE UNIT. 2min for ENHANCED SECURITY ERASE UNIT.`
 
-Fill the disk with random bytes stream. Depending on the drive size, this step will take an extended period of time.\
-**`# shred -v -n 1 /dev/sda`**
+Fill the disk with random bytes stream. Depending on the drive size, this step will take an extended period of time. Make sure to replace _**sdX**_ with the corresponding device name specific to your deployment.\
+**`# shred -v -n 1 /dev/sdX`**
 
 ## 9. Partition the disks ##
 **IMPORTANT**: If you follow the instructions included in this step, the data on the disk will be erased. If you apply incorrectly the following steps you may erase the data from your computer irreversibly. Proceed with caution.
@@ -307,29 +294,27 @@ BIOS | boot_grub | 1MiB | N/A
 ESP | esp | 550MiB | fat32
 SYSTEM | linux | ~ | btrfs
 
-In case you skipped the previous step, where we wiped out the disk, you need to verify the disk device name on which we will install Arch Linux.\
+In case you skipped the previous step, where we wiped out the disk, you need to verify the disk device name on which we will install Arch Linux. In this example we will use _**sda**_.\
 **`# lsblk -o +VENDOR,MODEL`**
 >`NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS      VENDOR   MODEL`\
 >`loop0 7:0 0 662.1M 1 loop /run/archiso/airootfs`\
 >`sda 8:0 0 20G 0 disk                       	ATA      VBOX HARDDISK`\
 >`sr0 11:0 1 831.3M 0 rom /run/archiso/bootmnt  VBOX     VBOX CD-ROM`
 
-In this case the disk device is _**sda**_.
-
 We will use GNU parted to partition the disk.\
-First create GUID Partition Table.\
-**`# parted -s /dev/sda mklabel gpt`**
+First create GUID Partition Table. Make sure to replace _**sdX**_ with the corresponding device name specific to your deployment.\
+**`# parted -s /dev/sdX mklabel gpt`**
 
-Make partition for BIOS boot.\
-**`# parted -s -a minimal /dev/sda mkpart BIOS 0G 1MiB set 1 bios_grub on`**
+Make partition for BIOS boot. Make sure to replace _**sdX**_ with the corresponding device name specific to your deployment.\
+**`# parted -s -a minimal /dev/sdX mkpart BIOS 0G 1MiB set 1 bios_grub on`**
 
-Make partition for UEFI boot.\
-**`# parted -s /dev/sda mkpart ESP fat32 1MiB 551MiB set 2 esp on`**
+Make partition for UEFI boot. Make sure to replace _**sdX**_ with the corresponding device name specific to your deployment.\
+**`# parted -s /dev/sdX mkpart ESP fat32 1MiB 551MiB set 2 esp on`**
 
-Make partition for the system.\
-**`# parted -s /dev/sda mkpart SYSTEM btrfs 551MiB 100%`**
+Make partition for the system. Make sure to replace _**sdX**_ with the corresponding device name specific to your deployment.\
+**`# parted -s /dev/sdX mkpart SYSTEM btrfs 551MiB 100%`**
 
-Verify the partitions are correcrtly created.\
+Verify the partitions are correcrtly created. In this example drive device is _**sda**_.\
 **`# lsblk`**
 >`loop0 7:0 0 662.1M 1 loop /run/archiso/airootfs`\
 >`sda 8:0 0 20G 0 disk`\
@@ -341,20 +326,21 @@ Verify the partitions are correcrtly created.\
 ## 10. Setup an encryption and format the partitions ##
 We will encrypt the system partition with LUKS.
 
-Setup encryption on the SYSTEM partition and open the encrypted partition to work with.\
-**`# cryptsetup luksFormat /dev/sda3`**\
-**`# cryptsetup luksOpen /dev/sda3 cryptroot`**
+Setup encryption on the SYSTEM partition and open the encrypted partition to work with. Make sure to replace _**sdXY**_ with the corresponding partition name specific to your deployment.\
+**`# cryptsetup luksFormat /dev/sdXY`**\
+**`# cryptsetup luksOpen /dev/sdXY cryptroot`**
 
 Format SYSTEM and EFI partition with its respective file systems.
 
-EFI partition requires FAT32 file system.\
-**`# mkfs.fat -F32 /dev/sda2`**
+EFI partition requires FAT32 file system. Make sure to replace _**sdXY**_ with the corresponding partition name specific to your deployment.\
+**`# mkfs.fat -F32 /dev/sdXY`**
 
 SYSTEM partition will use btrfs file system.\
 **`# mkfs.btrfs /dev/mapper/cryptroot`**
 
 ## 11. Create and mount btrfs subvolumes and non-btrfs partitions for the System. ##
-IMPORTANT: TODO: ( revisit System and User directories/subvolumes to have CoW disabled, for example. virtual machine images ). Make sure to not use Copy on Write mechanism on Virtual Machines virtual disks and images.
+IMPORTANT: Make sure to not use Copy on Write mechanism on Virtual Machines virtual disks and images.\
+TODO: (revisit System and User directories/subvolumes to have CoW disabled, for example. virtual machine images).
 
 Subvolume flat layout is used for the SYSTEM installation.
 subvolume | directory | rationale
@@ -411,8 +397,8 @@ Mount the remaining subvolumes.\
 Disable Copy-on-write mechanism on /var directory.\
 **`# chattr +C /mnt/var`**
 
-Mount the boot partition.\
-**`# mount /dev/sda2 /mnt/boot`**
+Mount the boot partition. Make sure to replace _**sdXY**_ with the corresponding partition name specific to your deployment.\
+**`# mount /dev/sdXY /mnt/boot`**
 
 ## 12. Create a swap area: swapfile ##
 To be able to hibarnate the system on button press or lid close we will need to create a swap area. In the previous steps we have created @swap volume to make sure it is not part of the snapshots, and mounted it to the /swapspace directory.
@@ -525,8 +511,8 @@ Change root into the new system using Arch Linux provided tool.\
 Setup root password.\
 **`# passwd`**
 
-Setup your timezone. Make sure to replace Europe/Warsaw with your respective values.\
-**`# ln -sf /usr/share/zoneinfo/Europe/Warsaw /etc/localtime`**
+Setup your timezone. Make sure to replace Region/City with your respective values.\
+**`# ln -sf /usr/share/zoneinfo/Region/City /etc/localtime`**
 
 Generate /etc/adjtime\
 **`# hwclock --systohc`**
@@ -543,19 +529,19 @@ Generate the locales.\
 Create locale.conf and set the LANG variable accordingly.\
 **`# echo "LANG=en_US.UTF-8" > /etc/locale.conf`**
 
-Setup the hostname.\
+Setup the hostname. Make sure to replace _**myHostname**_ with the name of your choice.\
 **`# echo "myHostname" > /etc/hostname`**
 
-Add default entries to hosts file.\
+Add default entries to hosts file. Make sure to replace _**myHostname**_ with the name of your choice.\
 **`# vim /etc/hosts`**
 >`127.0.0.1 localhost`\
 >`::1 localhost`\
 >`127.0.1.1 myHostname.localdomain myHostname`
 
-Add user and include it to _wheel_ group for sudo access. Make sure th change _UserName_ to a correct user name.\
+Add user and include it to _wheel_ group for sudo access. Make sure th change _**UserName**_ to a correct user name.\
 **`# useradd -G wheel UserName`**
 
-Set the user password.\
+Set the user password. Make sure th change _**UserName**_ to a correct user name.\
 **`# passwd UserName`**
 
 Grant your user admin privilages via sudo. Uncomment a respective line in sudoers file.\
@@ -587,8 +573,8 @@ Generate initramfs.\
 ## 18. Install and configure the boot loader ##
 We will use GRUB as boot loader for our installation. Mainly because it supports both legacy BIOS and UEFI boot modes.
 
-Install GRUB for legacy BIOS.\
-**`# grub-install --target=i386-pc /dev/sda`**
+Install GRUB for legacy BIOS. Make sure to replace _**sdX**_ with the corresponding device name specific to your deployment.\
+**`# grub-install --target=i386-pc /dev/sdX`**
 
 Install GRUB for UEFI.\
 **`# grub-install --target=x86_64-efi --efi-directory=/boot --boot-directory=/boot --bootloader-id=GRUB`**
@@ -631,7 +617,7 @@ Previously we have made a note of /dev/mapper/cryptroot UUID which is d72f6385-b
 Update GRUB configuration to make sure we have access to encrypted SYSTEM partition and the resume from hibernation details.\
 **`# vim /etc/default/grub`**
 
-Update GRUB_CMDLINE_LINUX_DEFAULT.
+Update GRUB_CMDLINE_LINUX_DEFAULT. Make sure to replace _**sdXY**_ with the corresponding partition name specific to your deployment.\
 >`GRUB_CMDLINE_LINUX_DEFAULT="cryptdevice=/dev/sda3:cryptroot root=/dev/mapper/cryptroot rootflags=subvol=@ resume=UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 resume_offset=140544 loglevel=3 quiet"`
 
 Configure GRUB.\
@@ -649,13 +635,13 @@ Unmount all the partitions from /mnt\
 Shutdown to safely remove the installation media (USD flash memory), and start the system again.\
 **`# shutdown now`**
 
-Wireless network connectivity needs to be configured on a first boot into new system.\
-**`$ nmcli device wifi connect MyTestLab password myTestPass`**
+Wireless network connectivity needs to be configured on a first boot into new system. Make sure to replace _**your_wifi_password**_, and _**your_ssid**_ with the respective values specific to your deployment.\
+**`$ nmcli device wifi connect your_ssid password your_wifi_password`**
 
 ## 20. Setup User's home directory subvolume layout ##
 To take advantage of btrfs file system snapshot capabilities, we will create some subvolumes in users home directory.
 
-TODO: ( Revisit subvolumes layout for User home directory )
+TODO: (Revisit subvolumes layout for User home directory)
 
 subvolume | description
 --------- | -----------
@@ -669,7 +655,7 @@ subvolume | description
 ~/Projects | directory to store project related files, it should be snapshoted separately
 ~/Projects/.snapshots | Projects will require its own subvolume dedicated to snapshots
 
-Create _UserName_ home directory and set the correct permissions and ownership. Make sure to change _UserName_ to the correct user name.\
+Create _UserName_ home directory and set the correct permissions and ownership. Make sure to change _**UserName**_ to the correct user name.\
 **`$ cd /home`**\
 **`$ sudo btrfs subvolume create UserName`**\
 **`$ sudo chown UserName:UserName UserName`**\
@@ -697,7 +683,7 @@ As per the author, this method tries to preserve both suckless philosophy and Ar
 [Installing DWM on Arch Linux the proper Arch Way](https://youtu.be/-Hw9WLztuqM)\
 [Arch Linux: Customizing and "patching" DWM through PKGBUILD](https://youtu.be/WOACiOXEuaI)
 
-Perform initial git configuration. Make sure to use a correct _User Name_, _username_ and _domain.com_.\
+Perform initial git configuration. Make sure to use a correct _**User Name**_, _**username**_ and _**domain.com**_.\
 **`$ git config --global user.email "username@domain.com"`**\
 **`$ git config --global user.name "User Name"`**
 
