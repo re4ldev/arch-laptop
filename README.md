@@ -820,6 +820,10 @@ Configure DWM.\
 Once the changes in config.h are done, rebuild the package.\
 **`$ makepkg -sifc`**
 
+If the changes are correct and approved, git commit.\
+**`$ git add .`**\
+**`$ git commit -m "changes description"`**
+
 Go to user home directory and create .xinitrc file.\
 **`$ cd`**\
 **`$ cp /etc/X11/xinit/xinitrc ./.xinitrc`**
