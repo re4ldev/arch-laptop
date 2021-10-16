@@ -802,6 +802,10 @@ Configure ST.\
 Once the changes in config.h are done, rebuild the package.\
 **`$ makepkg -sifc`**
 
+If the changes are correct and approved, git commit.\
+**`$ git add .`**\
+**`$ git commit -m "changes description"`**
+
 Install DWM and the missing dependencies.\
 **`$ cd ../dwm`**\
 **`$ makepkg -sifc`**
