@@ -2,7 +2,7 @@ IMPORTANT: This **Guide** is still under development.
 
 # 0. Introduction #
 
-In this repository I attempt to create a complete **Guide** for [Arch Linux](https://archlinux.org/) operating system deployment on a mobile personal computer aka laptop. The solution should satisfy the list of requirements collected in section [I. Requirements](#i-requirements), following a number of assumptions listed in section [II. Assumptions](#ii-assumptions).
+This repository is an attempt to create a complete **Guide** for [Arch Linux](https://archlinux.org/) operating system deployment on a mobile personal computer aka laptop. The solution should satisfy the list of requirements collected in section [I. Requirements](#i-requirements), following a number of assumptions listed in section [II. Assumptions](#ii-assumptions).
 
 I am Linux enthusiast with no system administration background. This **Guide** was put together by myself following a number of documents, guides and tutorials available online which I list below in the section [A. Sources](#a-sources). Hopefully this is a living document, updated frequently, to catch up with the latest developments.
 
@@ -33,7 +33,7 @@ id | Requirement | Rationale | Solution
 2 | Battery saving | Mobile device should work without grid connection for longer periods of time. | TLP and hibernation to disk on lid close or button press
 3 | Wireless connectivity | Connection to LAN or WAN should be supported without wire connectivity in case only wireless access points are available in the environment. | Network Manager
 4 | Snapshot system | To reduce the risk of failure the snapshot system must be available. Atomic snapshots should be take prior to system upgrades or on-demand. | BTRFS file system and Snapper
-5 | Periodic backup to NAS | When connected to home LAN full system/data backup to NAS should be available | !!! TBD !!!
+5 | Periodic backup to NAS | When connected to home LAN full system/data backup to NAS should be available | rsync
 6 | Graphical environment | Graphical environment must be available to support graphical content (ex. X window applications, Internet browsing) | Suckless DWM
 7 | Minimal installation | The solution should provide only the bare minimum number of packages to support required functionalites. | Arch Linux OS
 8 | Rolling release Linux distro | The latest available software versions should be applied as soon as possible to keep up with the latest developments and security patches. | Arch Linux OS
@@ -89,7 +89,7 @@ Execute the gpg command to verify .iso file agianst .iso.sig. Both files must be
 ## 2. Prepare an installation medium ##
 **IMPORTANT**: Make sure you are applying the changes to the USB drive. After this step the data will be permanently erased from the device on which you apply the commands.
 
-Find out the name of the USB drive device.\
+Find out the name of the USB drive device. In this example, the USB drive is the _**sda**_ device. \
 **`$ lsblk -o +VENDOR,MODEL`**
 >`NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT            VENDOR   MODEL`\
 >`sda           8:0    1 14.5G  0 disk                       SanDisk  Ultra`\
@@ -99,14 +99,14 @@ Find out the name of the USB drive device.\
 >`├─sdb1      179:6    0   66M  0 part /boot`\
 >`└─sdb2      179:7    0 57.8G  0 part /`
 
-In the above example, the USB drive is the _**sda**_ device. Make sure the device is not mounted.\
-**`$ umount /dev/sda1`**
+Make sure the device is not mounted. Make sure to replace _**sdXY**_ with the corresponding partition name.\
+**`$ umount /dev/sdXY`**
 
-In case the device is not empty, wipe out the device prior to .iso copy.\
-**`# wipefs --all /dev/sda`**
+In case the device is not empty, wipe out the device prior to .iso copy. Make sure to replace _**sdX**_ with the corresponding device name.\
+**`# wipefs --all /dev/sdX`**
 
-Copy Arch Linux install image to USB drive.\
-**`# dd if=archlinux-2021.10.01-x86_64.iso of=/dev/sda bs=4M conv=fsync oflag=direct status=progress`**
+Copy Arch Linux install image to USB drive. Make sure to replace _**sdX**_ with the corresponding device name.\
+**`# dd if=archlinux-2021.10.01-x86_64.iso of=/dev/sdX bs=4M conv=fsync oflag=direct status=progress`**
 
 ## 3. Boot the live environment, and configure console keymap and font ##
 Boot laptop with the USB drive prepared in the previous step. Arch Linux installation images do not support Secure Boot. If you are having trouble booting from the USB, please, consult [Arch Linux installation guide](https://wiki.archlinux.org/title/Installation_guide) for more details.
@@ -114,14 +114,14 @@ Boot laptop with the USB drive prepared in the previous step. Arch Linux install
 By default console keymap is US. List the directory with available keyboard layouts.\
 **`# ls /usr/share/kbd/keymaps/**/*.map.gz`**
 
-To modify the layout, append a corresponding file name without extension (.map.gz) to loadkeys. For example, for "Polish programmers" layout.\
-**`# loadkeys pl`**
+To modify the layout, append a corresponding file name without extension (.map.gz) to loadkeys. Make sure to replace _**layout_name**_ with your preferred layout.\
+**`# loadkeys layout_name`**
 
 List the directory with available console fonts.\
 **`# ls /usr/share/kbd/consolefonts/**/*.psfu.gz`**
 
-To modify the console font to support Polish special characters, append a font name without extension (.psfu.gz) to setfont.\
-**`# setfont lat2-16`**
+To modify the console font to support special characters, append a font name without extension (.psfu.gz) to setfont. Make sure to replace _**font_name**_ with your preferred font.\
+**`# setfont font_name`**
 
 ## 4. Live environment network access setup ##
 Since network connectivity is a critical component for successful Arch Linux installation we will describe four different network access scenarios:
