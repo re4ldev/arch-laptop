@@ -251,7 +251,10 @@ Make sure the drive security is not frozen.\
 >`frozen`
 
 If it says _frozen_ it is not possible to proceed with the next step. To unfreeze the drive you may try to suspend the system. Upon waking up, it is likely that the freeze will be lifted. If this trick does not work for you, please, follow up on Arch Linux wiki [SSD/Memory cell cleaning](https://wiki.archlinux.org/title/Solid_state_drive/Memory_cell_clearing).\
-**`# systemctl suspend`**\
+**`# systemctl suspend`**
+
+If you are performing the installation via ssh, you have now lost your connection. Resume the device from suspension and reconnect via ssh to proceed.
+
 **`# hdparm -I /dev/sda | grep frozen`**
 >`not frozen`
 
