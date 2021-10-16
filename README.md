@@ -842,12 +842,12 @@ However, we will use [Ly](https://github.com/nullgemm/ly) display manager to sta
 
 Clone Ly AUR git repository.\
 **`$ cd ~/bin`**\
-**`$ git clone https://aur.archlinux.org/ly`**
+**`$ git clone https://aur.archlinux.org/ly`**\
+**`$ cd ly`**
 
 Install the package, and enable the service to start on boot.\
 **`$ makepkg -sifc`**\
-**`$ sudo systemctl enable ly`**\
-**`$ cd ly`**
+**`$ sudo systemctl enable ly`**
 
 After reboot you will be greeted by Ly login screen.
 
