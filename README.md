@@ -838,7 +838,7 @@ Remove the last 5 lines and add the following lines instead.
 You can now start Graphical Environment.\
 **`$ startx`**
 
-However, we will use [Ly](https://github.com/nullgemm/ly) display manager to start graphical environment.\
+However, we will use [Ly](https://github.com/nullgemm/ly) display manager to start graphical environment.
 
 Clone Ly AUR git repository.\
 **`$ cd ~/bin`**\
