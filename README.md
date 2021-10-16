@@ -786,7 +786,7 @@ Update the last line to match DWM requirements.\
 
 Commit the changes to dwm.\
 **`$ git add .`**\
-**`$ git commit -m "modify PKGBUILD (delete config.h, add _sourcedir and update prepare() function), and add .gitignore file"`**
+**`$ git commit -m "modify PKGBUILD (delete config.h, add _sourcedir and update prepare() function), add .gitignore file, and remove config.h file"`**
 
 Install ST and the missing dependencies.\
 **`$ cd ../st`**\
