@@ -526,7 +526,7 @@ Edit locale.gen and uncomment the locales required for the system.\
 Generate the locales.\
 **`# locale-gen`**
 
-Create locale.conf and set the LANG variable accordingly.\
+Create locale.conf and set the LANG variable accordingly. Instead of _**en_US.UTF-8**_ make sure to use a correct entry from /etc/locale.gen file.\
 **`# echo "LANG=en_US.UTF-8" > /etc/locale.conf`**
 
 Setup the hostname. Make sure to replace _**myHostname**_ with the name of your choice.\
