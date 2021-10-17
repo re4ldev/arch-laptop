@@ -332,7 +332,7 @@ Setup encryption on the SYSTEM partition and open the encrypted partition to wor
 
 Format SYSTEM and EFI partition with its respective file systems.
 
-EFI partition requires FAT32 file system. Make sure to replace _**sdXY**_ with the corresponding partition name specific to your deployment.\
+ESP partition requires FAT32 file system. Make sure to replace _**sdXY**_ with the corresponding partition name specific to your deployment.\
 **`# mkfs.fat -F32 /dev/sdXY`**
 
 SYSTEM partition will use btrfs file system.\
@@ -397,7 +397,7 @@ Mount the remaining subvolumes.\
 Disable Copy-on-write mechanism on /var directory.\
 **`# chattr +C /mnt/var`**
 
-Mount the boot partition. Make sure to replace _**sdXY**_ with the corresponding partition name specific to your deployment.\
+Mount ESP partition. Make sure to replace _**sdXY**_ with the corresponding partition name specific to your deployment.\
 **`# mount /dev/sdXY /mnt/boot`**
 
 ## 12. Create a swap area: swapfile ##
@@ -617,8 +617,8 @@ Previously we have made a note of /dev/mapper/cryptroot UUID which is d72f6385-b
 Update GRUB configuration to make sure we have access to encrypted SYSTEM partition and the resume from hibernation details.\
 **`# vim /etc/default/grub`**
 
-Update GRUB_CMDLINE_LINUX_DEFAULT. Make sure to replace _**sdXY**_ with the corresponding partition name specific to your deployment.\
->`GRUB_CMDLINE_LINUX_DEFAULT="cryptdevice=/dev/sda3:cryptroot root=/dev/mapper/cryptroot rootflags=subvol=@ resume=UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 resume_offset=140544 loglevel=3 quiet"`
+Update GRUB_CMDLINE_LINUX_DEFAULT. Make sure to replace _**sdXY**_ with the corresponding SYSTEM partition name specific to your deployment.\
+>`GRUB_CMDLINE_LINUX_DEFAULT="cryptdevice=/dev/sdXY:cryptroot root=/dev/mapper/cryptroot rootflags=subvol=@ resume=UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 resume_offset=140544 loglevel=3 quiet"`
 
 Configure GRUB.\
 **`# grub-mkconfig -o /boot/grub/grub.cfg`**
