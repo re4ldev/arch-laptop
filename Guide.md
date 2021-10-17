@@ -606,8 +606,7 @@ To compute the resume_offset value, divide the physical offset by the pagesize.\
 In this example, 575668224 / 4096 = _**140544**_
 
 We will not need the tool anymore so we remove it.\
-**`# cd`**\
-**`# rm -r bin`**
+**`# rm -r ~/bin`**
 
 Previously we have made a note of /dev/mapper/cryptroot UUID which is d72f6385-bb67-4ce2-810c-8eb8935402a2.
 
