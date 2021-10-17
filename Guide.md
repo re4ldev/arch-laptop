@@ -837,6 +837,19 @@ Install the package, and enable the service to start on boot.\
 After reboot you will be greeted by Ly login screen.
 
 ## 22. Configure snapper ##
+Snapper will allow to make scheduled or on-demand snapshots. We make snapshots of several parts of the system separately, to make sure the rollback of one of the parts will not destroy any other.
+
+We will use the following snapshot schedule for the initial installation.
+directory | period
+--------- | ------
+@ | automaticaly right before system update
+@home | once a day
+@root | once a day
+@usr_local | once a day
+@home/UserName | once a day
+@home/UserName/bin | once a day
+@home/UserName/Projects | once a day
+
 ## 23. Configure backup to NAS and perform initial full backup ##
 
 
