@@ -842,7 +842,7 @@ Snapper will allow to make scheduled or on-demand snapshots. We make snapshots o
 We will use the following snapshot schedule for the initial installation.
 directory | period
 --------- | ------
-@ | automaticaly right before system update
+@ | automatically right before system update
 @home | once a day
 @root | once a day
 @usr_local | once a day
