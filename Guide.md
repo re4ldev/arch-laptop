@@ -625,6 +625,9 @@ Finalize the installation and boot into a newly deployed Arch Linux system.
 Exit chroot environment.\
 **`# exit`**
 
+Turn off swap.\
+**`# swapoff /mnt/swapspace/swapfile`**
+
 Unmount all the partitions from /mnt\
 **`# umount -R /mnt`**
 
