@@ -452,7 +452,7 @@ Identify the video card.\
 
 Depending on your system hardware include the video drivers packages in the following _pacstrap_ command. In this example we will use _xf86-video-intel_ package.
 
-This is a complete list of packages that will be installed to satisfy the system requirements from section [I. Requirements](#i-requirements).
+This is a complete list of packages that will be installed to satisfy the system requirements from section [I.Requirements](#i-requirements).
  
 categoty | official | AUR 
 -------- | -------- | --------
