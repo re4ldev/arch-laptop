@@ -2,7 +2,7 @@ IMPORTANT: This **Guide** is still under development.
 
 # 0. Introduction #
 
-This repository is an attempt to create a complete **Guide** for [Arch Linux](https://archlinux.org/) operating system deployment on a mobile personal computer aka laptop. The solution should satisfy the list of requirements collected in section [I.Requirements](#i-requirements), following a number of assumptions listed in section [II.Assumptions](#ii-assumptions).
+This repository is an attempt to create a complete **Guide** for [Arch Linux](https://archlinux.org/) operating system deployment on a mobile personal computer a.k.a laptop. The solution should satisfy the list of requirements collected in section [I.Requirements](#i-requirements), following a number of assumptions listed in section [II.Assumptions](#ii-assumptions).
 
 I am Linux enthusiast with no system administration background. This **Guide** was put together by myself following a number of documents, guides and tutorials available online which I list below in the section [A.Sources](#a-sources). Hopefully this is a living document, updated frequently, to catch up with the latest developments.
 
@@ -42,7 +42,7 @@ id | Requirement | Rationale | Solution
 # II. Assumptions #
 
 1. To create an installation medium we will use Linux distribution with the following tools: GnuPG, wget, dd. For instructions to create installation medium from Windows or MacOS, please refer to Arch Linux installation guide.
-2. USB flash drive aka pendrive is used as installation medium.
+2. USB flash drive a.k.a pendrive is used as installation medium.
 3. We are using the following Arch Linux image file: _**archlinux-2021.10.01-x86_64.iso**_ and corresponding _**archlinux-2021.10.01-x86_64.iso.sig**_
 4. Arch Linux installation process requires Internet access. There is a LAN network with Internet access available.
 5. Arch Linux live environment will be accessed via SSH to perform the installation procedure.
@@ -70,8 +70,8 @@ id | Requirement | Rationale | Solution
 18. [Install and configure the boot loader.](#18-install-and-configure-the-boot-loader)
 19. [Boot into a newly installed system.](#19-boot-into-a-newly-installed-system)
 20. [Setup User's home directory subvolume layout.](#20-setup-users-home-directory-subvolume-layout)
-21. [Install Graphical Environment.](#21-install-graphical-environment)
-22. [Configure snapper.](#22-configure-snapper)
+21. [Configure snapshots system for periodic and ad-hoc snapshots.](#21-configure-snapshots-system-for-periodic-and-ad-hoc-snapshots)
+22. [Install Graphical Environment.](#22-install-graphical-environment)
 23. [Configure backup to NAS and perform initial full backup.](#23-configure-backup-to-nas-and-perform-initial-full-backup)
 
 ## 1. Acquire and verify an installation image ##
@@ -223,14 +223,12 @@ We need verify that we are actually booted in UEFI mode. If the following comman
 
 This step is optional but recommended. It ensures that random data is written to the disk prior to the encryption making it almost impossible to distinguish the free space from the occupied one.
 
-Verify the disk device name on which we will install Arch Linux.\
+Verify the disk device name on which we will install Arch Linux. In this example, we will use _**sda**_ device.\
 **`# lsblk -o +VENDOR,MODEL`**
 >`NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS      VENDOR   MODEL`\
 >`loop0 7:0 0 662.1M 1 loop /run/archiso/airootfs`\
 >`sda 8:0 0 20G 0 disk                       	ATA      VBOX HARDDISK`\
 >`sr0 11:0 1 831.3M 0 rom /run/archiso/bootmnt  VBOX     VBOX CD-ROM`
-
-In the above example the hard drive we will use is _**sda**_.
  
 Check if the drive security is frozen. Make sure to replace _**sdX**_ with the corresponding device name specific to your deployment.\
 **`hdparm -I /dev/sdX | grep frozen`**
@@ -294,7 +292,7 @@ BIOS | boot_grub | 1MiB | N/A
 ESP | esp | 550MiB | fat32
 SYSTEM | linux | ~ | btrfs
 
-In case you skipped the previous step, where we wiped out the disk, you need to verify the disk device name on which we will install Arch Linux. In this example we will use _**sda**_.\
+In case you skipped the previous step, where we wiped out the disk, you need to verify the disk device name on which we will install Arch Linux. In this example, we will use _**sda**_ device.\
 **`# lsblk -o +VENDOR,MODEL`**
 >`NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS      VENDOR   MODEL`\
 >`loop0 7:0 0 662.1M 1 loop /run/archiso/airootfs`\
@@ -315,34 +313,34 @@ Make partition for the system. Make sure to replace _**sdX**_ with the correspon
 **`# parted -s /dev/sdX mkpart SYSTEM btrfs 551MiB 100%`**
 
 Verify the partitions are correcrtly created. In this example drive device is _**sda**_.\
-**`# lsblk`**
->`loop0 7:0 0 662.1M 1 loop /run/archiso/airootfs`\
->`sda 8:0 0 20G 0 disk`\
->`└─sda1 8:1 0 1007K 0 part`\
->`└─sda2 8:2 0 550M 0 part`\
->`└─sda3 8:3 0 19.5G 0 part`\
->`sr0 11:0 1 831.3M 0 rom /run/archiso/bootmnt`
+**`# lsblk -o +PARTLABEL`**
+>`NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS           PARTLABEL`\
+>`loop0    7:0    0 673.1M  1 loop /run/archiso/airootfs`\
+>`sda      8:0    0    20G  0 disk`\
+>`├─sda1   8:1    0  1007K  0 part                       BIOS`\
+>`├─sda2   8:2    0   550M  0 part                       ESP`\
+>`└─sda3   8:3    0  19.5G  0 part                       SYSTEM`\
+>`sr0     11:0    1 846.3M  0 rom  /run/archiso/bootmnt`
 
 ## 10. Setup an encryption and format the partitions ##
-We will encrypt the system partition with LUKS.
+We will encrypt SYSTEM partition with LUKS.
 
-Setup encryption on the SYSTEM partition and open the encrypted partition to work with. Make sure to replace _**sdXY**_ with the corresponding partition name specific to your deployment.\
+Setup encryption on the SYSTEM partition and open the encrypted partition to work with. Make sure to replace _**sdXY**_ with the corresponding SYSTEM partition name specific to your deployment.\
 **`# cryptsetup luksFormat /dev/sdXY`**\
 **`# cryptsetup luksOpen /dev/sdXY cryptroot`**
 
 Format SYSTEM and EFI partition with its respective file systems.
 
-ESP partition requires FAT32 file system. Make sure to replace _**sdXY**_ with the corresponding partition name specific to your deployment.\
+ESP partition requires FAT32 file system. Make sure to replace _**sdXY**_ with the corresponding ESP partition name specific to your deployment.\
 **`# mkfs.fat -F32 /dev/sdXY`**
 
 SYSTEM partition will use btrfs file system.\
 **`# mkfs.btrfs /dev/mapper/cryptroot`**
 
 ## 11. Create and mount btrfs subvolumes and non-btrfs partitions for the System. ##
-IMPORTANT: Make sure to not use Copy on Write mechanism on Virtual Machines virtual disks and images.\
-TODO: (revisit System and User directories/subvolumes to have CoW disabled, for example. virtual machine images).
+**IMPORTANT**: Make sure to not use Copy on Write mechanism on Virtual Machines virtual disks and images.\
 
-Subvolume flat layout is used for the SYSTEM installation.
+Subvolume flat layout is used for the SYSTEM installation. The following subvolumes will be created to avoid data loss on rollback. The following subvolume layout will also permit to use different mount options once the feature is available in btrfs. Currently (2021-10-23) specified mount options are applied per file system. 
 subvolume | directory | rationale
 --------- | --------- | ---------
 @ | / | root directory is its own subvolume
@@ -351,7 +349,7 @@ subvolume | directory | rationale
 @opt | /opt | third-party applications are usually installed here, it is excluded to avoid uninstalling these apps on rollbacks
 @srv | /srv | contains web and ftp servers, it is excluded to avoid data loss on rollbacks
 @tmp | /tmp | all directories containing temporary files and caches are excluded from snapshots
-@usr_local | /usr/local | used to manually install software, it is excluded to avoid uninstalling this softare on rollbacks
+@usr_local | /usr/local | used to manually install software, it is excluded to avoid uninstalling this software on rollbacks
 @var | /var | this directory contains many variable files, including logs, temporary caches, third party products in /var/opt, and is the default location for many virtual machine images and databases. Therefore this subvolume is created to exclude all of this variable data from snapshots and is created with Copy-On-Write disabled. 
 @swap | /swapspace | contains a swapfile which should be excluded from snapshots
 @snapshots | /.snapshots | snapshots subvolume, do not snapshot the snapshots :)
@@ -375,27 +373,29 @@ Create System subvolumes.\
 **`# umount /mnt`**
 
 Mount root subvolume.\
-IMPORTANT: Make sure to revisit mount options to fit your hardware.\
+**IMPORTANT**: Make sure to revisit mount options to fit your hardware.\
 **`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@ /dev/mapper/cryptroot /mnt`**
 
 Create the directories where the subvolumes will be mounted.\
 **`# mkdir /mnt/{boot,home,root,opt,srv,tmp,usr,var,swapspace,.snapshots}`**\
 **`# mkdir /mnt/usr/local`**
 
-Mount the remaining subvolumes.\
+Mount the remaining subvolumes. We specify different options to each subvolume, however for now (2021-10-23) btrfs does not support using different options on subvolume level. It means that the mount options specified below are going to be ignored and the mount options used to mount @ subvolume will apply.\
 **`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@home /dev/mapper/cryptroot /mnt/home`**\
 **`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@root /dev/mapper/cryptroot /mnt/root`**\
 **`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@opt /dev/mapper/cryptroot /mnt/opt`**\
 **`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@srv /dev/mapper/cryptroot /mnt/srv`**\
 **`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@tmp /dev/mapper/cryptroot /mnt/tmp`**\
 **`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@usr_local /dev/mapper/cryptroot /mnt/usr/local`**\
-**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@var /dev/mapper/cryptroot /mnt/var`**\
+**`# mount -o defaults,noatime,nodatacow,compress=zstd,space_cache=v1,ssd,subvol=@var /dev/mapper/cryptroot /mnt/var`**\
 **`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@snapshots /dev/mapper/cryptroot /mnt/.snapshots`**\
-**`# mount -o defaults,noatime,space_cache=v1,ssd,subvol=@swap /dev/mapper/cryptroot /mnt/swapspace`**\
+**`# mount -o defaults,noatime,nodatacow,space_cache=v1,ssd,subvol=@swap /dev/mapper/cryptroot /mnt/swapspace`**\
 **`# sync`**
 
-Disable Copy-on-write mechanism on /var directory.\
+Since the above mount options specified to @var subvolume will not be applied as mentioned above, we disable Copy-on-write mechanism on /var directory using file attributes.\
 **`# chattr +C /mnt/var`**
+
+TODO: (Revisit directories included in /var, and check if CoW can be disabled with more granularity instead of on the entire /var directory.)
 
 Mount ESP partition. Make sure to replace _**sdXY**_ with the corresponding partition name specific to your deployment.\
 **`# mount /dev/sdXY /mnt/boot`**
@@ -460,21 +460,21 @@ Base System | base base-devel linux linux-firmware |
 File System tools | dosfstools btrfs-progs ef2sprogs |
 CPU microcode | intel-ucode |
 Network | dhcpcd wpa_supplicant networkmanager | 
-Bootloader | grub efibootmgr | 
-Utils | vim git openssh parted wget |
+Bootloader | grub grub-btrfs efibootmgr | 
+Utils | vim git openssh parted wget snapper rsync |
 Documentation | man-db man-pages texinfo |
 Graphical environment | xorg-server xorg-xinit xorg-xsetroot ttf-dejavu |
 Video drivers | xf86-video-intel |
 Window Manager | | dwm
 
 Use _pacstrap_ to install Arch Linux on the hard drive.\
-**`# pacstrap /mnt base base-devel linux linux-firmware dosfstools btrfs-progs e2fsprogs intel-ucode dhcpcd wpa_supplicant networkmanager grub efibootmgr vim git openssh parted wget man-db man-pages texinfo xorg-server xorg-xinit xorg-xsetroot ttf-dejavu xf86-video-intel`**
+**`# pacstrap /mnt base base-devel linux linux-firmware dosfstools btrfs-progs e2fsprogs intel-ucode dhcpcd wpa_supplicant networkmanager grub grub-btrfs efibootmgr vim git openssh parted wget snapper rsync man-db man-pages texinfo xorg-server xorg-xinit xorg-xsetroot ttf-dejavu xf86-video-intel`**
 
 ## 15. Generate fstab ##
 Generate fstab file using UUIDs.\
 **`# genfstab -p -U /mnt >> /mnt/etc/fstab`**
 
-Verify the correct entries in fstab file. Make sure swapfile and swapspace are mounted on boot as well and the compression is not enabled on /swapspace. Example of fstab file is in the below output.\
+Verify the correct entries in fstab file. Since we have specified mount points in step 11 they should now be included in the fstab file. However, the mount options need to be revisited since btrfs is not applying mount options on subvolume level. Example of fstab file is in the below output.\
 **`# vim /mnt/etc/fstab`**
 >`# Static information about the filesystems.`\
 >`# See fstab(5) for details.`\
@@ -495,9 +495,9 @@ Verify the correct entries in fstab file. Make sure swapfile and swapspace are m
 >`# /dev/mapper/cryptroot`\
 >`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /usr/local btrfs rw,noatime,compress=zstd:3,ssd,space_cache,subvolid=263,subvol=/@usr_local 0 0`\
 >`# /dev/mapper/cryptroot`\
->`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /var btrfs rw,noatime,nodatacow,ssd,space_cache,subvolid=264,subvol=/@var 0 0`\
+>`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /var btrfs rw,noatime,nodatacow,compress=zstd:3,ssd,space_cache,subvolid=264,subvol=/@var 0 0`\
 >`# /dev/mapper/cryptroot`\
->`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /.snapshots btrfs rw,noatime,ssd,space_cache,subvolid=266,subvol=/@snapshots 0 0`\
+>`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /.snapshots btrfs rw,noatime,compress=zstd:3,ssd,space_cache,subvolid=266,subvol=/@snapshots 0 0`\
 >`# /dev/mapper/cryptroot`\
 >`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /swapspace btrfs rw,noatime,ssd,space_cache,subvolid=265,subvol=/@swap 0 0`\
 >`/swapspace/swapfile none swap defaults 0 0`
@@ -606,7 +606,8 @@ To compute the resume_offset value, divide the physical offset by the pagesize.\
 In this example, 575668224 / 4096 = _**140544**_
 
 We will not need the tool anymore so we remove it.\
-**`# rm -r ~/bin`**
+**`# rm -r ~/bin`**\
+**`# cd`**
 
 Previously we have made a note of /dev/mapper/cryptroot UUID which is d72f6385-bb67-4ce2-810c-8eb8935402a2.
 
@@ -634,8 +635,16 @@ Unmount all the partitions from /mnt\
 Shutdown to safely remove the installation media (USD flash memory), and start the system again.\
 **`# shutdown now`**
 
+Remove the USB device with installation image and turn on the laptop. You should be greeted with grub menu. Boot the Arch Linux installation. Enter encryption passphrase to open the encrypted SYSTEM partition. And finally login as regular _**UserName**_ created in step 16.
+
+You will probably get the below error message about missing /home/UserName directory. We will fix the issue in the next step.
+>` -- UserName: /home/UserName: change directory failed: No such file or directory`\
+>`Logging in with home = "/"`
+
 Wireless network connectivity needs to be configured on a first boot into new system. Make sure to replace _**your_wifi_password**_, and _**your_ssid**_ with the respective values specific to your deployment.\
 **`$ nmcli device wifi connect your_ssid password your_wifi_password`**
+
+Once network connectivity is established you may log in to the system via SSH to perform the remaining steps.
 
 ## 20. Setup User's home directory subvolume layout ##
 To take advantage of btrfs file system snapshot capabilities, we will create some subvolumes in users home directory.
@@ -648,16 +657,16 @@ subvolume | description
 ~/.cache | temporary local cache files should be excluded from snapshots
 ~/.local | user-specific data directories, executables and libraries
 ~/bin | user-specific binaries that should no be rolled back with the home directory, but should be snapshoted separately
-~/bin/.snapshots | bin subvolume requires its own subvolume dedicated to snapshots
+~/bin/.snapshots | bin subvolume requires its own subvolume dedicated to snapshots. This subvolume will be created by Snapper
 ~/vms | virtual machines directory, make sure to disable CoW
 ~/Downloads | should be excluded from snapshots
 ~/Projects | directory to store project related files, it should be snapshoted separately
-~/Projects/.snapshots | Projects will require its own subvolume dedicated to snapshots
+~/Projects/.snapshots | Projects will require its own subvolume dedicated to snapshots. This subvolume will be created by Snapper
 
 Create _UserName_ home directory and set the correct permissions and ownership. Make sure to change _**UserName**_ to the correct user name.\
 **`$ cd /home`**\
-**`$ sudo btrfs subvolume create UserName`**\
-**`$ sudo chown UserName:UserName UserName`**\
+**`# btrfs subvolume create UserName`**\
+**`# chown UserName:UserName UserName`**\
 **`$ chmod 700 UserName`**
 
 Create _UserName_ home directory subvolumes structure.\
@@ -665,20 +674,170 @@ Create _UserName_ home directory subvolumes structure.\
 **`$ btrfs subvolume create .cache`**\
 **`$ btrfs subvolume create .local`**\
 **`$ btrfs subvolume create bin`**\
-**`$ cd bin`**\
-**`$ btrfs subvolume create .snapshots`**\
-**`$ cd`**\
 **`$ btrfs subvolume create vms`**\
 **`$ chattr +C vms`**\
 **`$ btrfs subvolume create Downloads`**\
-**`$ btrfs subvolume create Projects`**\
-**`$ cd Projects`**\
-**`$ btrfs subvolume create .snapshots`**\
-**`$ cd`**
+**`$ btrfs subvolume create Projects`**
 
-## 21. Install Graphical Environment ##
+## 21. Configure snapshots system for periodic and ad-hoc snapshots ##
+Snapper will allow to make scheduled or on-demand snapshots. We make snapshots of several parts of the system separately, to make sure the rollback of one of the parts will not destroy any other. We make snapshots, or backup in case of /boot partition, prior to package manager action.
+
+TODO: Revisit the snapshot schedule.
+
+We will use the following snapshot schedule for the initial installation.
+directory | period
+--------- | ------
+/ | automatically, right before system update and on-demand
+/root | on-demand
+/usr/local | on-demand
+/home/UserName | on-demand
+/home/UserName/bin | on-demand
+/home/UserName/Projects | on-demand
+
+Create Snapper configuration for / directory.\
+**`# umount /.snapshots`**\
+**`# rm -rf /.snapshots`**\
+**`# snapper -c root create-config /`**\
+**`# btrfs subvolume delete /.snapshots`**\
+**`# mkdir /.snapshots`**\
+**`# mount -a`**\
+**`# chmod a+rx /.snapshots`**\
+**`# chown :UserName /.snapshots`**
+
+Modify / directory Snapper configuration. Allow _**UserName**_ to work with config. Make sure to replace _**UserName**_ with your user name. Configure cleanup to define how many snapshots will be kept before erasing the older snapshots.\
+**`# vim /etc/snapper/configs/root`**
+>`# users and groups allowed to work with config`\
+>`ALLOW_USERS="UserName"`\
+>` `\
+>`# limits for timeline cleanup`\
+>`TIMELINE_MIN_AGE="1800"`\
+>`TIMELINE_LIMIT_HOURLY="5"`\
+>`TIMELINE_LIMIT_DAILY="7"`\
+>`TIMELINE_LIMIT_WEEKLY="0"`\
+>`TIMELINE_LIMIT_MONTHLY="0"`\
+>`TIMELINE_LIMIT_YEARLY="0"`
+
+Create Snapper configuration for /root directory.\
+**`# snapper -c root_user create-config /root`**
+
+Modify /root directory Snapper configuration. Configure cleanup to define how many snapshots will be kept before erasing the older snapshots.\
+**`# vim /etc/snapper/configs/root_user`**
+>`# limits for timeline cleanup`\
+>`TIMELINE_MIN_AGE="1800"`\
+>`TIMELINE_LIMIT_HOURLY="5"`\
+>`TIMELINE_LIMIT_DAILY="7"`\
+>`TIMELINE_LIMIT_WEEKLY="0"`\
+>`TIMELINE_LIMIT_MONTHLY="0"`\
+>`TIMELINE_LIMIT_YEARLY="0"`
+
+Create Snapper configuration for /usr/local directory.\
+**`# snapper -c usr_local create-config /usr/local`**\
+**`# chmod a+rx /usr/local/.snapshots`**\
+**`# chown :UserName /usr/local/.snapshots`**
+
+Modify /usr/local directory Snapper configuration. Allow _**UserName**_ to work with config. Make sure to replace _**UserName**_ with your user name. Configure cleanup to define how many snapshots will be kept before erasing the older snapshots.\
+**`# vim /etc/snapper/configs/usr_local`**
+>`# users and groups allowed to work with config`\
+>`ALLOW_USERS="UserName"`\
+>` `\
+>`# limits for timeline cleanup`\
+>`TIMELINE_MIN_AGE="1800"`\
+>`TIMELINE_LIMIT_HOURLY="5"`\
+>`TIMELINE_LIMIT_DAILY="7"`\
+>`TIMELINE_LIMIT_WEEKLY="0"`\
+>`TIMELINE_LIMIT_MONTHLY="0"`\
+>`TIMELINE_LIMIT_YEARLY="0"`
+
+Create Snapper configuration for /home/UserName directory. Make sure to replace _**UserName**_ with your user name.\
+**`# snapper -c home_UserName create-config /home/UserName`**\
+**`# chmod a+rx /home/UserName/.snapshots`**\
+**`# chown :UserName /home/UserName/.snapshots`**
+
+Modify /home/UserName directory Snapper configuration. Allow _**UserName**_ to work with config. Make sure to replace _**UserName**_ with your user name. Configure cleanup to define how many snapshots will be kept before erasing the older snapshots.\
+**`# vim /etc/snapper/configs/home_UserName`**
+>`# users and groups allowed to work with config`\
+>`ALLOW_USERS="UserName"`\
+>` `\
+>`# limits for timeline cleanup`\
+>`TIMELINE_MIN_AGE="1800"`\
+>`TIMELINE_LIMIT_HOURLY="5"`\
+>`TIMELINE_LIMIT_DAILY="7"`\
+>`TIMELINE_LIMIT_WEEKLY="0"`\
+>`TIMELINE_LIMIT_MONTHLY="0"`\
+>`TIMELINE_LIMIT_YEARLY="0"`
+
+Create Snapper configuration for /home/UserName/bin directory. Make sure to replace _**UserName**_ with your user name.\
+**`# snapper -c home_UserName_bin create-config /home/UserName/bin`**\
+**`# chmod a+rx /home/UserName/bin/.snapshots`**\
+**`# chown :UserName /home/UserName/bin/.snapshots`**
+
+Modify /home/UserName/bin directory Snapper configuration. Allow _**UserName**_ to work with config. Make sure to replace _**UserName**_ with your user name. Configure cleanup to define how many snapshots will be kept before erasing the older snapshots.\
+**`# vim /etc/snapper/configs/home_UserName_bin`**
+>`# users and groups allowed to work with config`\
+>`ALLOW_USERS="UserName"`\
+>` `\
+>`# limits for timeline cleanup`\
+>`TIMELINE_MIN_AGE="1800"`\
+>`TIMELINE_LIMIT_HOURLY="5"`\
+>`TIMELINE_LIMIT_DAILY="7"`\
+>`TIMELINE_LIMIT_WEEKLY="0"`\
+>`TIMELINE_LIMIT_MONTHLY="0"`\
+>`TIMELINE_LIMIT_YEARLY="0"`
+
+Create Snapper configuration for /home/UserName/Projects directory. Make sure to replace _**UserName**_ with your user name.\
+**`# snapper -c home_UserName_Projects create-config /home/UserName/Projects`**\
+**`# chmod a+rx /home/UserName/Projects/.snapshots`**\
+**`# chown :UserName /home/UserName/Projects/.snapshots`**
+
+Modify /home/UserName/bin directory Snapper configuration. Allow _**UserName**_ to work with config. Make sure to replace _**UserName**_ with your user name. Configure cleanup to define how many snapshots will be kept before erasing the older snapshots.\
+**`# vim /etc/snapper/configs/home_UserName_Projects`**
+>`# users and groups allowed to work with config`\
+>`ALLOW_USERS="UserName"`\
+>` `\
+>`# limits for timeline cleanup`\
+>`TIMELINE_MIN_AGE="1800"`\
+>`TIMELINE_LIMIT_HOURLY="5"`\
+>`TIMELINE_LIMIT_DAILY="7"`\
+>`TIMELINE_LIMIT_WEEKLY="0"`\
+>`TIMELINE_LIMIT_MONTHLY="0"`\
+>`TIMELINE_LIMIT_YEARLY="0"`
+
+Once all the configurations are done, enable the services for Snapper.\
+**`# systemctl start snapper-timeline.timer`**\
+**`# systemctl enable snapper-timeline.timer`**\
+**`# systemctl start snapper-cleanup.timer`**\
+**`# systemctl enable snapper-cleanup.timer`**
+
+Enable grub-btrfs service.\
+**`# systemctl start grub-btrfs.path`**\
+**`# systemctl enable grub-btrfs.path`**
+
+Install snap-pac-grub - Pacman hook to update GRUB entries for grub-btrfs after snap-pac made snapshots.\
+**`$ cd ~/bin`**\
+**`$ git clone https://aur.archlinux.org/snap-pac-grub.git`**\
+**`$ cd snap-pac-grub`**\
+**`$ gpg --recv-keys EB4F9E5A60D32232BB52150C12C87A28FEAC6B20`**\
+**`$ makepkg -sifc`**
+
+Create a hook to enable backup of the /boot partition before the kernel upgrade.\
+**`# mkdir /etc/pacman.d/hooks`**\
+**`# vim /etc/pacman.d/hooks/50-bootbackup.hook`**
+>`[Trigger]`\
+>`Operation = Upgrade`\
+>`Operation = Install`\
+>`Operation = Remove`\
+>`Type = Path`\
+>`Target = boot/*`\
+>` `\
+>`[Action]`\
+>`Depends = rsync`\
+>`Description = Backing up /boot...`\
+>`When = PreTransaction`\
+>`Exec = /usr/bin/rsync -a --delete /boot/.bootbackup`
+
+## 22. Install Graphical Environment ##
 The following steps are coming from the procedure published by [Nice Micro](https://www.youtube.com/c/NiceMicroLinux) on his [Youtube channel](https://www.youtube.com/c/NiceMicroLinux) as part of ["Understanding the Arch Linux installation procedure"](https://www.youtube.com/watch?v=wZr9WTfFed0&list=PL2t9VWDusOo-0jF18YvEVhwpxTXlXPunG) series.
-As per the author, this method tries to preserve both suckless philosophy and Arch Linux best practices. To fully understand the process, I encourage you to watch both videos published by Nice Micro:\
+As per the author, this method tries to preserve both, suckless philosophy and Arch Linux best practices. To fully understand the process, I encourage you to watch both videos published by Nice Micro:\
 [Installing DWM on Arch Linux the proper Arch Way](https://youtu.be/-Hw9WLztuqM)\
 [Arch Linux: Customizing and "patching" DWM through PKGBUILD](https://youtu.be/WOACiOXEuaI)
 
@@ -787,7 +946,7 @@ Configure ST.\
 Once the changes in config.h are done, rebuild the package.\
 **`$ makepkg -sifc`**
 
-If the changes are correct and approved, git commit.\
+If the changes are correct and approved, git commit. Make sure to replace _**changes_description**_ with the description of actual changes.\
 **`$ git add .`**\
 **`$ git commit -m "changes description"`**
 
@@ -805,7 +964,7 @@ Configure DWM.\
 Once the changes in config.h are done, rebuild the package.\
 **`$ makepkg -sifc`**
 
-If the changes are correct and approved, git commit.\
+If the changes are correct and approved, git commit. Make sure to replace _**changes_description**_ with the description of actual changes.\
 **`$ git add .`**\
 **`$ git commit -m "changes description"`**
 
@@ -832,26 +991,11 @@ Clone Ly AUR git repository.\
 
 Install the package, and enable the service to start on boot.\
 **`$ makepkg -sifc`**\
-**`$ sudo systemctl enable ly`**
+**`# systemctl enable ly`**
 
 After reboot you will be greeted by Ly login screen.
 
-## 22. Configure snapper ##
-Snapper will allow to make scheduled or on-demand snapshots. We make snapshots of several parts of the system separately, to make sure the rollback of one of the parts will not destroy any other.
-
-We will use the following snapshot schedule for the initial installation.
-subvolume | period
---------- | ------
-@ | automatically right before system update
-@home | once a day
-@root | once a day
-@usr_local | once a day
-@home/UserName | once a day
-@home/UserName/bin | once a day
-@home/UserName/Projects | once a day
-
 ## 23. Configure backup to NAS and perform initial full backup ##
-
 
 \
 \
@@ -859,4 +1003,4 @@ subvolume | period
 \
 \
 TODO: ( Test on hardware, for now the process is only tested on virtual machine )\
-TODO: ( Add steps 22 - 23 )
+TODO: ( Add step 23 )
