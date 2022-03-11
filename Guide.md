@@ -31,8 +31,8 @@ id | Requirement | Rationale | Solution
 -- | ----------- | --------- | --------
 1 | Data-at-rest encryption | If the device is lost, the data and swap area can not be easily accessible. | LUKS encryption for data partition and swapfile on the encrypted data partition
 2 | Battery saving | Mobile device should work without grid connection for longer periods of time. | TLP and hibernation to disk on lid close or button press
-3 | Wireless connectivity | Connection to LAN or WAN should be supported without wire connectivity in case only wireless access points are available in the environment. | Network Manager
-4 | Snapshot system | To reduce the risk of failure the snapshot system must be available. Atomic snapshots should be take prior to system upgrades or on-demand. | BTRFS file system and Snapper
+3 | Wireless connectivity | Connection to LAN or WAN should be supported without wired connectivity in case only wireless access points are available in the environment. | Network Manager
+4 | Snapshot system | To reduce the risk of failure the snapshot system must be available. Atomic snapshots should be taken prior to system upgrades or on-demand. | BTRFS file system and Snapper
 5 | Periodic backup to NAS | When connected to home LAN full system/data backup to NAS should be available | rsync
 6 | Graphical environment | Graphical environment must be available to support graphical content (ex. X window applications, Internet browsing) | Suckless DWM
 7 | Minimal installation | The solution should provide only the bare minimum number of packages to support required functionalites. | Arch Linux OS
