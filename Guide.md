@@ -355,7 +355,7 @@ subvolume | directory | rationale
 @snapshots | /.snapshots | snapshots subvolume, do not snapshot the snapshots :)
 
 Mount the cryptroot mapper to /mnt.\
-**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd /dev/mapper/cryptroot /mnt`**
+**`# mount -o defaults,noatime,compress=zstd,space_cache=v2,ssd /dev/mapper/cryptroot /mnt`**
 
 Create System subvolumes.\
 **`# cd /mnt`**\
@@ -374,22 +374,22 @@ Create System subvolumes.\
 
 Mount root subvolume.\
 **IMPORTANT**: Make sure to revisit mount options to fit your hardware.\
-**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@ /dev/mapper/cryptroot /mnt`**
+**`# mount -o defaults,noatime,compress=zstd,space_cache=v2,ssd,subvol=@ /dev/mapper/cryptroot /mnt`**
 
 Create the directories where the subvolumes will be mounted.\
 **`# mkdir /mnt/{boot,home,root,opt,srv,tmp,usr,var,swapspace,.snapshots}`**\
 **`# mkdir /mnt/usr/local`**
 
 Mount the remaining subvolumes. We specify different options to each subvolume, however for now (2021-10-23) btrfs does not support using different options on subvolume level. It means that the mount options specified below are going to be ignored and the mount options used to mount @ subvolume will apply.\
-**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@home /dev/mapper/cryptroot /mnt/home`**\
-**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@root /dev/mapper/cryptroot /mnt/root`**\
-**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@opt /dev/mapper/cryptroot /mnt/opt`**\
-**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@srv /dev/mapper/cryptroot /mnt/srv`**\
-**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@tmp /dev/mapper/cryptroot /mnt/tmp`**\
-**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@usr_local /dev/mapper/cryptroot /mnt/usr/local`**\
-**`# mount -o defaults,noatime,nodatacow,compress=zstd,space_cache=v1,ssd,subvol=@var /dev/mapper/cryptroot /mnt/var`**\
-**`# mount -o defaults,noatime,compress=zstd,space_cache=v1,ssd,subvol=@snapshots /dev/mapper/cryptroot /mnt/.snapshots`**\
-**`# mount -o defaults,noatime,nodatacow,space_cache=v1,ssd,subvol=@swap /dev/mapper/cryptroot /mnt/swapspace`**\
+**`# mount -o defaults,noatime,compress=zstd,space_cache=v2,ssd,subvol=@home /dev/mapper/cryptroot /mnt/home`**\
+**`# mount -o defaults,noatime,compress=zstd,space_cache=v2,ssd,subvol=@root /dev/mapper/cryptroot /mnt/root`**\
+**`# mount -o defaults,noatime,compress=zstd,space_cache=v2,ssd,subvol=@opt /dev/mapper/cryptroot /mnt/opt`**\
+**`# mount -o defaults,noatime,compress=zstd,space_cache=v2,ssd,subvol=@srv /dev/mapper/cryptroot /mnt/srv`**\
+**`# mount -o defaults,noatime,compress=zstd,space_cache=v2,ssd,subvol=@tmp /dev/mapper/cryptroot /mnt/tmp`**\
+**`# mount -o defaults,noatime,compress=zstd,space_cache=v2,ssd,subvol=@usr_local /dev/mapper/cryptroot /mnt/usr/local`**\
+**`# mount -o defaults,noatime,nodatacow,compress=zstd,space_cache=v2,ssd,subvol=@var /dev/mapper/cryptroot /mnt/var`**\
+**`# mount -o defaults,noatime,compress=zstd,space_cache=v2,ssd,subvol=@snapshots /dev/mapper/cryptroot /mnt/.snapshots`**\
+**`# mount -o defaults,noatime,nodatacow,space_cache=v2,ssd,subvol=@swap /dev/mapper/cryptroot /mnt/swapspace`**\
 **`# sync`**
 
 Since the above mount options specified to @var subvolume will not be applied as mentioned above, we disable Copy-on-write mechanism on /var directory using file attributes.\
