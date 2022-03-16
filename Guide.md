@@ -348,6 +348,9 @@ Mount ESP partition. Make sure to replace _**sdXY**_ with the corresponding part
 ## 12. Create a swap area: swapfile ##
 To be able to hibarnate the system on button press or lid close we will need to create a swap area. In the previous steps we have created @swap volume to make sure it is not part of the snapshots, and mounted it to the /swapspace directory.
 
+Create a directory for a swap file.\
+**`# mkdir /mnt/swapspace`**
+
 Create a zero length file.\
 **`# truncate -s 0 /mnt/swapspace/swapfile`**
 
