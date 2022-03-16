@@ -445,7 +445,7 @@ Enable NTP time syncronization.\
 **`# timedatectl set-ntp true`**
 
 Edit locale.gen and uncomment the locales required for the system.\
-**`# vim /etc/locale.gen`**
+**`# nvim /etc/locale.gen`**
 
 Generate the locales.\
 **`# locale-gen`**
@@ -457,7 +457,7 @@ Setup the hostname. Make sure to replace _**myHostname**_ with the name of your 
 **`# echo "myHostname" > /etc/hostname`**
 
 Add default entries to hosts file. Make sure to replace _**myHostname**_ with the name of your choice.\
-**`# vim /etc/hosts`**
+**`# nvim /etc/hosts`**
 >`127.0.0.1 localhost`\
 >`::1 localhost`\
 >`127.0.1.1 myHostname.localdomain myHostname`
@@ -469,7 +469,7 @@ Set the user password. Make sure th change _**UserName**_ to a correct user name
 **`# passwd UserName`**
 
 Grant your user admin privilages via sudo. Uncomment a respective line in sudoers file.\
-**`# EDITOR=vim visudo`**
+**`# EDITOR=nvim visudo`**
 >`## Same thing without a password`\
 >`%wheel ALL=(ALL) NOPASSWD: ALL`
 
@@ -483,10 +483,7 @@ Enable sshd service.\
 Since we have added to our system some features that are not default, we have to include additional hook and binary in our initramfs.
 
 Update mkinitcpio.conf\
-**`# vim /etc/mkinitcpio.conf`**
-
-Update BINARIES.
->`BINARIES=(btrfs)`
+**`# nvim /etc/mkinitcpio.conf`**
 
 Update HOOKS.
 >`HOOKS=(base udev autodetect modconf block encrypt filesystems keyboard resume fsck)`
