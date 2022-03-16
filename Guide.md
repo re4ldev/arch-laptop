@@ -524,7 +524,7 @@ Update GRUB configuration to make sure we have access to encrypted SYSTEM partit
 **`# nvim /etc/default/grub`**
 
 Update GRUB_CMDLINE_LINUX_DEFAULT. Make sure to replace _**sdXY**_ with the corresponding SYSTEM partition name specific to your deployment.\
->`GRUB_CMDLINE_LINUX_DEFAULT="cryptdevice=/dev/sdXY:cryptroot root=/dev/mapper/cryptroot rootflags=subvol=@ resume=UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 resume_offset=140544 loglevel=3 quiet"`
+>`GRUB_CMDLINE_LINUX_DEFAULT="cryptdevice=/dev/sdXY:cryptroot root=/dev/mapper/cryptroot rootflags=subvol=@ resume=UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 resume_offset=34816 loglevel=3 quiet"`
 
 Configure GRUB.\
 **`# grub-mkconfig -o /boot/grub/grub.cfg`**
