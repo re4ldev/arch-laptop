@@ -453,6 +453,11 @@ Generate the locales.\
 Create locale.conf and set the LANG variable accordingly. Instead of _**en_US.UTF-8**_ make sure to use a correct entry from /etc/locale.gen file.\
 **`# echo "LANG=en_US.UTF-8" > /etc/locale.conf`**
 
+Create vconsole.conf and set KEYMAP and FONT values.\
+**`# nvim /etc/vconsole.conf`**
+>`KEYMAP=pl`\
+>`FONT=Lat2-Terminus16`
+
 Setup the hostname. Make sure to replace _**myHostname**_ with the name of your choice.\
 **`# echo "myHostname" > /etc/hostname`**
 
