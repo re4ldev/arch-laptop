@@ -32,7 +32,7 @@ id | Requirement | Rationale | Solution
 1 | Data-at-rest encryption | If the device is lost, the data and swap area can not be easily accessible. | LUKS encryption for data partition and swapfile on the encrypted data partition
 2 | Battery saving | Mobile device should work without grid connection for longer periods of time. | TLP and hibernation to disk on lid close or button press
 3 | Wireless connectivity | Connection to LAN or WAN should be supported without wired connectivity in case only wireless access points are available in the environment. | Network Manager
-4 | Snapshot system | To reduce the risk of failure the snapshot system must be available. Atomic snapshots should be taken prior to system upgrades or on-demand. | BTRFS file system and Snapper
+4 | Snapshot system | To reduce the risk of failure the snapshot system must be available. Atomic snapshots should be taken prior to system upgrades or on-demand. | ~~BTRFS file system and Snapper~~
 5 | Periodic backup to NAS | When connected to home LAN full system/data backup to NAS should be available | rsync
 6 | Graphical environment | Graphical environment must be available to support graphical content (ex. X window applications, Internet browsing) | Suckless DWM
 7 | Minimal installation | The solution should provide only the bare minimum number of packages to support required functionalites. | Arch Linux OS
@@ -60,7 +60,7 @@ id | Requirement | Rationale | Solution
 8. [Wipe out the disk.](#8-wipe-out-the-disk)
 9. [Partition the disks.](#9-partition-the-disks)
 10. [Setup an encryption and format the partitions.](#10-setup-an-encryption-and-format-the-partitions)
-11. [Create and mount btrfs subvolumes and non-btrfs partitions for the System.](#11-create-and-mount-btrfs-subvolumes-and-non-btrfs-partitions-for-the-system)
+11. [Mount partitions for the System and Boot.](#11-mount-partitions-for-the-system-and-boot)
 12. [Create a swap area: swapfile.](#12-create-a-swap-area-swapfile)
 13. [Select the mirrors.](#13-update-the-mirror-list)
 14. [Install system packages with pacstrap.](#14-install-system-packages-with-pacstrap)
@@ -69,10 +69,8 @@ id | Requirement | Rationale | Solution
 17. [Update mkinitcpio configuration and generate initramfs.](#17-update-mkinitcpio-configuration-and-generate-initramfs)
 18. [Install and configure the boot loader.](#18-install-and-configure-the-boot-loader)
 19. [Boot into a newly installed system.](#19-boot-into-a-newly-installed-system)
-20. [Setup User's home directory subvolume layout.](#20-setup-users-home-directory-subvolume-layout)
-21. [Configure snapshots system for periodic and ad-hoc snapshots.](#21-configure-snapshots-system-for-periodic-and-ad-hoc-snapshots)
-22. [Install Graphical Environment.](#22-install-graphical-environment)
-23. [Configure backup to NAS and perform initial full backup.](#23-configure-backup-to-nas-and-perform-initial-full-backup)
+20. [Install Graphical Environment.](#20-install-graphical-environment)
+21. [Configure backup to NAS and perform initial full backup.](#21-configure-backup-to-nas-and-perform-initial-full-backup)
 
 ## 1. Acquire and verify an installation image ##
 The updated list of mirrors can be found on [Arch Linux download page](https://archlinux.org/download). Download Arch Linux image (.iso) from preferred mirror, and the corresponding PGP signature file (.iso.sig) from Arch Linux download page directly.\
@@ -337,65 +335,12 @@ ESP partition requires FAT32 file system. Make sure to replace _**sdXY**_ with t
 SYSTEM partition will use btrfs file system.\
 **`# mkfs.btrfs /dev/mapper/cryptroot`**
 
-## 11. Create and mount btrfs subvolumes and non-btrfs partitions for the System. ##
-**IMPORTANT**: Make sure to not use Copy on Write mechanism on Virtual Machines virtual disks and images.\
+## 11. Mount partitions for the System and Boot. ##
+Mount SYSTEM partition to /mnt.\
+**`# mount -o noatime,commit=60 /dev/mapper/cryptroot /mnt`**
 
-Subvolume flat layout is used for the SYSTEM installation. The following subvolumes will be created to avoid data loss on rollback. The following subvolume layout will also permit to use different mount options once the feature is available in btrfs. Currently (2021-10-23) specified mount options are applied per file system. 
-subvolume | directory | rationale
---------- | --------- | ---------
-@ | / | root directory is its own subvolume
-@home | /home | since /home does not reside on a separate partition it is excluded from snapshots to avoid data loss on rollbacks
-@root | /root | it is just a home directory for root users, excluded to avoid data loss on rollbacks
-@opt | /opt | third-party applications are usually installed here, it is excluded to avoid uninstalling these apps on rollbacks
-@srv | /srv | contains web and ftp servers, it is excluded to avoid data loss on rollbacks
-@tmp | /tmp | all directories containing temporary files and caches are excluded from snapshots
-@usr_local | /usr/local | used to manually install software, it is excluded to avoid uninstalling this software on rollbacks
-@var | /var | this directory contains many variable files, including logs, temporary caches, third party products in /var/opt, and is the default location for many virtual machine images and databases. Therefore this subvolume is created to exclude all of this variable data from snapshots and is created with Copy-On-Write disabled. 
-@swap | /swapspace | contains a swapfile which should be excluded from snapshots
-@snapshots | /.snapshots | snapshots subvolume, do not snapshot the snapshots :)
-
-Mount the cryptroot mapper to /mnt.\
-**`# mount -o defaults,noatime,compress=zstd,space_cache=v2,ssd /dev/mapper/cryptroot /mnt`**
-
-Create System subvolumes.\
-**`# cd /mnt`**\
-**`# btrfs subvolume create @`**\
-**`# btrfs subvolume create @home`**\
-**`# btrfs subvolume create @root`**\
-**`# btrfs subvolume create @opt`**\
-**`# btrfs subvolume create @srv`**\
-**`# btrfs subvolume create @tmp`**\
-**`# btrfs subvolume create @usr_local`**\
-**`# btrfs subvolume create @var`**\
-**`# btrfs subvolume create @swap`**\
-**`# btrfs subvolume create @snapshots`**\
-**`# cd`**\
-**`# umount /mnt`**
-
-Mount root subvolume.\
-**IMPORTANT**: Make sure to revisit mount options to fit your hardware.\
-**`# mount -o defaults,noatime,compress=zstd,space_cache=v2,ssd,subvol=@ /dev/mapper/cryptroot /mnt`**
-
-Create the directories where the subvolumes will be mounted.\
-**`# mkdir /mnt/{boot,home,root,opt,srv,tmp,usr,var,swapspace,.snapshots}`**\
-**`# mkdir /mnt/usr/local`**
-
-Mount the remaining subvolumes. We specify different options to each subvolume, however for now (2021-10-23) btrfs does not support using different options on subvolume level. It means that the mount options specified below are going to be ignored and the mount options used to mount @ subvolume will apply.\
-**`# mount -o defaults,noatime,compress=zstd,space_cache=v2,ssd,subvol=@home /dev/mapper/cryptroot /mnt/home`**\
-**`# mount -o defaults,noatime,compress=zstd,space_cache=v2,ssd,subvol=@root /dev/mapper/cryptroot /mnt/root`**\
-**`# mount -o defaults,noatime,compress=zstd,space_cache=v2,ssd,subvol=@opt /dev/mapper/cryptroot /mnt/opt`**\
-**`# mount -o defaults,noatime,compress=zstd,space_cache=v2,ssd,subvol=@srv /dev/mapper/cryptroot /mnt/srv`**\
-**`# mount -o defaults,noatime,compress=zstd,space_cache=v2,ssd,subvol=@tmp /dev/mapper/cryptroot /mnt/tmp`**\
-**`# mount -o defaults,noatime,compress=zstd,space_cache=v2,ssd,subvol=@usr_local /dev/mapper/cryptroot /mnt/usr/local`**\
-**`# mount -o defaults,noatime,nodatacow,compress=zstd,space_cache=v2,ssd,subvol=@var /dev/mapper/cryptroot /mnt/var`**\
-**`# mount -o defaults,noatime,compress=zstd,space_cache=v2,ssd,subvol=@snapshots /dev/mapper/cryptroot /mnt/.snapshots`**\
-**`# mount -o defaults,noatime,nodatacow,space_cache=v2,ssd,subvol=@swap /dev/mapper/cryptroot /mnt/swapspace`**\
-**`# sync`**
-
-Since the above mount options specified to @var subvolume will not be applied as mentioned above, we disable Copy-on-write mechanism on /var directory using file attributes.\
-**`# chattr +C /mnt/var`**
-
-TODO: (Revisit directories included in /var, and check if CoW can be disabled with more granularity instead of on the entire /var directory.)
+Create the directory where ESP partition will be mounted.\
+**`# mkdir /mnt/boot`**
 
 Mount ESP partition. Make sure to replace _**sdXY**_ with the corresponding partition name specific to your deployment.\
 **`# mount /dev/sdXY /mnt/boot`**
@@ -405,12 +350,6 @@ To be able to hibarnate the system on button press or lid close we will need to 
 
 Create a zero length file.\
 **`# truncate -s 0 /mnt/swapspace/swapfile`**
-
-Disable CoW mechanism on the swap file.\
-**`# chattr +C /mnt/swapspace/swapfile`**
-
-Make sure the compression is disbled on swap file.\
-**`# btrfs property set /mnt/swapspace/swapfile compression none`**
 
 Set the swap file size. Swap file size should be two times the size of available RAM.\
 **`# fallocate -l 8G /mnt/swapspace/swapfile`**
@@ -457,18 +396,20 @@ This is a complete list of packages that will be installed to satisfy the system
 categoty | official | AUR 
 -------- | -------- | --------
 Base System | base base-devel linux linux-firmware |
-File System tools | dosfstools btrfs-progs ef2sprogs |
+File System tools | dosfstools ef2sprogs |
 CPU microcode | intel-ucode |
 Network | dhcpcd wpa_supplicant networkmanager | 
-Bootloader | grub grub-btrfs efibootmgr | 
-Utils | vim git openssh parted wget snapper rsync |
+Bootloader | grub efibootmgr | 
+Utils | neovim git openssh parted wget rsync |
 Documentation | man-db man-pages texinfo |
 Graphical environment | xorg-server xorg-xinit xorg-xsetroot ttf-dejavu |
 Video drivers | xf86-video-intel |
 Window Manager | | dwm
 
 Use _pacstrap_ to install Arch Linux on the hard drive.\
-**`# pacstrap /mnt base base-devel linux linux-firmware dosfstools btrfs-progs e2fsprogs intel-ucode dhcpcd wpa_supplicant networkmanager grub grub-btrfs efibootmgr vim git openssh parted wget snapper rsync man-db man-pages texinfo xorg-server xorg-xinit xorg-xsetroot ttf-dejavu xf86-video-intel`**
+**`# pacstrap /mnt base base-devel linux linux-firmware dosfstools e2fsprogs intel-ucode dhcpcd wpa_supplicant networkmanager grub efibootmgr neovim git openssh parted wget rsync man-db man-pages texinfo xorg-server xorg-xinit xorg-xsetroot ttf-dejavu xf86-video-intel`**
+
+(TODO: Follow up from here for the new solution that do not use BTRFS + SNAPPER)
 
 ## 15. Generate fstab ##
 Generate fstab file using UUIDs.\
@@ -646,196 +587,7 @@ Wireless network connectivity needs to be configured on a first boot into new sy
 
 Once network connectivity is established you may log in to the system via SSH to perform the remaining steps.
 
-## 20. Setup User's home directory subvolume layout ##
-To take advantage of btrfs file system snapshot capabilities, we will create some subvolumes in users home directory.
-
-TODO: (Revisit subvolumes layout for User home directory)
-
-subvolume | description
---------- | -----------
-/home/UserName | user's home directory is a separate subvolume
-~/.cache | temporary local cache files should be excluded from snapshots
-~/.local | user-specific data directories, executables and libraries
-~/bin | user-specific binaries that should no be rolled back with the home directory, but should be snapshoted separately
-~/bin/.snapshots | bin subvolume requires its own subvolume dedicated to snapshots. This subvolume will be created by Snapper
-~/vms | virtual machines directory, make sure to disable CoW
-~/Downloads | should be excluded from snapshots
-~/Projects | directory to store project related files, it should be snapshoted separately
-~/Projects/.snapshots | Projects will require its own subvolume dedicated to snapshots. This subvolume will be created by Snapper
-
-Create _UserName_ home directory and set the correct permissions and ownership. Make sure to change _**UserName**_ to the correct user name.\
-**`$ cd /home`**\
-**`# btrfs subvolume create UserName`**\
-**`# chown UserName:UserName UserName`**\
-**`$ chmod 700 UserName`**
-
-Create _UserName_ home directory subvolumes structure.\
-**`$ cd UserName`**\
-**`$ btrfs subvolume create .cache`**\
-**`$ btrfs subvolume create .local`**\
-**`$ btrfs subvolume create bin`**\
-**`$ btrfs subvolume create vms`**\
-**`$ chattr +C vms`**\
-**`$ btrfs subvolume create Downloads`**\
-**`$ btrfs subvolume create Projects`**
-
-## 21. Configure snapshots system for periodic and ad-hoc snapshots ##
-Snapper will allow to make scheduled or on-demand snapshots. We make snapshots of several parts of the system separately, to make sure the rollback of one of the parts will not destroy any other. We make snapshots, or backup in case of /boot partition, prior to package manager action.
-
-TODO: Revisit the snapshot schedule.
-
-We will use the following snapshot schedule for the initial installation.
-directory | period
---------- | ------
-/ | automatically, right before system update and on-demand
-/root | on-demand
-/usr/local | on-demand
-/home/UserName | on-demand
-/home/UserName/bin | on-demand
-/home/UserName/Projects | on-demand
-
-Create Snapper configuration for / directory.\
-**`# umount /.snapshots`**\
-**`# rm -rf /.snapshots`**\
-**`# snapper -c root create-config /`**\
-**`# btrfs subvolume delete /.snapshots`**\
-**`# mkdir /.snapshots`**\
-**`# mount -a`**\
-**`# chmod a+rx /.snapshots`**\
-**`# chown :UserName /.snapshots`**
-
-Modify / directory Snapper configuration. Allow _**UserName**_ to work with config. Make sure to replace _**UserName**_ with your user name. Configure cleanup to define how many snapshots will be kept before erasing the older snapshots.\
-**`# vim /etc/snapper/configs/root`**
->`# users and groups allowed to work with config`\
->`ALLOW_USERS="UserName"`\
->` `\
->`# limits for timeline cleanup`\
->`TIMELINE_MIN_AGE="1800"`\
->`TIMELINE_LIMIT_HOURLY="5"`\
->`TIMELINE_LIMIT_DAILY="7"`\
->`TIMELINE_LIMIT_WEEKLY="0"`\
->`TIMELINE_LIMIT_MONTHLY="0"`\
->`TIMELINE_LIMIT_YEARLY="0"`
-
-Create Snapper configuration for /root directory.\
-**`# snapper -c root_user create-config /root`**
-
-Modify /root directory Snapper configuration. Configure cleanup to define how many snapshots will be kept before erasing the older snapshots.\
-**`# vim /etc/snapper/configs/root_user`**
->`# limits for timeline cleanup`\
->`TIMELINE_MIN_AGE="1800"`\
->`TIMELINE_LIMIT_HOURLY="5"`\
->`TIMELINE_LIMIT_DAILY="7"`\
->`TIMELINE_LIMIT_WEEKLY="0"`\
->`TIMELINE_LIMIT_MONTHLY="0"`\
->`TIMELINE_LIMIT_YEARLY="0"`
-
-Create Snapper configuration for /usr/local directory.\
-**`# snapper -c usr_local create-config /usr/local`**\
-**`# chmod a+rx /usr/local/.snapshots`**\
-**`# chown :UserName /usr/local/.snapshots`**
-
-Modify /usr/local directory Snapper configuration. Allow _**UserName**_ to work with config. Make sure to replace _**UserName**_ with your user name. Configure cleanup to define how many snapshots will be kept before erasing the older snapshots.\
-**`# vim /etc/snapper/configs/usr_local`**
->`# users and groups allowed to work with config`\
->`ALLOW_USERS="UserName"`\
->` `\
->`# limits for timeline cleanup`\
->`TIMELINE_MIN_AGE="1800"`\
->`TIMELINE_LIMIT_HOURLY="5"`\
->`TIMELINE_LIMIT_DAILY="7"`\
->`TIMELINE_LIMIT_WEEKLY="0"`\
->`TIMELINE_LIMIT_MONTHLY="0"`\
->`TIMELINE_LIMIT_YEARLY="0"`
-
-Create Snapper configuration for /home/UserName directory. Make sure to replace _**UserName**_ with your user name.\
-**`# snapper -c home_UserName create-config /home/UserName`**\
-**`# chmod a+rx /home/UserName/.snapshots`**\
-**`# chown :UserName /home/UserName/.snapshots`**
-
-Modify /home/UserName directory Snapper configuration. Allow _**UserName**_ to work with config. Make sure to replace _**UserName**_ with your user name. Configure cleanup to define how many snapshots will be kept before erasing the older snapshots.\
-**`# vim /etc/snapper/configs/home_UserName`**
->`# users and groups allowed to work with config`\
->`ALLOW_USERS="UserName"`\
->` `\
->`# limits for timeline cleanup`\
->`TIMELINE_MIN_AGE="1800"`\
->`TIMELINE_LIMIT_HOURLY="5"`\
->`TIMELINE_LIMIT_DAILY="7"`\
->`TIMELINE_LIMIT_WEEKLY="0"`\
->`TIMELINE_LIMIT_MONTHLY="0"`\
->`TIMELINE_LIMIT_YEARLY="0"`
-
-Create Snapper configuration for /home/UserName/bin directory. Make sure to replace _**UserName**_ with your user name.\
-**`# snapper -c home_UserName_bin create-config /home/UserName/bin`**\
-**`# chmod a+rx /home/UserName/bin/.snapshots`**\
-**`# chown :UserName /home/UserName/bin/.snapshots`**
-
-Modify /home/UserName/bin directory Snapper configuration. Allow _**UserName**_ to work with config. Make sure to replace _**UserName**_ with your user name. Configure cleanup to define how many snapshots will be kept before erasing the older snapshots.\
-**`# vim /etc/snapper/configs/home_UserName_bin`**
->`# users and groups allowed to work with config`\
->`ALLOW_USERS="UserName"`\
->` `\
->`# limits for timeline cleanup`\
->`TIMELINE_MIN_AGE="1800"`\
->`TIMELINE_LIMIT_HOURLY="5"`\
->`TIMELINE_LIMIT_DAILY="7"`\
->`TIMELINE_LIMIT_WEEKLY="0"`\
->`TIMELINE_LIMIT_MONTHLY="0"`\
->`TIMELINE_LIMIT_YEARLY="0"`
-
-Create Snapper configuration for /home/UserName/Projects directory. Make sure to replace _**UserName**_ with your user name.\
-**`# snapper -c home_UserName_Projects create-config /home/UserName/Projects`**\
-**`# chmod a+rx /home/UserName/Projects/.snapshots`**\
-**`# chown :UserName /home/UserName/Projects/.snapshots`**
-
-Modify /home/UserName/bin directory Snapper configuration. Allow _**UserName**_ to work with config. Make sure to replace _**UserName**_ with your user name. Configure cleanup to define how many snapshots will be kept before erasing the older snapshots.\
-**`# vim /etc/snapper/configs/home_UserName_Projects`**
->`# users and groups allowed to work with config`\
->`ALLOW_USERS="UserName"`\
->` `\
->`# limits for timeline cleanup`\
->`TIMELINE_MIN_AGE="1800"`\
->`TIMELINE_LIMIT_HOURLY="5"`\
->`TIMELINE_LIMIT_DAILY="7"`\
->`TIMELINE_LIMIT_WEEKLY="0"`\
->`TIMELINE_LIMIT_MONTHLY="0"`\
->`TIMELINE_LIMIT_YEARLY="0"`
-
-Once all the configurations are done, enable the services for Snapper.\
-**`# systemctl start snapper-timeline.timer`**\
-**`# systemctl enable snapper-timeline.timer`**\
-**`# systemctl start snapper-cleanup.timer`**\
-**`# systemctl enable snapper-cleanup.timer`**
-
-Enable grub-btrfs service.\
-**`# systemctl start grub-btrfs.path`**\
-**`# systemctl enable grub-btrfs.path`**
-
-Install snap-pac-grub - Pacman hook to update GRUB entries for grub-btrfs after snap-pac made snapshots.\
-**`$ cd ~/bin`**\
-**`$ git clone https://aur.archlinux.org/snap-pac-grub.git`**\
-**`$ cd snap-pac-grub`**\
-**`$ gpg --recv-keys EB4F9E5A60D32232BB52150C12C87A28FEAC6B20`**\
-**`$ makepkg -sifc`**
-
-Create a hook to enable backup of the /boot partition before the kernel upgrade.\
-**`# mkdir /etc/pacman.d/hooks`**\
-**`# vim /etc/pacman.d/hooks/50-bootbackup.hook`**
->`[Trigger]`\
->`Operation = Upgrade`\
->`Operation = Install`\
->`Operation = Remove`\
->`Type = Path`\
->`Target = boot/*`\
->` `\
->`[Action]`\
->`Depends = rsync`\
->`Description = Backing up /boot...`\
->`When = PreTransaction`\
->`Exec = /usr/bin/rsync -a --delete /boot/.bootbackup`
-
-## 22. Install Graphical Environment ##
+## 20. Install Graphical Environment ##
 The following steps are coming from the procedure published by [Nice Micro](https://www.youtube.com/c/NiceMicroLinux) on his [Youtube channel](https://www.youtube.com/c/NiceMicroLinux) as part of ["Understanding the Arch Linux installation procedure"](https://www.youtube.com/watch?v=wZr9WTfFed0&list=PL2t9VWDusOo-0jF18YvEVhwpxTXlXPunG) series.
 As per the author, this method tries to preserve both, suckless philosophy and Arch Linux best practices. To fully understand the process, I encourage you to watch both videos published by Nice Micro:\
 [Installing DWM on Arch Linux the proper Arch Way](https://youtu.be/-Hw9WLztuqM)\
@@ -995,7 +747,7 @@ Install the package, and enable the service to start on boot.\
 
 After reboot you will be greeted by Ly login screen.
 
-## 23. Configure backup to NAS and perform initial full backup ##
+## 21. Configure backup to NAS and perform initial full backup ##
 
 \
 \
