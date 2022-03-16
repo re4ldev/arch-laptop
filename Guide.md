@@ -288,7 +288,7 @@ partition | parted type | size | file system
 --------- | ---- | ---- | ----------- 
 BIOS | boot_grub | 1MiB | N/A
 ESP | esp | 550MiB | fat32
-SYSTEM | linux | ~ | btrfs
+SYSTEM | linux | ~ | ext4
 
 In case you skipped the previous step, where we wiped out the disk, you need to verify the disk device name on which we will install Arch Linux. In this example, we will use _**sda**_ device.\
 **`# lsblk -o +VENDOR,MODEL`**
@@ -308,7 +308,7 @@ Make partition for UEFI boot. Make sure to replace _**sdX**_ with the correspond
 **`# parted -s /dev/sdX mkpart ESP fat32 1MiB 551MiB set 2 esp on`**
 
 Make partition for the system. Make sure to replace _**sdX**_ with the corresponding device name specific to your deployment.\
-**`# parted -s /dev/sdX mkpart SYSTEM btrfs 551MiB 100%`**
+**`# parted -s /dev/sdX mkpart SYSTEM ext4 551MiB 100%`**
 
 Verify the partitions are correcrtly created. In this example drive device is _**sda**_.\
 **`# lsblk -o +PARTLABEL`**
@@ -333,7 +333,7 @@ ESP partition requires FAT32 file system. Make sure to replace _**sdXY**_ with t
 **`# mkfs.fat -F32 /dev/sdXY`**
 
 SYSTEM partition will use btrfs file system.\
-**`# mkfs.btrfs /dev/mapper/cryptroot`**
+**`# mkfs.ext4 /dev/mapper/cryptroot`**
 
 ## 11. Mount partitions for the System and Boot. ##
 Mount SYSTEM partition to /mnt.\
@@ -408,8 +408,6 @@ Window Manager | | dwm
 
 Use _pacstrap_ to install Arch Linux on the hard drive.\
 **`# pacstrap /mnt base base-devel linux linux-firmware dosfstools e2fsprogs intel-ucode dhcpcd wpa_supplicant networkmanager grub efibootmgr neovim git openssh parted wget rsync man-db man-pages texinfo xorg-server xorg-xinit xorg-xsetroot ttf-dejavu xf86-video-intel`**
-
-(TODO: Follow up from here for the new solution that do not use BTRFS + SNAPPER)
 
 ## 15. Generate fstab ##
 Generate fstab file using UUIDs.\
