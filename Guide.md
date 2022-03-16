@@ -463,7 +463,7 @@ Add default entries to hosts file. Make sure to replace _**myHostname**_ with th
 >`127.0.1.1 myHostname.localdomain myHostname`
 
 Add user and include it to _wheel_ group for sudo access. Make sure th change _**UserName**_ to a correct user name.\
-**`# useradd -G wheel UserName`**
+**`# useradd -mG wheel UserName`**
 
 Set the user password. Make sure th change _**UserName**_ to a correct user name.\
 **`# passwd UserName`**
