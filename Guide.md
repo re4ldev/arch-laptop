@@ -507,7 +507,7 @@ Install GRUB for UEFI.\
 
 Add resume entries to GRUB configuration file.
 
-To be able to resume from hibernation we need to calculate the resume_offset number.
+To be able to resume from hibernation we need to calculate the resume_offset number.\
 **`# filefrag -v /swapspace/swapfile`**
 >`Filesystem type is: ef53`\
 >`File size of /swapspace/swapfile is 8589934592 (2097152 blocks of 4096 bytes)`\
@@ -523,13 +523,13 @@ Previously we have made a note of /dev/mapper/cryptroot UUID which is d72f6385-b
 Update GRUB configuration to make sure we have access to encrypted SYSTEM partition and the resume from hibernation details.\
 **`# nvim /etc/default/grub`**
 
-Update GRUB_CMDLINE_LINUX_DEFAULT. Make sure to replace _**sdXY**_ with the corresponding SYSTEM partition name specific to your deployment.\
+Update GRUB_CMDLINE_LINUX_DEFAULT. Make sure to replace _**sdXY**_ with the corresponding SYSTEM partition name specific to your deployment.
 >`GRUB_CMDLINE_LINUX_DEFAULT="cryptdevice=/dev/sdXY:cryptroot root=/dev/mapper/cryptroot rootflags=subvol=@ resume=UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 resume_offset=34816 loglevel=3 quiet"`
 
 Configure GRUB.\
 **`# grub-mkconfig -o /boot/grub/grub.cfg`**
 
-Create additional BOOT direectory in EFI folder for compatibility, and copy efi file with compatible name.
+Create additional BOOT direectory in EFI folder for compatibility, and copy efi file with compatible name.\
 **`# mkdir /boot/EFI/BOOT`**\
 **`# cp /boot/EFI/GRUB/grubx64.efi /boot/EFI/BOOT/BOOTX64.EFI`**
 
