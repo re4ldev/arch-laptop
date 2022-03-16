@@ -421,27 +421,9 @@ Verify the correct entries in fstab file. Since we have specified mount points i
 >`# Static information about the filesystems.`\
 >`# See fstab(5) for details.`\
 >`# <file system> <dir> <type> <options> <dump> <pass>`\
->`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 / btrfs rw,noatime,compress=zstd:3,ssd,space_cache,subvolid=256,subvol=/@ 0 0`\
+>`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 / ext4 rw,noatime,commit=60 0 1`\
 >`# /dev/sda2`\
 >`UUID=8D9C-13EE /boot vfat rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro 0 2`\
->`# /dev/mapper/cryptroot`\
->`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /home btrfs rw,noatime,compress=zstd:3,ssd,space_cache,subvolid=258,subvol=/@home 0 0`\
->`# /dev/mapper/cryptroot`\
->`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /root btrfs rw,noatime,compress=zstd:3,ssd,space_cache,subvolid=259,subvol=/@root 0 0`\
->`# /dev/mapper/cryptroot`\
->`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /opt btrfs rw,noatime,compress=zstd:3,ssd,space_cache,subvolid=260,subvol=/@opt 0 0`\
->`# /dev/mapper/cryptroot`\
->`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /srv btrfs rw,noatime,compress=zstd:3,ssd,space_cache,subvolid=261,subvol=/@srv 0 0`\
->`# /dev/mapper/cryptroot`\
->`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /tmp btrfs rw,noatime,compress=zstd:3,ssd,space_cache,subvolid=262,subvol=/@tmp 0 0`\
->`# /dev/mapper/cryptroot`\
->`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /usr/local btrfs rw,noatime,compress=zstd:3,ssd,space_cache,subvolid=263,subvol=/@usr_local 0 0`\
->`# /dev/mapper/cryptroot`\
->`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /var btrfs rw,noatime,nodatacow,compress=zstd:3,ssd,space_cache,subvolid=264,subvol=/@var 0 0`\
->`# /dev/mapper/cryptroot`\
->`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /.snapshots btrfs rw,noatime,compress=zstd:3,ssd,space_cache,subvolid=266,subvol=/@snapshots 0 0`\
->`# /dev/mapper/cryptroot`\
->`UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 /swapspace btrfs rw,noatime,ssd,space_cache,subvolid=265,subvol=/@swap 0 0`\
 >`/swapspace/swapfile none swap defaults 0 0`
 
 Make note for /dev/mapper/cryptroot UUID we will need it later in the process. In this case it is _**d72f6385-bb67-4ce2-810c-8eb8935402a2**_
