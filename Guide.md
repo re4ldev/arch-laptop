@@ -455,7 +455,7 @@ Create locale.conf and set the LANG variable accordingly. Instead of _**en_US.UT
 
 Create vconsole.conf and set KEYMAP and FONT values.\
 **`# nvim /etc/vconsole.conf`**
->`KEYMAP=pl`\
+>`KEYMAP=en`\
 >`FONT=Lat2-Terminus16`
 
 Setup the hostname. Make sure to replace _**myHostname**_ with the name of your choice.\
@@ -528,6 +528,10 @@ Update GRUB_CMDLINE_LINUX_DEFAULT. Make sure to replace _**sdXY**_ with the corr
 
 Configure GRUB.\
 **`# grub-mkconfig -o /boot/grub/grub.cfg`**
+
+Create additional BOOT direectory in EFI folder for compatibility, and copy efi file with compatible name.
+**`# mkdir /boot/EFI/BOOT`**\
+**`# cp /boot/EFI/GRUB/grubx64.efi /boot/EFI/BOOT/BOOTX64.EFI`**
 
 ## 19. Boot into a newly installed system ##
 Finalize the installation and boot into a newly deployed Arch Linux system.
