@@ -507,38 +507,21 @@ Install GRUB for UEFI.\
 
 Add resume entries to GRUB configuration file.
 
-To be able to resume from hibernation we need to calculate the resume_offset number. As recommended in Arch Linux Wiki we will use [tool btrfs_map_physical.c](https://github.com/osandov/osandov-linux/blob/master/scripts/btrfs_map_physical.c) to compute resume_offset.\
+To be able to resume from hibernation we need to calculate the resume_offset number.
+**`# filefrag -v /swapspace/swapfile`**
+>`Filesystem type is: ef53`\
+>`File size of /swapspace/swapfile is 8589934592 (2097152 blocks of 4096 bytes)`\
+>` ext:     logical_offset:        physical_offset: length:   expected: flags:`\
+>`   0:        0..       0:      34816..     34816:      1:`\
+>`   1:        1..   63487:      34817..     98303:  63487:             unwritten`\
+>`   2:    63488..  126975:     100352..    163839:  63488:      98304: unwritten`
 
-Download and compile the tool.\
-**`# mkdir -p ~/bin/btrfs_map_physical`**\
-**`# cd ~/bin/btrfs_map_physical`**\
-**`# wget https://raw.githubusercontent.com/osandov/osandov-linux/master/scripts/btrfs_map_physical.c`**\
-**`# gcc -O2 -o btrfs_map_physical btrfs_map_physical.c`**
-
-Run the tool and make a note of the first physical offset.\
-**`# ./btrfs_map_physical /swapspace/swapfile`**
->`FILE OFFSET     FILE SIZE       EXTENT OFFSET   EXTENT TYPE     LOGICAL SIZE    LOGICAL OFFSET  PHYSICAL SIZE   DEVID   PHYSICAL OFFSET`\
->`0       4096    0       regular 268435456       298844160       268435456       1       575668224`\
->`4096    268431360       4096    prealloc        268435456       298844160       268435456       1       575668224`\
->`268435456       268435456       0       prealloc        268435456       567279616       268435456       1       844103680`
-
-In the above example, the first physical offset returned is _**575668224**_.
-
-Find out the PAGESIZE.\
-**`# getconf PAGESIZE`**
->`4096`
-
-To compute the resume_offset value, divide the physical offset by the pagesize.\
-In this example, 575668224 / 4096 = _**140544**_
-
-We will not need the tool anymore so we remove it.\
-**`# rm -r ~/bin`**\
-**`# cd`**
+In the above example, the first physical offset returned is _**34816**_, which is the resume offset.
 
 Previously we have made a note of /dev/mapper/cryptroot UUID which is d72f6385-bb67-4ce2-810c-8eb8935402a2.
 
 Update GRUB configuration to make sure we have access to encrypted SYSTEM partition and the resume from hibernation details.\
-**`# vim /etc/default/grub`**
+**`# nvim /etc/default/grub`**
 
 Update GRUB_CMDLINE_LINUX_DEFAULT. Make sure to replace _**sdXY**_ with the corresponding SYSTEM partition name specific to your deployment.\
 >`GRUB_CMDLINE_LINUX_DEFAULT="cryptdevice=/dev/sdXY:cryptroot root=/dev/mapper/cryptroot rootflags=subvol=@ resume=UUID=d72f6385-bb67-4ce2-810c-8eb8935402a2 resume_offset=140544 loglevel=3 quiet"`
