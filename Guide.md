@@ -486,7 +486,7 @@ Update mkinitcpio.conf\
 **`# nvim /etc/mkinitcpio.conf`**
 
 Update HOOKS.
->`HOOKS=(base udev autodetect keyboard keymap modconf block encrypt filesystems resume fsck)`
+>`HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt filesystems resume fsck)`
 
 Generate initramfs.\
 **`# mkinitcpio -P`**
