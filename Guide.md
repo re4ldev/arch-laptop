@@ -30,7 +30,7 @@ This installation procedure heavily borrows from the following sources:
 id | Requirement | Rationale | Solution
 -- | ----------- | --------- | --------
 1 | Data-at-rest encryption | If the device is lost, the data and swap area can not be easily accessible. | LUKS encryption for data partition and swapfile on the encrypted data partition
-2 | Battery saving | Mobile device should work without grid connection for longer periods of time. | TLP and hibernation to disk on lid close or button press
+2 | Battery saving | Mobile device should work without grid connection for longer periods of time. | ~~TLP~~ and hibernation to disk on lid close or button press
 3 | Wireless connectivity | Connection to LAN or WAN should be supported without wired connectivity in case only wireless access points are available in the environment. | Network Manager
 4 | Snapshot system | To reduce the risk of failure the snapshot system must be available. Atomic snapshots should be taken prior to system upgrades or on-demand. | ~~BTRFS file system and Snapper~~
 5 | Periodic backup to NAS | When connected to home LAN full system/data backup to NAS should be available | rsync
@@ -558,22 +558,6 @@ Wireless network connectivity needs to be configured on a first boot into new sy
 **`$ nmcli device wifi connect your_ssid password your_wifi_password`**
 
 Once network connectivity is established you may log in to the system via SSH to perform the remaining steps.
-
-As per [TLP recommendation](https://linrunner.de/tlp/installation/arch.html#thinkpads-only-external-kernel-modules) install required kernel modules.\
-**`# tlp-stat -b`**
->`+++ Recommendations`\
->`* Install acpi_call kernel module for ThinkPad battery recalibration`\
->`* Install tp-smapi kernel module for extended battery status (e.g. the cycle count)`
-
-Install recommended kernel modules.\
-**`# pacman -S acpi_call tp_smapi`**
-
-Enable tlp service.\
-**`# systemctl enable tlp.service`**
-
-TODO: Review if required and used at all:\
-**`# systemctl enable NetworkManager-dispatcher.service`**\
-**`# systemctl mask systemd-rfkill.service systemd-rfkill.socket`**
 
 ## 20. Install Graphical Environment ##
 The following steps are coming from the procedure published by [Nice Micro](https://www.youtube.com/c/NiceMicroLinux) on his [Youtube channel](https://www.youtube.com/c/NiceMicroLinux) as part of ["Understanding the Arch Linux installation procedure"](https://www.youtube.com/watch?v=wZr9WTfFed0&list=PL2t9VWDusOo-0jF18YvEVhwpxTXlXPunG) series.
