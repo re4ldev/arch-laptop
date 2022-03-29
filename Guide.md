@@ -571,7 +571,7 @@ Install recommended kernel modules.\
 Enable tlp service.\
 **`# systemctl enable tlp.service`**
 
-TODO: Review if required and used at all:
+TODO: Review if required and used at all:\
 **`# systemctl enable NetworkManager-dispatcher.service`**\
 **`# systemctl mask systemd-rfkill.service systemd-rfkill.socket`**
 
