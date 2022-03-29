@@ -403,7 +403,7 @@ File System tools | dosfstools ef2sprogs |
 CPU microcode | intel-ucode |
 Network | dhcpcd wpa_supplicant networkmanager | 
 Bootloader | grub efibootmgr | 
-Utils | neovim git openssh parted wget rsync |
+Utils | neovim git openssh parted wget rsync tlp tlp-rdw |
 Documentation | man-db man-pages texinfo |
 Graphical environment | xorg-server xorg-xinit xorg-xsetroot ttf-dejavu |
 Video drivers | xf86-video-intel |
@@ -558,6 +558,22 @@ Wireless network connectivity needs to be configured on a first boot into new sy
 **`$ nmcli device wifi connect your_ssid password your_wifi_password`**
 
 Once network connectivity is established you may log in to the system via SSH to perform the remaining steps.
+
+As per [TLP recommendation](https://linrunner.de/tlp/installation/arch.html#thinkpads-only-external-kernel-modules) install required kernel modules.\
+**`# tlp-stat -b`**
+>`+++ Recommendations`\
+>`* Install acpi_call kernel module for ThinkPad battery recalibration`\
+>`* Install tp-smapi kernel module for extended battery status (e.g. the cycle count)`
+
+Install recommended kernel modules.\
+**`# pacman -S acpi_call tp_smapi`**
+
+Enable tlp service.\
+**`# systemctl enable tlp.service`**
+
+TODO: Review if required and used at all:
+**`# systemctl enable NetworkManager-dispatcher.service`**\
+**`# systemctl mask systemd-rfkill.service systemd-rfkill.socket`**
 
 ## 20. Install Graphical Environment ##
 The following steps are coming from the procedure published by [Nice Micro](https://www.youtube.com/c/NiceMicroLinux) on his [Youtube channel](https://www.youtube.com/c/NiceMicroLinux) as part of ["Understanding the Arch Linux installation procedure"](https://www.youtube.com/watch?v=wZr9WTfFed0&list=PL2t9VWDusOo-0jF18YvEVhwpxTXlXPunG) series.
